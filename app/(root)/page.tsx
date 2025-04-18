@@ -1,10 +1,9 @@
 import Logo from '@/public/images/wallet.svg';
 import Image from 'next/image';
 import { APP_NAME } from '@/lib/constants';
-
-const HomePage = () => {
+const HomePage = async () => {
 	return (
-		<div className='h-[calc(100vh-130px)] flex items-center justify-center'>
+		<div className='h-[calc(100vh-134px)] flex items-center justify-center'>
 			<div className='p-8 rounded-lg shadow-lg w-full max-w-md'>
 				<Image
 					priority={true}

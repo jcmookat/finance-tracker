@@ -25,7 +25,7 @@ const ModeToggle = () => {
 			variant='ghost'
 			size='icon'
 			onClick={toggleTheme}
-			className='relative overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 h-10 w-10'
+			className='relative overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 h-9 w-10'
 			aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
 			<AnimatePresence mode='wait' initial={false}>
 				<motion.div
