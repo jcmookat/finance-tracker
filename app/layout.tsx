@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import '@/assets/styles/globals.css';
 import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from '@/lib/constants';
+import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
 	title: {
@@ -20,7 +21,15 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en' suppressHydrationWarning>
-			<body className={`${inter.className}`}>{children}</body>
+			<body className={`${inter.className}`}>
+				<ThemeProvider
+					attribute='class'
+					defaultTheme='dark'
+					enableSystem
+					disableTransitionOnChange>
+					{children}
+				</ThemeProvider>
+			</body>
 		</html>
 	);
 }

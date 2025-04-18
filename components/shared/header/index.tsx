@@ -2,9 +2,9 @@ import { UserIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '@/public/images/wallet.svg';
-
 import { Button } from '@/components/ui/button';
 import { APP_NAME } from '@/lib/constants';
+import ModeToggle from './mode-toggle';
 
 const Header = () => {
 	return (
@@ -24,7 +24,8 @@ const Header = () => {
 						</span>
 					</Link>
 				</div>
-				<div className='space-x-2'>
+				<div className='space-x-2 flex '>
+					<ModeToggle />
 					<Button asChild>
 						<Link href='/sign-in'>
 							<UserIcon />
