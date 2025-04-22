@@ -99,14 +99,20 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 // 		...authConfig.callbacks,
 // 	},
 // };
-
 export const {
 	auth,
 	handlers: { GET, POST },
 	signIn,
 	signOut,
 } = NextAuth({
+	// pages: {
+	// 	signIn: '/sign-in',
+	// 	error: '/sign-in',
+	// },
+	session: {
+		strategy: 'jwt',
+		maxAge: 30 * 24 * 60 * 60, // 30 days
+	},
 	adapter: PrismaAdapter(prisma),
-	session: { strategy: 'jwt' },
 	...authConfig,
 });
