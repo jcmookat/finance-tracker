@@ -1,22 +1,21 @@
 'use client';
 
-import { signUpDefaultValues } from '@/lib/constants';
+import { signInDefaultValues } from '@/lib/constants';
 import Link from 'next/link';
 import { useActionState, useEffect, useTransition } from 'react';
-import { signUpUser } from '@/lib/actions/user.actions';
+import { signInWithCredentials } from '@/lib/actions/user.actions';
 import { useSearchParams } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { signUpFormSchema } from '@/lib/validators';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from '@/components/ui/form';
 import SubmitButton from '@/components/shared/submit-button';
+import { Form } from '@/components/ui/form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signInFormSchema } from '@/lib/validators';
+import { z } from 'zod';
 import { toast } from 'sonner';
 import BaseFormField from '@/components/shared/base-form-field';
 import { Check, X } from 'lucide-react';
-
-const SignUpForm = () => {
-  const [data, action] = useActionState(signUpUser, {
+const CredentialsSignInForm = () => {
+  const [data, action] = useActionState(signInWithCredentials, {
     success: false,
     message: '',
   });
@@ -24,22 +23,21 @@ const SignUpForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
 
-  const form = useForm<z.infer<typeof signUpFormSchema>>({
-    resolver: zodResolver(signUpFormSchema),
-    defaultValues: signUpDefaultValues,
+  const form = useForm<z.infer<typeof signInFormSchema>>({
+    resolver: zodResolver(signInFormSchema),
+    defaultValues: signInDefaultValues,
   });
-
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (!data.success && data.message) {
-      toast('Sign up failed', {
+      toast('Sign in failed', {
         description: data.message,
         duration: 3500,
         icon: <X />,
       });
     } else {
-      toast('Sign up success', {
+      toast('Sign in success', {
         description: data.message,
         duration: 3500,
         icon: <Check />,
@@ -47,7 +45,7 @@ const SignUpForm = () => {
     }
   }, [data]);
 
-  const onSubmit: SubmitHandler<z.infer<typeof signUpFormSchema>> = async (
+  const onSubmit: SubmitHandler<z.infer<typeof signInFormSchema>> = async (
     values,
   ) => {
     startTransition(async () => {
@@ -60,11 +58,9 @@ const SignUpForm = () => {
           typeof value === 'object' ? JSON.stringify(value) : String(value),
         );
       });
-
       if (callbackUrl) {
         formData.append('callbackUrl', callbackUrl);
       }
-
       action(formData);
     });
   };
@@ -72,47 +68,33 @@ const SignUpForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-6">
-          <BaseFormField<typeof signUpFormSchema>
-            name="name"
-            label="Name"
-            placeholder="Name"
-            formControl={form.control}
-          />
-          <BaseFormField<typeof signUpFormSchema>
+          <BaseFormField<typeof signInFormSchema>
             name="email"
             label="Email"
-            placeholder="Email"
-            inputType="email"
+            placeholder="Enter email"
             formControl={form.control}
           />
-          <BaseFormField<typeof signUpFormSchema>
+          <BaseFormField<typeof signInFormSchema>
             name="password"
             label="Password"
-            placeholder="Password"
-            inputType="password"
-            formControl={form.control}
-          />
-          <BaseFormField<typeof signUpFormSchema>
-            name="confirmPassword"
-            label="Confirm Password"
-            placeholder="Confirm Password"
+            placeholder="Enter password"
             inputType="password"
             formControl={form.control}
           />
           <div>
             <SubmitButton
               isPending={isPending}
-              buttonLabel="Sign Up"
-              isPendingLabel="Creating account..."
+              buttonLabel="Sign In"
+              isPendingLabel="Signing In..."
             />
           </div>
           {data && !data.success && (
             <div className="text-center text-destructive">{data.message}</div>
           )}
           <div className="text-sm text-center text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/sign-in" target="self" className="link">
-              Sign In
+            Don&apos;t have an account?{' '}
+            <Link href="/sign-up" className="link">
+              Sign Up
             </Link>
           </div>
         </div>
@@ -121,4 +103,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default CredentialsSignInForm;
