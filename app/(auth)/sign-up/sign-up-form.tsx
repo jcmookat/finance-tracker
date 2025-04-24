@@ -13,7 +13,8 @@ import { Form } from '@/components/ui/form';
 import SubmitButton from '@/components/shared/submit-button';
 import { toast } from 'sonner';
 import BaseFormField from '@/components/shared/base-form-field';
-import { Check, X } from 'lucide-react';
+import { X } from 'lucide-react';
+import GoogleLogin from '@/components/auth/google-button';
 
 const SignUpForm = () => {
   const [data, action] = useActionState(signUpUser, {
@@ -37,12 +38,6 @@ const SignUpForm = () => {
         description: data.message,
         duration: 3500,
         icon: <X />,
-      });
-    } else {
-      toast('Sign up success', {
-        description: data.message,
-        duration: 3500,
-        icon: <Check />,
       });
     }
   }, [data]);
@@ -69,55 +64,58 @@ const SignUpForm = () => {
     });
   };
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="space-y-6">
-          <BaseFormField<typeof signUpFormSchema>
-            name="name"
-            label="Name"
-            placeholder="Name"
-            formControl={form.control}
-          />
-          <BaseFormField<typeof signUpFormSchema>
-            name="email"
-            label="Email"
-            placeholder="Email"
-            inputType="email"
-            formControl={form.control}
-          />
-          <BaseFormField<typeof signUpFormSchema>
-            name="password"
-            label="Password"
-            placeholder="Password"
-            inputType="password"
-            formControl={form.control}
-          />
-          <BaseFormField<typeof signUpFormSchema>
-            name="confirmPassword"
-            label="Confirm Password"
-            placeholder="Confirm Password"
-            inputType="password"
-            formControl={form.control}
-          />
-          <div>
-            <SubmitButton
-              isPending={isPending}
-              buttonLabel="Sign Up"
-              isPendingLabel="Creating account..."
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="space-y-6">
+            <BaseFormField<typeof signUpFormSchema>
+              name="name"
+              label="Name"
+              placeholder="Name"
+              formControl={form.control}
             />
+            <BaseFormField<typeof signUpFormSchema>
+              name="email"
+              label="Email"
+              placeholder="Email"
+              inputType="email"
+              formControl={form.control}
+            />
+            <BaseFormField<typeof signUpFormSchema>
+              name="password"
+              label="Password"
+              placeholder="Password"
+              inputType="password"
+              formControl={form.control}
+            />
+            <BaseFormField<typeof signUpFormSchema>
+              name="confirmPassword"
+              label="Confirm Password"
+              placeholder="Confirm Password"
+              inputType="password"
+              formControl={form.control}
+            />
+            <div>
+              <SubmitButton
+                isPending={isPending}
+                buttonLabel="Sign Up"
+                isPendingLabel="Creating account..."
+              />
+            </div>
+            {data && !data.success && (
+              <div className="text-center text-destructive">{data.message}</div>
+            )}
+            <div className="text-sm text-center text-muted-foreground">
+              Already have an account?{' '}
+              <Link href="/sign-in" target="self" className="link">
+                Sign In
+              </Link>
+            </div>
           </div>
-          {data && !data.success && (
-            <div className="text-center text-destructive">{data.message}</div>
-          )}
-          <div className="text-sm text-center text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/sign-in" target="self" className="link">
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+      <GoogleLogin />
+    </>
   );
 };
 

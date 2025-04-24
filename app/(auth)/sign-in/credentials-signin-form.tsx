@@ -13,7 +13,9 @@ import { signInFormSchema } from '@/lib/validators';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import BaseFormField from '@/components/shared/base-form-field';
-import { Check, X } from 'lucide-react';
+import { X } from 'lucide-react';
+import GoogleLogin from '@/components/auth/google-button';
+
 const CredentialsSignInForm = () => {
   const [data, action] = useActionState(signInWithCredentials, {
     success: false,
@@ -35,12 +37,6 @@ const CredentialsSignInForm = () => {
         description: data.message,
         duration: 3500,
         icon: <X />,
-      });
-    } else {
-      toast('Sign in success', {
-        description: data.message,
-        duration: 3500,
-        icon: <Check />,
       });
     }
   }, [data]);
@@ -65,41 +61,44 @@ const CredentialsSignInForm = () => {
     });
   };
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="space-y-6">
-          <BaseFormField<typeof signInFormSchema>
-            name="email"
-            label="Email"
-            placeholder="Enter email"
-            formControl={form.control}
-          />
-          <BaseFormField<typeof signInFormSchema>
-            name="password"
-            label="Password"
-            placeholder="Enter password"
-            inputType="password"
-            formControl={form.control}
-          />
-          <div>
-            <SubmitButton
-              isPending={isPending}
-              buttonLabel="Sign In"
-              isPendingLabel="Signing In..."
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="space-y-6">
+            <BaseFormField<typeof signInFormSchema>
+              name="email"
+              label="Email"
+              placeholder="Enter email"
+              formControl={form.control}
             />
+            <BaseFormField<typeof signInFormSchema>
+              name="password"
+              label="Password"
+              placeholder="Enter password"
+              inputType="password"
+              formControl={form.control}
+            />
+            <div>
+              <SubmitButton
+                isPending={isPending}
+                buttonLabel="Sign In"
+                isPendingLabel="Signing In..."
+              />
+            </div>
+            {data && !data.success && (
+              <div className="text-center text-destructive">{data.message}</div>
+            )}
+            <div className="text-sm text-center text-muted-foreground">
+              Don&apos;t have an account?{' '}
+              <Link href="/sign-up" className="link">
+                Sign Up
+              </Link>
+            </div>
           </div>
-          {data && !data.success && (
-            <div className="text-center text-destructive">{data.message}</div>
-          )}
-          <div className="text-sm text-center text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="/sign-up" className="link">
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+      <GoogleLogin />
+    </>
   );
 };
 

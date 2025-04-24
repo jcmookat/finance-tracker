@@ -16,7 +16,7 @@ export default {
         const validatedData = signInFormSchema.safeParse(credentials);
         if (!validatedData.success) return null;
         const { email, password } = validatedData.data;
-        const user = await prisma.user.findFirst({
+        const user = await prisma.user.findUnique({
           where: {
             email: email,
           },

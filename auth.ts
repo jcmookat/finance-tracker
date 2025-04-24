@@ -5,6 +5,7 @@ import authConfig from './auth.config';
 
 import { prisma } from '@/db/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { getAccountByUserId, getUserById } from './lib/actions/user.actions';
 
 // export const config = {
 // 	pages: {
@@ -92,27 +93,66 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 // 			}
 // 			return token;
 // 		},
-// 		// Redirects users to /cart after sign-in
-// 		// async redirect({ url, baseUrl }: any) {
-// 		// 	return baseUrl + '/cart';
-// 		// },
 // 		...authConfig.callbacks,
 // 	},
 // };
 export const {
-	auth,
-	handlers: { GET, POST },
-	signIn,
-	signOut,
+  auth,
+  handlers: { GET, POST },
+  signIn,
+  signOut,
 } = NextAuth({
-	// pages: {
-	// 	signIn: '/sign-in',
-	// 	error: '/sign-in',
-	// },
-	session: {
-		strategy: 'jwt',
-		maxAge: 30 * 24 * 60 * 60, // 30 days
-	},
-	adapter: PrismaAdapter(prisma),
-	...authConfig,
+  // pages: {
+  // 	signIn: '/sign-in',
+  // 	error: '/sign-in',
+  // },
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  adapter: PrismaAdapter(prisma),
+  ...authConfig,
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider !== 'credentials') {
+        return true;
+      }
+      if (!user.id) return false;
+      const existingUser = await getUserById(user.id);
+
+      if (!existingUser?.emailVerified) {
+        return false;
+      }
+
+      return true;
+    },
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const existingUser = await getUserById(token.sub);
+      if (!existingUser) return token;
+
+      const existingAccount = await getAccountByUserId(existingUser.id);
+      if (!existingAccount) return token;
+
+      token.isOauth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.image = existingUser.image;
+      token.role = existingUser.role;
+
+      return token;
+    },
+    async session({ token, session }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub,
+          role: token.role,
+          isOauth: token.isOauth,
+        },
+      };
+    },
+  },
 });

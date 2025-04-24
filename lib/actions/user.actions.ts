@@ -92,7 +92,7 @@ export async function signInWithCredentials(
       redirectTo: '/dashboard',
     });
 
-    return { success: true, message: 'Signed in successfully' };
+    return { success: true, message: 'User logged in successfully' };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -101,7 +101,7 @@ export async function signInWithCredentials(
         default:
           return {
             success: false,
-            message: 'Please confirm your email address',
+            message: 'Please verify your email address',
           };
       }
     }
@@ -113,9 +113,40 @@ export async function signInWithCredentials(
   }
 }
 
+export async function googleAuthenticate() {
+  try {
+    await signIn('google');
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return 'google log in failed';
+    }
+    throw error;
+  }
+}
+
 // Sign user out
 export async function signOutUser() {
   const cookiesObject = await cookies();
   cookiesObject.set('sessionCartId', '', { expires: new Date(0) }); // Clear the cookie
   await signOut({ redirectTo: '/', redirect: true });
+}
+
+// Get user by the ID
+export async function getUserById(id: string) {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+  if (!user) throw new Error('User not found');
+  return user;
+}
+
+// Get account by user ID
+export async function getAccountByUserId(userId: string) {
+  const account = await prisma.account.findFirst({
+    where: {
+      userId,
+    },
+  });
+  if (!account) throw new Error('Account not found');
+  return account;
 }
