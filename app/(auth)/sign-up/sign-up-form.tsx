@@ -13,7 +13,7 @@ import { Form } from '@/components/ui/form';
 import SubmitButton from '@/components/shared/submit-button';
 import { toast } from 'sonner';
 import BaseFormField from '@/components/shared/base-form-field';
-import { X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import GoogleLogin from '@/components/auth/google-button';
 
 const SignUpForm = () => {
@@ -38,6 +38,12 @@ const SignUpForm = () => {
         description: data.message,
         duration: 3500,
         icon: <X />,
+      });
+    } else {
+      toast('Sign up success', {
+        description: data.message,
+        duration: 3500,
+        icon: <Check />,
       });
     }
   }, [data]);
@@ -102,9 +108,16 @@ const SignUpForm = () => {
                 isPendingLabel="Creating account..."
               />
             </div>
-            {data && !data.success && (
-              <div className="text-center text-destructive">{data.message}</div>
-            )}
+            {data &&
+              (data.success ? (
+                <div className="text-center text-green-500">
+                  Success! Your operation completed.
+                </div>
+              ) : (
+                <div className="text-center text-destructive">
+                  {data.message}
+                </div>
+              ))}
             <div className="text-sm text-center text-muted-foreground">
               Already have an account?{' '}
               <Link href="/sign-in" target="self" className="link">

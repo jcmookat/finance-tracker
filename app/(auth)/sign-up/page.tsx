@@ -30,27 +30,29 @@ const SignUpPage = async (props: {
     return redirect(callbackUrl || '/');
   }
   return (
-    <div className="w-full max-w-md mx-auto">
-      <Card>
-        <CardHeader className="space-y-4">
-          <Link href="/" className="flex-center">
-            <Image
-              src={logo}
-              width={100}
-              height={100}
-              alt={`${APP_NAME} logo`}
-              priority={true}
-            />
-          </Link>
-          <CardTitle className="text-center">Create Account</CardTitle>
-          <CardDescription className="text-center">
-            Enter your information below to sign up
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <SignUpForm />
-        </CardContent>
-      </Card>
+    <div className="flex-center min-h-screen w-full">
+      <div className="w-full max-w-md mx-auto">
+        <Card>
+          <CardHeader className="space-y-4">
+            <Link href="/" className="flex-center">
+              <Image
+                src={logo}
+                width={100}
+                height={100}
+                alt={`${APP_NAME} logo`}
+                priority={true}
+              />
+            </Link>
+            <CardTitle className="text-center">Create Account</CardTitle>
+            <CardDescription className="text-center">
+              Enter your information below to sign up
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <SignUpForm />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
