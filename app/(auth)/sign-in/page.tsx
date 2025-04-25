@@ -27,7 +27,7 @@ const SignInPage = async (props: {
   const session = await auth();
 
   if (session) {
-    return redirect(callbackUrl || '/');
+    return redirect(callbackUrl || '/dashboard');
   }
   return (
     <div className="flex-center min-h-screen w-full">

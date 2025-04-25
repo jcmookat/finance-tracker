@@ -39,7 +39,8 @@ const SignUpForm = () => {
         duration: 3500,
         icon: <X />,
       });
-    } else {
+    }
+    if (data.success && data.message) {
       toast('Sign up success', {
         description: data.message,
         duration: 3500,
@@ -79,6 +80,7 @@ const SignUpForm = () => {
               label="Name"
               placeholder="Name"
               formControl={form.control}
+              disabled={data?.success}
             />
             <BaseFormField<typeof signUpFormSchema>
               name="email"
@@ -86,6 +88,7 @@ const SignUpForm = () => {
               placeholder="Email"
               inputType="email"
               formControl={form.control}
+              disabled={data?.success}
             />
             <BaseFormField<typeof signUpFormSchema>
               name="password"
@@ -93,6 +96,7 @@ const SignUpForm = () => {
               placeholder="Password"
               inputType="password"
               formControl={form.control}
+              disabled={data?.success}
             />
             <BaseFormField<typeof signUpFormSchema>
               name="confirmPassword"
@@ -100,24 +104,28 @@ const SignUpForm = () => {
               placeholder="Confirm Password"
               inputType="password"
               formControl={form.control}
+              disabled={data?.success}
             />
             <div>
-              <SubmitButton
-                isPending={isPending}
-                buttonLabel="Sign Up"
-                isPendingLabel="Creating account..."
-              />
-            </div>
-            {data &&
-              (data.success ? (
-                <div className="text-center text-green-500">
-                  Success! Your operation completed.
+              {data?.success ? (
+                <div className="text-center p-2 bg-green-100 text-green-700 rounded-md font-medium">
+                  Registration complete!
                 </div>
               ) : (
-                <div className="text-center text-destructive">
-                  {data.message}
-                </div>
-              ))}
+                <SubmitButton
+                  isPending={isPending}
+                  buttonLabel="Sign Up"
+                  isPendingLabel="Creating account..."
+                />
+              )}
+            </div>
+            {data && (
+              <div
+                className={`text-center ${data.success ? 'text-green-500' : 'text-destructive'}`}
+              >
+                {data.message}
+              </div>
+            )}
             <div className="text-sm text-center text-muted-foreground">
               Already have an account?{' '}
               <Link href="/sign-in" target="self" className="link">
@@ -127,7 +135,7 @@ const SignUpForm = () => {
           </div>
         </form>
       </Form>
-      <GoogleLogin />
+      {!data?.success && <GoogleLogin />}
     </>
   );
 };

@@ -54,7 +54,10 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     //   password: plainPassword,
     // });
 
-    return { success: true, message: 'User registered successfully' };
+    return {
+      success: true,
+      message: 'Success! Verify your email address.',
+    };
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
@@ -115,7 +118,7 @@ export async function signInWithCredentials(
 
 export async function googleAuthenticate() {
   try {
-    await signIn('google');
+    await signIn('google', { redirectTo: '/dashboard' });
   } catch (error) {
     if (error instanceof AuthError) {
       return 'google log in failed';
