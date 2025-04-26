@@ -14,3 +14,4 @@ export const signUpDefaultValues = {
   password: '',
   confirmPassword: '',
 };
+export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'onboarding@resend.dev';

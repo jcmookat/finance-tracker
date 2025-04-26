@@ -5,7 +5,8 @@ import authConfig from './auth.config';
 
 import { prisma } from '@/db/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { getAccountByUserId, getUserById } from './lib/actions/user.actions';
+import { getUserById } from '@/lib/data/user';
+import { getAccountByUserId } from './lib/data/account';
 
 // export const config = {
 // 	pages: {

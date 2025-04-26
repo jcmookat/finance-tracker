@@ -11,8 +11,6 @@ export default auth(async (req) => {
   const isAuthRoute = nextUrl.pathname.includes('/auth');
   const isApiRoute = nextUrl.pathname.includes('/api');
 
-  console.log(isAuthRoute);
-
   if (isApiRoute) {
     return;
   }

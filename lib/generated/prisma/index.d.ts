@@ -1200,6 +1200,8 @@ export namespace Prisma {
     name: string | null
     email: string | null
     emailVerified: Date | null
+    verificationToken: string | null
+    verificationTokenExpiry: Date | null
     image: string | null
     password: string | null
     role: string | null
@@ -1212,6 +1214,8 @@ export namespace Prisma {
     name: string | null
     email: string | null
     emailVerified: Date | null
+    verificationToken: string | null
+    verificationTokenExpiry: Date | null
     image: string | null
     password: string | null
     role: string | null
@@ -1224,6 +1228,8 @@ export namespace Prisma {
     name: number
     email: number
     emailVerified: number
+    verificationToken: number
+    verificationTokenExpiry: number
     image: number
     password: number
     role: number
@@ -1238,6 +1244,8 @@ export namespace Prisma {
     name?: true
     email?: true
     emailVerified?: true
+    verificationToken?: true
+    verificationTokenExpiry?: true
     image?: true
     password?: true
     role?: true
@@ -1250,6 +1258,8 @@ export namespace Prisma {
     name?: true
     email?: true
     emailVerified?: true
+    verificationToken?: true
+    verificationTokenExpiry?: true
     image?: true
     password?: true
     role?: true
@@ -1262,6 +1272,8 @@ export namespace Prisma {
     name?: true
     email?: true
     emailVerified?: true
+    verificationToken?: true
+    verificationTokenExpiry?: true
     image?: true
     password?: true
     role?: true
@@ -1347,6 +1359,8 @@ export namespace Prisma {
     name: string
     email: string
     emailVerified: Date | null
+    verificationToken: string | null
+    verificationTokenExpiry: Date | null
     image: string | null
     password: string | null
     role: string
@@ -1376,6 +1390,8 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     emailVerified?: boolean
+    verificationToken?: boolean
+    verificationTokenExpiry?: boolean
     image?: boolean
     password?: boolean
     role?: boolean
@@ -1391,6 +1407,8 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     emailVerified?: boolean
+    verificationToken?: boolean
+    verificationTokenExpiry?: boolean
     image?: boolean
     password?: boolean
     role?: boolean
@@ -1403,6 +1421,8 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     emailVerified?: boolean
+    verificationToken?: boolean
+    verificationTokenExpiry?: boolean
     image?: boolean
     password?: boolean
     role?: boolean
@@ -1415,6 +1435,8 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     emailVerified?: boolean
+    verificationToken?: boolean
+    verificationTokenExpiry?: boolean
     image?: boolean
     password?: boolean
     role?: boolean
@@ -1422,7 +1444,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "verificationToken" | "verificationTokenExpiry" | "image" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     account?: boolean | User$accountArgs<ExtArgs>
     session?: boolean | User$sessionArgs<ExtArgs>
@@ -1442,6 +1464,8 @@ export namespace Prisma {
       name: string
       email: string
       emailVerified: Date | null
+      verificationToken: string | null
+      verificationTokenExpiry: Date | null
       image: string | null
       password: string | null
       role: string
@@ -1876,6 +1900,8 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
+    readonly verificationToken: FieldRef<"User", 'String'>
+    readonly verificationTokenExpiry: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'String'>
@@ -5577,6 +5603,8 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     emailVerified: 'emailVerified',
+    verificationToken: 'verificationToken',
+    verificationTokenExpiry: 'verificationTokenExpiry',
     image: 'image',
     password: 'password',
     role: 'role',
@@ -5722,6 +5750,8 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
+    verificationToken?: StringNullableFilter<"User"> | string | null
+    verificationTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
     role?: StringFilter<"User"> | string
@@ -5736,6 +5766,8 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
+    verificationToken?: SortOrderInput | SortOrder
+    verificationTokenExpiry?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     role?: SortOrder
@@ -5753,6 +5785,8 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
+    verificationToken?: StringNullableFilter<"User"> | string | null
+    verificationTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
     role?: StringFilter<"User"> | string
@@ -5767,6 +5801,8 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
+    verificationToken?: SortOrderInput | SortOrder
+    verificationTokenExpiry?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     role?: SortOrder
@@ -5785,6 +5821,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    verificationToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    verificationTokenExpiry?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: StringWithAggregatesFilter<"User"> | string
@@ -5993,6 +6031,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -6007,6 +6047,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -6021,6 +6063,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -6035,6 +6079,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -6049,6 +6095,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -6061,6 +6109,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -6073,6 +6123,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -6382,6 +6434,8 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
+    verificationToken?: SortOrder
+    verificationTokenExpiry?: SortOrder
     image?: SortOrder
     password?: SortOrder
     role?: SortOrder
@@ -6394,6 +6448,8 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
+    verificationToken?: SortOrder
+    verificationTokenExpiry?: SortOrder
     image?: SortOrder
     password?: SortOrder
     role?: SortOrder
@@ -6406,6 +6462,8 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
+    verificationToken?: SortOrder
+    verificationTokenExpiry?: SortOrder
     image?: SortOrder
     password?: SortOrder
     role?: SortOrder
@@ -7085,6 +7143,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -7098,6 +7158,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -7127,6 +7189,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -7140,6 +7204,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -7153,6 +7219,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -7166,6 +7234,8 @@ export namespace Prisma {
     name?: string
     email: string
     emailVerified?: Date | string | null
+    verificationToken?: string | null
+    verificationTokenExpiry?: Date | string | null
     image?: string | null
     password?: string | null
     role?: string
@@ -7195,6 +7265,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
@@ -7208,6 +7280,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
