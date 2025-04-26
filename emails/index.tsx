@@ -28,11 +28,13 @@ export const sendVerificationEmail = async ({
       }),
     });
     if (error) {
-      return Response.json({ error }, { status: 500 });
+      console.error('Email sending error:', error);
+      return { success: false, error };
     }
-    return Response.json(data);
+
+    return { success: true, data };
   } catch (error) {
-    console.log(error);
-    return Response.json({ error }, { status: 500 });
+    console.error('Email sending exception:', error);
+    return { success: false, error };
   }
 };

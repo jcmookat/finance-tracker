@@ -8,13 +8,8 @@ import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { formatError } from '../utils';
 import { cookies } from 'next/headers';
 import { AuthError } from 'next-auth';
-// import { Resend } from 'resend';
-// import { VerificationEmail } from '@/emails/verification-email';
 import bcrypt from 'bcryptjs';
-// import { APP_NAME, SENDER_EMAIL } from '@/lib/constants';
 import { sendVerificationEmail } from '@/emails';
-
-// const resend = new Resend(process.env.RESEND_API_KEY as string);
 
 // Sign up user
 export async function signUpUser(prevState: unknown, formData: FormData) {
@@ -72,25 +67,24 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     // Create verification link
     const verificationLink = `${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${encodeURIComponent(token)}`;
 
-    // Send verification email
-    // await resend.emails.send({
-    //   from: `${APP_NAME} <${SENDER_EMAIL}>`,
-    //   to: normalizedEmail,
-    //   subject: 'Verify your email address',
-    //   react: VerificationEmail({
-    //     username: formData.get('name'),
-    //     verificationLink,
-    //   }),
-    // });
-
-    const verification = await sendVerificationEmail({
+    const emailVerification = await sendVerificationEmail({
       email: normalizedEmail,
       username: user.name,
       verificationLink,
     });
 
-    console.log(verification);
+    if (!emailVerification.success) {
+      // Email sending failed
+      return {
+        success: false,
+        message:
+          'Registration completed, but we could not send a verification email. Please try to verify your account later.',
+        // Optionally include more details or error info for debugging
+        error: emailVerification.error,
+      };
+    }
 
+    // Registered user and verication email was sent successfully
     return {
       success: true,
       message:
@@ -124,14 +118,35 @@ export async function verifyEmail(token: string) {
       };
     }
 
-    // Update user as verified
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        emailVerified: new Date(),
-        verificationToken: null,
-        verificationTokenExpiry: null,
-      },
+    // Use a transaction to ensure both operations succeed or fail together
+    await prisma.$transaction(async (tx) => {
+      // Update user as verified
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          emailVerified: new Date(),
+          verificationToken: null,
+          verificationTokenExpiry: null,
+        },
+      });
+
+      // Create an account for the user
+      await tx.account.create({
+        data: {
+          userId: user.id,
+          type: 'credentials',
+          provider: 'email',
+          providerAccountId: user.email, // Using email as the providerAccountId
+          // Optional fields below can be null
+          refresh_token: null,
+          access_token: null,
+          expires_at: null,
+          token_type: null,
+          scope: null,
+          id_token: null,
+          session_state: null,
+        },
+      });
     });
 
     return {
