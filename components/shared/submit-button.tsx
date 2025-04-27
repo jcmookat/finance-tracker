@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Loader } from 'lucide-react';
+import { ArrowRight, Loader, LogIn, UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const SubmitButton = ({
@@ -27,7 +27,14 @@ const SubmitButton = ({
         </>
       ) : (
         <>
-          {withIcon && <ArrowRight className="w-4 h-4" />}
+          {withIcon &&
+            (buttonLabel === 'Sign In' ? (
+              <LogIn className="w-4 h-4 mr-2" />
+            ) : buttonLabel === 'Sign Up' ? (
+              <UserIcon className="w-4 h-4 mr-2" />
+            ) : (
+              <ArrowRight className="w-4 h-4 mr-2" />
+            ))}
           {buttonLabel}
         </>
       )}

@@ -25,7 +25,7 @@ const ModeToggle = () => {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0"
+      className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 p-1 w-8 h-8"
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -35,9 +35,13 @@ const ModeToggle = () => {
           animate={{ y: 0, opacity: 1, rotate: 0 }}
           exit={{ y: 20, opacity: 0, rotate: 90 }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center p-0"
         >
-          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          {theme === 'dark' ? (
+            <SunIcon className="w-5 h-5" />
+          ) : (
+            <MoonIcon className="h-5 w-5" />
+          )}
         </motion.div>
       </AnimatePresence>
     </Button>

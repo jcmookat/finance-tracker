@@ -1,6 +1,7 @@
 import { z, ZodType } from 'zod';
 import { signUpFormSchema } from '@/lib/validators';
 import { FieldPath, Control } from 'react-hook-form';
+import { DefaultSession } from 'next-auth';
 
 // Base type for form field props
 export type BaseFormFieldProps<TSchema extends ZodType> = {
@@ -18,3 +19,46 @@ export type BaseFormFieldProps<TSchema extends ZodType> = {
 };
 
 export type SignupFormFieldProps = BaseFormFieldProps<typeof signUpFormSchema>;
+
+// Define your role type if you have specific roles
+export type UserRole = 'user' | 'admin';
+
+// Session user schema
+export const sessionUserSchema = z.object({
+  id: z.string(),
+  name: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
+  image: z.string().optional(), // Important: allow null
+  role: z.string(),
+  isOauth: z.boolean(),
+});
+
+export const sessionSchema = z.object({
+  user: sessionUserSchema,
+  expires: z.string(),
+});
+
+// Session types
+
+export type SessionUser = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null; // Allow null
+  role: string;
+  isOauth: boolean;
+};
+export interface Session extends DefaultSession {
+  user: SessionUser;
+}
+
+// For easier type extending in other files
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      role: string;
+      isOauth: boolean;
+    } & DefaultSession['user'];
+  }
+}
