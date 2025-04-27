@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react';
-import { ArrowUpCircleIcon, Wallet } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,

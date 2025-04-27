@@ -10,19 +10,20 @@ datasource db {
 }
 
 model User {
-  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                    String    @default("NO_NAME")
-  email                   String    @unique(map: "user_email_idx")
-  emailVerified           DateTime? @db.Timestamp(6)
+  id                      String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                    String        @default("NO_NAME")
+  email                   String        @unique(map: "user_email_idx")
+  emailVerified           DateTime?     @db.Timestamp(6)
   verificationToken       String?
   verificationTokenExpiry DateTime?
   image                   String?
   password                String?
-  role                    String    @default("user")
-  createdAt               DateTime  @default(now()) @db.Timestamp(6)
-  updatedAt               DateTime  @updatedAt
+  role                    String        @default("user")
+  createdAt               DateTime      @default(now()) @db.Timestamp(6)
+  updatedAt               DateTime      @updatedAt
   account                 Account[]
   session                 Session[]
+  Transaction             Transaction[]
 }
 
 model Account {
@@ -62,4 +63,26 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Transaction {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String          @db.Uuid
+  type            TransactionType
+  category        String
+  amount          Decimal         @db.Decimal(10, 2)
+  description     String?
+  transactionDate DateTime        @db.Timestamp(6)
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }

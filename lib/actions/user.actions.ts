@@ -188,7 +188,6 @@ export async function signInWithCredentials(
     await signIn('credentials', {
       email: existingUser.email,
       password: user.password,
-      redirectTo: '/dashboard',
     });
 
     return { success: true, message: 'User logged in successfully' };

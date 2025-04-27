@@ -1,1 +1,1 @@
-export const privateRoutes = ['/dashboard'];
+export const privateRoutes = ['/dashboard', '/transactions', '/profile'];
