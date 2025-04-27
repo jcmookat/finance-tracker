@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import { getTransactionsByUserId } from '@/lib/data/transaction';
+import { getCurrentMonthAndYear } from '@/lib/utils';
 import { type ReactElement } from 'react';
 
 export default async function TransactionsPage(): Promise<ReactElement> {
@@ -8,8 +9,10 @@ export default async function TransactionsPage(): Promise<ReactElement> {
   if (!session) {
     throw new Error('User is not authenticated');
   }
-  const user = session.user;
-  const transactions = await getTransactionsByUserId(user.id);
+  const userId = session.user.id;
+
+  const { month, year } = getCurrentMonthAndYear();
+  const transactions = await getTransactionsByUserId(userId, month, year); // Fetch April 2025
 
   return (
     <>
@@ -18,9 +21,9 @@ export default async function TransactionsPage(): Promise<ReactElement> {
           <p>No transactions found.</p>
         ) : (
           <ul>
-            {transactions.map((tx) => (
-              <li key={tx.id}>
-                {tx.category} - ${tx.amount.toFixed(2)} ({tx.type})
+            {transactions.map((tr) => (
+              <li key={tr.id}>
+                {tr.category} - ${tr.amount.toFixed(2)} ({tr.type})
               </li>
             ))}
           </ul>

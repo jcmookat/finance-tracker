@@ -34,3 +34,12 @@ export function formatError(error: any) {
       : JSON.stringify(error.message);
   }
 }
+
+// Get Current Month and Year
+export function getCurrentMonthAndYear() {
+  const now = new Date();
+  return {
+    month: now.getMonth() + 1,
+    year: now.getFullYear(),
+  };
+}
