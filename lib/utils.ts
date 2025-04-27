@@ -43,3 +43,15 @@ export function getCurrentMonthAndYear() {
     year: now.getFullYear(),
   };
 }
+
+// Helper to group transactions by date (yyyy-mm-dd)
+export function groupTransactionsByDate(transactions: any[]) {
+  return transactions.reduce((groups: Record<string, any[]>, tr) => {
+    const dateKey = tr.transactionDate.toISOString().split('T')[0]; // '2025-04-05'
+    if (!groups[dateKey]) {
+      groups[dateKey] = [];
+    }
+    groups[dateKey].push(tr);
+    return groups;
+  }, {});
+}
