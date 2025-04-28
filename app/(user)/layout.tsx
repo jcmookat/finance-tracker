@@ -22,7 +22,7 @@ export default function RootLayout({
           </div>
         </header>
         <main className="flex-1 p-4 pt-0">
-          <div className="h-[calc(100vh-80px)] flex-1 rounded-xl bg-muted/50 p-4">
+          <div className="min-h-[calc(100vh-80px)] flex-1 rounded-xl bg-muted/50 p-4">
             {children}
           </div>
         </main>

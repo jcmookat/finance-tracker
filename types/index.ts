@@ -39,7 +39,6 @@ export const sessionSchema = z.object({
 });
 
 // Session types
-
 export type SessionUser = {
   id: string;
   name?: string | null;

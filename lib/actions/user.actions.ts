@@ -5,7 +5,7 @@ import { signIn, signOut } from '@/auth';
 import { prisma } from '@/db/prisma';
 import { hashSync } from 'bcrypt-ts-edge';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { formatError } from '../utils';
+import { formatError } from '@/lib/utils/formatHelpers';
 import { cookies } from 'next/headers';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcryptjs';
