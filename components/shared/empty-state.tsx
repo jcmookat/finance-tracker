@@ -1,6 +1,6 @@
 import { TbMoodEmpty } from 'react-icons/tb'; // install react-icons if you haven't: npm install react-icons
 
-export function EmptyState({
+export default function EmptyState({
   title,
   subtitle,
 }: {

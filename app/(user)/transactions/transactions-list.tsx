@@ -3,11 +3,12 @@ import {
   groupTransactionsByDate,
 } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { Transactions } from '@/types';
+import { TransactionsListProps } from '@/types';
 
-export function TransactionsList({ transactions }: Transactions) {
+export default function TransactionsList({
+  transactions,
+}: TransactionsListProps) {
   const groupedTransactionsByDate = groupTransactionsByDate(transactions);
-  console.log(groupedTransactionsByDate);
   const sortedDates = Object.keys(groupedTransactionsByDate).sort((a, b) =>
     b.localeCompare(a),
   );
@@ -15,9 +16,6 @@ export function TransactionsList({ transactions }: Transactions) {
   const renderTransactionGroup = (date: string) => {
     const dayTransactions = groupedTransactionsByDate[date];
     const dayTotal = calculateTotalTransactions(dayTransactions);
-    const monthTotal = calculateTotalTransactions(transactions);
-
-    console.log(monthTotal);
 
     const incomes = dayTransactions.filter((tr) => tr.type === 'INCOME');
     const expenses = dayTransactions.filter((tr) => tr.type === 'EXPENSE');
@@ -33,7 +31,7 @@ export function TransactionsList({ transactions }: Transactions) {
             <ul>
               {incomes.map((tr) => (
                 <li key={tr.id} className="ml-2">
-                  {tr.category}: +{formatCurrency(tr.amount)}
+                  {tr.category} - {formatCurrency(tr.amount)}
                 </li>
               ))}
             </ul>
@@ -45,7 +43,7 @@ export function TransactionsList({ transactions }: Transactions) {
             <ul>
               {expenses.map((tr) => (
                 <li key={tr.id} className="ml-2">
-                  {tr.category}: -{formatCurrency(tr.amount)}
+                  {tr.category} - {formatCurrency(tr.amount)}
                 </li>
               ))}
             </ul>

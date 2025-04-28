@@ -1,4 +1,5 @@
 import { prisma } from '@/db/prisma';
+import { convertToPlainObject } from '../utils/formatHelpers';
 
 // Get transactions by User ID, with optional month/year filtering
 export async function getTransactionsByUserId(
@@ -24,6 +25,5 @@ export async function getTransactionsByUserId(
     where: { userId, ...dateFilter },
     orderBy: { transactionDate: 'desc' }, // most recent first
   });
-
-  return transactions;
+  return convertToPlainObject(transactions);
 }
