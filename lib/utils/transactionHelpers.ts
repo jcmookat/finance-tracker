@@ -1,5 +1,5 @@
 // Helper to calculate total amount for a list of transactions
-export function calculateTotalTransactionsByDay(transactions: any[]) {
+export function calculateTotalTransactions(transactions: any[]) {
   return transactions.reduce((sum, tr) => {
     // Convert amount to a number explicitly to ensure arithmetic addition
     const numericAmount = parseFloat(tr.amount);
@@ -7,7 +7,9 @@ export function calculateTotalTransactionsByDay(transactions: any[]) {
     // Apply the sign based on transaction type
     const amount = tr.type === 'INCOME' ? numericAmount : -numericAmount;
 
-    return sum + amount;
+    const total = sum + amount;
+
+    return total;
   }, 0);
 }
 

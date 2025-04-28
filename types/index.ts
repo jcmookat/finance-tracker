@@ -2,6 +2,7 @@ import { z, ZodType } from 'zod';
 import { signUpFormSchema } from '@/lib/validators';
 import { FieldPath, Control } from 'react-hook-form';
 import { DefaultSession } from 'next-auth';
+import { type Transaction } from '@/lib/generated/prisma';
 
 // Base type for form field props
 export type BaseFormFieldProps<TSchema extends ZodType> = {
@@ -61,3 +62,7 @@ declare module 'next-auth' {
     } & DefaultSession['user'];
   }
 }
+
+export type Transactions = {
+  transactions: Transaction[];
+};
