@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MonthYearPicker } from './month-year-picker';
+import MonthYearPicker from './month-year-picker';
 import TransactionsList from './transactions-list';
 import EmptyState from '@/components/shared/empty-state';
 import { calculateTotalTransactions } from '@/lib/utils/transactionHelpers';
