@@ -74,4 +74,5 @@ export interface TransactionsClientProps {
   initialTransactions: Transaction[];
   initialMonth: number;
   initialYear: number;
+  initialStartDate: Date;
 }

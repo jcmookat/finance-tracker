@@ -4,7 +4,7 @@ import { useState } from 'react';
 import MonthYearPicker from './month-year-picker';
 import TransactionsList from './transactions-list';
 import EmptyState from '@/components/shared/empty-state';
-import { calculateTotalTransactions } from '@/lib/utils/transactionHelpers';
+import { calculateTotal } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types'; // Adjust import path as needed
 import Loading from './loading';
@@ -13,33 +13,65 @@ export default function TransactionsClient({
   initialTransactions,
   initialMonth,
   initialYear,
+  initialStartDate,
 }: TransactionsClientProps) {
   const [transactions, setTransactions] =
     useState<Transaction[]>(initialTransactions);
   const [month, setMonth] = useState(initialMonth);
   const [year, setYear] = useState(initialYear);
+  const [startDate, setStartDate] = useState(initialStartDate);
   const [isLoading, setIsLoading] = useState(false);
 
-  const monthTotal = calculateTotalTransactions(transactions);
+  const filteredTransactions = transactions.filter((t) => {
+    const date = new Date(t.transactionDate);
+    return date.getMonth() + 1 === month && date.getFullYear() === year;
+  });
 
-  const handleMonthYearChange = async (newMonth: number, newYear: number) => {
+  const monthIncome = calculateTotal(filteredTransactions, 'INCOME');
+  const monthExpense = calculateTotal(filteredTransactions, 'EXPENSE');
+  const monthTotal = calculateTotal(filteredTransactions, 'ALL');
+
+  const handleMonthYearChange = async (
+    selectedMonth: number,
+    selectedYear: number,
+  ) => {
     setIsLoading(true);
-    setMonth(newMonth);
-    setYear(newYear);
+    setMonth(selectedMonth);
+    setYear(selectedYear);
+    setIsLoading(false);
 
-    try {
-      const response = await fetch(
-        `/api/transactions?month=${newMonth}&year=${newYear}`,
+    const dateOfSelectedMonthYear = new Date(selectedYear, selectedMonth);
+
+    const isSelectedMonthPrefetched = transactions.some((t) => {
+      const date = new Date(t.transactionDate);
+      return (
+        date.getMonth() + 1 === selectedMonth &&
+        date.getFullYear() === selectedYear
       );
-      if (!response.ok) throw new Error('Failed to fetch transactions');
+    });
 
-      const newTransactions = await response.json();
+    const isSelectedMonthOlderThenStartDate =
+      dateOfSelectedMonthYear < startDate;
 
-      setTransactions(newTransactions);
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-    } finally {
-      setIsLoading(false);
+    if (!isSelectedMonthPrefetched && isSelectedMonthOlderThenStartDate) {
+      try {
+        const olderEndDate = new Date(selectedYear, selectedMonth);
+        const olderStartDate = new Date(selectedYear - 1, selectedMonth);
+        setStartDate(olderStartDate);
+        setIsLoading(true);
+        const response = await fetch(
+          `/api/transactions?startDate=${olderStartDate}&endDate=${olderEndDate}`,
+        );
+        if (!response.ok) throw new Error('Failed to fetch transactions');
+
+        const olderTransactions = await response.json();
+
+        setTransactions((prev) => [...prev, ...olderTransactions]);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -52,7 +84,7 @@ export default function TransactionsClient({
       />
       {isLoading ? (
         <Loading />
-      ) : transactions.length === 0 ? (
+      ) : filteredTransactions.length === 0 ? (
         <EmptyState
           title="No Transactions Yet"
           subtitle="Start tracking your finances to see them here!"
@@ -66,15 +98,21 @@ export default function TransactionsClient({
                 year: 'numeric',
               })}
             </h2>
+            <p className="text-green-600">
+              Income: {formatCurrency(Math.abs(monthIncome))}
+            </p>
+            <p className="text-red-600">
+              Expense: {formatCurrency(Math.abs(monthExpense))}
+            </p>
             <p
-              className={`text-lg ${monthTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}
+              className={`text-lg font-bold ${monthTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}
             >
               Total: {monthTotal >= 0 ? '+' : '-'}
               {formatCurrency(Math.abs(monthTotal))}
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
-            <TransactionsList transactions={transactions} />
+            <TransactionsList transactions={filteredTransactions} />
           </div>
         </div>
       )}

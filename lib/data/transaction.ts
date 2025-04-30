@@ -10,8 +10,8 @@ export async function getTransactionsByUserId(
   let dateFilter = {};
 
   if (month && year) {
-    const startDate = new Date(year, month - 1, 1); // Month is 0-indexed in JS
-    const endDate = new Date(year, month, 1); // First day of next month
+    const startDate = new Date(year, month - 1, 1); // Month is 0-indexed in JS, (start of the month)
+    const endDate = new Date(year, month, 1); // First day of next month, (end of the month)
 
     dateFilter = {
       transactionDate: {
@@ -20,6 +20,28 @@ export async function getTransactionsByUserId(
       },
     };
   }
+
+  const transactions = await prisma.transaction.findMany({
+    where: { userId, ...dateFilter },
+    orderBy: { transactionDate: 'desc' }, // most recent first
+  });
+  return convertToPlainObject(transactions);
+}
+
+/**
+ * Get transactions for a date range (used for prefetching multiple months)
+ */
+export async function getTransactionsForPeriod(
+  userId: string,
+  startDate: Date,
+  endDate: Date,
+) {
+  const dateFilter = {
+    transactionDate: {
+      gte: startDate,
+      lt: endDate,
+    },
+  };
 
   const transactions = await prisma.transaction.findMany({
     where: { userId, ...dateFilter },

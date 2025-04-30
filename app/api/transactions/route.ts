@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { getTransactionsByUserId } from '@/lib/data/transaction';
+import { getTransactionsForPeriod } from '@/lib/data/transaction';
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,17 +13,24 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     // Get month and year from query parameters
-    const month = parseInt(searchParams.get('month') || '0');
-    const year = parseInt(searchParams.get('year') || '0');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
 
-    if (!month || !year) {
+    const olderStartDate = new Date(startDate);
+    const olderEndDate = new Date(endDate);
+
+    if (!startDate || !endDate) {
       return NextResponse.json(
         { error: 'Month and year are required' },
         { status: 400 },
       );
     }
 
-    const transactions = await getTransactionsByUserId(userId, month, year);
+    const transactions = await getTransactionsForPeriod(
+      userId,
+      olderStartDate,
+      olderEndDate,
+    );
 
     return NextResponse.json(transactions);
   } catch (error) {

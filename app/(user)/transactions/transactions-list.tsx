@@ -1,5 +1,5 @@
 import {
-  calculateTotalTransactions,
+  calculateTotal,
   groupTransactionsByDate,
 } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
@@ -15,7 +15,7 @@ export default function TransactionsList({
 
   const renderTransactionGroup = (date: string) => {
     const dayTransactions = groupedTransactionsByDate[date];
-    const dayTotal = calculateTotalTransactions(dayTransactions);
+    const dayTotal = calculateTotal(dayTransactions, 'ALL');
 
     const incomes = dayTransactions.filter((tr) => tr.type === 'INCOME');
     const expenses = dayTransactions.filter((tr) => tr.type === 'EXPENSE');
