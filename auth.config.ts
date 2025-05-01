@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
-import { signInFormSchema } from './lib/validators';
+import { signInFormSchema } from '@/lib/validators/user';
 import { prisma } from './db/prisma';
 import { compareSync } from 'bcryptjs';
 

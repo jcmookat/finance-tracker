@@ -90,19 +90,19 @@ export default function TransactionsClient({
           subtitle="Start tracking your finances to see them here!"
         />
       ) : (
-        <div className="">
-          <div className="mb-6">
+        <>
+          <div className="mb-6 flex gap-8 items-center">
             <h2 className="text-2xl font-bold">
               {new Date(year, month - 1).toLocaleString('default', {
                 month: 'long',
                 year: 'numeric',
               })}
             </h2>
-            <p className="text-green-600">
-              Income: {formatCurrency(Math.abs(monthIncome))}
+            <p className="text-lg font-bold text-green-600">
+              Income: +{formatCurrency(Math.abs(monthIncome))}
             </p>
-            <p className="text-red-600">
-              Expense: {formatCurrency(Math.abs(monthExpense))}
+            <p className="text-lg font-bold text-red-600">
+              Expense: -{formatCurrency(Math.abs(monthExpense))}
             </p>
             <p
               className={`text-lg font-bold ${monthTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}
@@ -114,7 +114,7 @@ export default function TransactionsClient({
           <div className="flex flex-wrap gap-4">
             <TransactionsList transactions={filteredTransactions} />
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -1,31 +1,46 @@
-// Format errors
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function formatError(error: any) {
-  if (error.name === 'ZodError') {
-    // Handle Zod error
-    const fieldErrors = Object.keys(error.errors).map(
-      (field) => error.errors[field].message,
-    );
+import { ZodError } from 'zod';
 
-    return fieldErrors.join('. ');
-  } else if (
-    error.name === 'PrismaClientKnownRequestError' &&
-    error.code === 'P2002'
+// Format errors
+export function formatError(error: unknown): string {
+  if (error instanceof ZodError) {
+    // Gather all _errors from each field
+    return Object.values(error.format())
+      .flatMap((field: any) =>
+        field && typeof field === 'object' && '_errors' in field
+          ? field._errors
+          : [],
+      )
+      .join('. ');
+  }
+
+  // Handle Prisma unique constraint error (e.g. P2002)
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'name' in error &&
+    (error as any).name === 'PrismaClientKnownRequestError' &&
+    (error as any).code === 'P2002'
   ) {
-    // Handle Prisma error
-    const field = error.meta?.target ? error.meta.target[0] : 'Field';
+    const field = (error as any).meta?.target?.[0] || 'Field';
     return `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
-  } else if (
-    error.name === 'Error' &&
-    error.message.includes(`code: "22P02"`)
+  }
+
+  // Handle Postgres bad input format (e.g. invalid UUID - code 22P02)
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    (error as any).message?.includes(`code: "22P02"`)
   ) {
     return 'Not found';
-  } else {
-    // Handle other errors
-    return typeof error.message === 'string'
-      ? error.message
-      : JSON.stringify(error.message);
   }
+
+  // Generic fallback
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    return (error as any).message ?? 'Unknown error';
+  }
+
+  return 'An unknown error occurred';
 }
 
 export function formatCurrency(

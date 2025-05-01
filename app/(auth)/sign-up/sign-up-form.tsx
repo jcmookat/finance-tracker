@@ -6,7 +6,7 @@ import { useActionState, useEffect, useTransition } from 'react';
 import { signUpUser } from '@/lib/actions/user.actions';
 import { useSearchParams } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { signUpFormSchema } from '@/lib/validators';
+import { signUpFormSchema } from '@/lib/validators/user';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';

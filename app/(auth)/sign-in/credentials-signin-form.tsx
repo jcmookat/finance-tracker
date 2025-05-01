@@ -9,7 +9,7 @@ import SubmitButton from '@/components/shared/submit-button';
 import { Form } from '@/components/ui/form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signInFormSchema } from '@/lib/validators';
+import { signInFormSchema } from '@/lib/validators/user';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import BaseFormField from '@/components/shared/base-form-field';

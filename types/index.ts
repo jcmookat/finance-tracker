@@ -1,8 +1,9 @@
 import { z, ZodType } from 'zod';
-import { signUpFormSchema } from '@/lib/validators';
+import { signUpFormSchema } from '@/lib/validators/user';
 import { FieldPath, Control } from 'react-hook-form';
 import { DefaultSession } from 'next-auth';
 import { Transaction as PrismaTransaction } from '@/lib/generated/prisma/';
+import { insertTransactionSchema } from '@/lib/validators/transaction';
 
 // Base type for form field props
 export type BaseFormFieldProps<TSchema extends ZodType> = {
@@ -76,3 +77,5 @@ export interface TransactionsClientProps {
   initialYear: number;
   initialStartDate: Date;
 }
+
+export type TransactionInput = z.infer<typeof insertTransactionSchema>;
