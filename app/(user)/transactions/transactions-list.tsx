@@ -3,7 +3,7 @@ import {
   groupTransactionsByDate,
 } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { TransactionsListProps } from '@/types';
+import { TransactionsListProps } from '@/types/transaction';
 
 export default function TransactionsList({
   transactions,

@@ -6,7 +6,7 @@ import TransactionsList from './transactions-list';
 import EmptyState from '@/components/shared/empty-state';
 import { calculateTotal } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { TransactionsClientProps, Transaction } from '@/types'; // Adjust import path as needed
+import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
 import Loading from './loading';
 
 export default function TransactionsClient({

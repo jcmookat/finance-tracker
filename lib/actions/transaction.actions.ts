@@ -1,16 +1,15 @@
+'use server';
 import { prisma } from '@/db/prisma';
-import { z } from 'zod';
 import { formatError } from '../utils/formatHelpers';
 import {
   insertTransactionSchema,
   updateTransactionSchema,
 } from '../validators/transaction';
 import { revalidatePath } from 'next/cache';
+import { InsertTransaction, UpdateTransaction } from '@/types/transaction';
 
 // Create transaction
-export async function createTransaction(
-  data: z.infer<typeof insertTransactionSchema>,
-) {
+export async function createTransaction(data: InsertTransaction) {
   // Validate
   const parsed = insertTransactionSchema.safeParse(data);
 
@@ -43,9 +42,7 @@ export async function createTransaction(
 }
 
 // Update transaction
-export async function updateTransaction(
-  data: z.infer<typeof updateTransactionSchema>,
-) {
+export async function updateTransaction(data: UpdateTransaction) {
   // Validate
   const parsed = updateTransactionSchema.safeParse(data);
 

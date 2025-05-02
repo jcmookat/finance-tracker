@@ -2,19 +2,17 @@ import { z, ZodType } from 'zod';
 import { signUpFormSchema } from '@/lib/validators/user';
 import { FieldPath, Control } from 'react-hook-form';
 import { DefaultSession } from 'next-auth';
-import { Transaction as PrismaTransaction } from '@/lib/generated/prisma/';
-import { insertTransactionSchema } from '@/lib/validators/transaction';
+import { LucideIcon } from 'lucide-react';
 
 // Base type for form field props
 export type BaseFormFieldProps<TSchema extends ZodType> = {
   name: FieldPath<z.infer<TSchema>>;
-  label: string;
+  label?: string;
   placeholder?: string;
   description?: string;
   inputType?: string;
   disabled?: boolean;
-  dataArr?: string[];
-  selectIcon?: boolean;
+  dataArr?: Array<{ label: string; value: string; icon?: LucideIcon }>;
   disabledLabel?: string;
   enabledLabel?: string;
   formControl: Control<z.infer<TSchema>>;
@@ -63,19 +61,3 @@ declare module 'next-auth' {
     } & DefaultSession['user'];
   }
 }
-
-// Transaction Types
-export type Transaction = PrismaTransaction;
-
-export interface TransactionsListProps {
-  transactions: Transaction[];
-}
-
-export interface TransactionsClientProps {
-  initialTransactions: Transaction[];
-  initialMonth: number;
-  initialYear: number;
-  initialStartDate: Date;
-}
-
-export type TransactionInput = z.infer<typeof insertTransactionSchema>;

@@ -21,10 +21,15 @@ export async function getTransactionsByUserId(
     };
   }
 
-  const transactions = await prisma.transaction.findMany({
+  const rawTransactions = await prisma.transaction.findMany({
     where: { userId, ...dateFilter },
     orderBy: { transactionDate: 'desc' }, // most recent first
   });
+  const transactions = rawTransactions.map((tr) => ({
+    ...tr,
+    amount: tr.amount.toNumber(),
+    description: tr.description ?? undefined,
+  }));
   return convertToPlainObject(transactions);
 }
 
@@ -43,9 +48,14 @@ export async function getTransactionsForPeriod(
     },
   };
 
-  const transactions = await prisma.transaction.findMany({
+  const rawTransactions = await prisma.transaction.findMany({
     where: { userId, ...dateFilter },
     orderBy: { transactionDate: 'desc' }, // most recent first
   });
+  const transactions = rawTransactions.map((tr) => ({
+    ...tr,
+    amount: tr.amount.toNumber(),
+    description: tr.description ?? undefined,
+  }));
   return convertToPlainObject(transactions);
 }

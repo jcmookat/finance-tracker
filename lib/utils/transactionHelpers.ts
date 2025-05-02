@@ -1,4 +1,4 @@
-import { Transaction } from '@/types';
+import { Transaction } from '@/types/transaction';
 
 export function calculateTotal(
   transactions: Transaction[],
