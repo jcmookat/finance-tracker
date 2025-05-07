@@ -59,3 +59,20 @@ export async function getTransactionsForPeriod(
   }));
   return convertToPlainObject(transactions);
 }
+
+// Get single transaction by transaction Id
+export async function getTransactionById(transactionId: string) {
+  const rawTransaction = await prisma.transaction.findFirst({
+    where: { id: transactionId },
+  });
+  if (!rawTransaction) throw new Error('Transaction not found');
+
+  // Convert Decimal to number
+  const transaction = {
+    ...rawTransaction,
+    amount: rawTransaction.amount.toNumber(),
+    description: rawTransaction.description ?? undefined,
+  };
+
+  return convertToPlainObject(transaction);
+}

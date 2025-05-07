@@ -21,7 +21,15 @@ export async function createTransaction(data: InsertTransaction) {
     };
   }
 
-  const transaction = parsed.data;
+  const transaction = { ...parsed.data };
+
+  // Handle date timezone conversion
+  if (transaction.transactionDate) {
+    const date = new Date(transaction.transactionDate);
+    // Just extract the date components and create a new date string in YYYY-MM-DD format
+    const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    transaction.transactionDate = new Date(dateString);
+  }
 
   try {
     // Create transaction
@@ -54,9 +62,16 @@ export async function updateTransaction(data: UpdateTransaction) {
     };
   }
 
-  const transaction = parsed.data;
-
+  const transaction = { ...parsed.data };
   const { id, ...updateTransaction } = transaction;
+
+  // Handle date timezone conversion
+  if (updateTransaction.transactionDate) {
+    const date = new Date(updateTransaction.transactionDate);
+    // Extract date components and create a new date string in YYYY-MM-DD format
+    const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    updateTransaction.transactionDate = new Date(dateString);
+  }
 
   try {
     // Validate and find transaction

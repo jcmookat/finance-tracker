@@ -12,14 +12,12 @@ export default function TransactionsList({
   const sortedDates = Object.keys(groupedTransactionsByDate).sort((a, b) =>
     b.localeCompare(a),
   );
-
   const renderTransactionGroup = (date: string) => {
     const dayTransactions = groupedTransactionsByDate[date];
     const dayTotal = calculateTotal(dayTransactions, 'ALL');
 
     const incomes = dayTransactions.filter((tr) => tr.type === 'INCOME');
     const expenses = dayTransactions.filter((tr) => tr.type === 'EXPENSE');
-
     return (
       <div
         key={date}

@@ -2,7 +2,7 @@
 
 import { Form } from '@/components/ui/form';
 import BaseFormField from '@/components/shared/base-form-field';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   insertTransactionSchema,
@@ -11,8 +11,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { InsertTransaction, Transaction } from '@/types/transaction';
 import { transactionDefaultValues } from '@/lib/constants';
-// import SubmitButton from '../shared/submit-button';
-import { Button } from '@/components/ui/button';
+import SubmitButton from '../shared/submit-button';
 import {
   expenseCategories,
   incomeCategories,
@@ -41,8 +40,21 @@ export default function TransactionForm({
   const typeParam = searchParams.get('type') as 'EXPENSE' | 'INCOME';
   const formDefaults = transactionDefaultValues();
 
-  const schema =
-    mode === 'Update' ? updateTransactionSchema : insertTransactionSchema;
+  const modeConfig = {
+    Update: {
+      buttonLabel: 'Update Transaction',
+      isPendingLabel: 'Updating transaction...',
+      schema: updateTransactionSchema,
+    },
+    Create: {
+      buttonLabel: 'Create Transaction',
+      isPendingLabel: 'Creating transaction...',
+      schema: insertTransactionSchema,
+    },
+  };
+
+  const currentMode = mode === 'Update' ? 'Update' : 'Create';
+  const { buttonLabel, isPendingLabel, schema } = modeConfig[currentMode];
 
   const form = useForm<InsertTransaction>({
     resolver: zodResolver(schema),
@@ -60,14 +72,14 @@ export default function TransactionForm({
   const type = form.watch('type');
   const categories = type === 'INCOME' ? incomeCategories : expenseCategories;
 
-  useEffect(() => {
-    const newCategory =
-      type === 'INCOME'
-        ? incomeCategories[0].value
-        : expenseCategories[0].value;
-
-    form.setValue('category', newCategory);
-  }, [form, type]);
+  // useEffect(() => {
+  //   const newCategory =
+  //     type === 'INCOME'
+  //       ? incomeCategories[0].value
+  //       : expenseCategories[0].value;
+  //
+  //   form.setValue('category', newCategory);
+  // }, [form, type]);
 
   const onSubmit: SubmitHandler<InsertTransaction> = async (values) => {
     const fullData = {
@@ -149,7 +161,11 @@ export default function TransactionForm({
           />
         </div>
         <div>
-          <Button type="submit">Submit</Button>
+          <SubmitButton
+            isPending={form.formState.isSubmitting}
+            buttonLabel={buttonLabel}
+            isPendingLabel={isPendingLabel}
+          />
         </div>
       </form>
     </Form>

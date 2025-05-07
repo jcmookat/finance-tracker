@@ -18,7 +18,11 @@ export const insertTransactionSchema = z.object({
   }),
 });
 
+export const transactionWithIdSchema = insertTransactionSchema.extend({
+  id: z.string().uuid('ID must be a valid UUID'),
+});
+
 //Schema for updating transaction
 export const updateTransactionSchema = insertTransactionSchema.extend({
-  id: z.string().min(1, 'ID is required'),
+  id: z.string().uuid('ID must be a valid UUID'),
 });

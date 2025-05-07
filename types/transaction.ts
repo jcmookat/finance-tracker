@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import {
   insertTransactionSchema,
+  transactionWithIdSchema,
   updateTransactionSchema,
 } from '@/lib/validators/transaction';
-// Transaction Types
-// export type Transaction = PrismaTransaction;
-export type Transaction = z.infer<typeof insertTransactionSchema>;
+
+export type Transaction = z.infer<typeof transactionWithIdSchema>;
 
 export interface TransactionsListProps {
   transactions: Transaction[];
@@ -19,6 +19,5 @@ export interface TransactionsClientProps {
 }
 
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
-export type UpdateTransaction = z.infer<typeof updateTransactionSchema> & {
-  id: string;
-};
+export type UpdateTransaction = z.infer<typeof updateTransactionSchema>;
+export type TransactionWithId = z.infer<typeof transactionWithIdSchema>;
