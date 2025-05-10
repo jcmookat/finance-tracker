@@ -70,6 +70,7 @@ model Transaction {
   userId          String          @db.Uuid
   type            TransactionType
   category        String
+  subcategory     String?
   amount          Decimal         @db.Decimal(10, 2)
   description     String?
   transactionDate DateTime        @db.Timestamp(6)

@@ -1,21 +1,22 @@
 import { z } from 'zod';
 import {
-  insertTransactionSchema,
-  transactionWithIdSchema,
-  updateTransactionSchema,
+	insertTransactionSchema,
+	transactionWithIdSchema,
+	updateTransactionSchema,
 } from '@/lib/validators/transaction';
 
 export type Transaction = z.infer<typeof transactionWithIdSchema>;
 
 export interface TransactionsListProps {
-  transactions: Transaction[];
+	transactions: Transaction[];
+	onDelete: (id: string) => void;
 }
 
 export interface TransactionsClientProps {
-  initialTransactions: Transaction[];
-  initialMonth: number;
-  initialYear: number;
-  initialStartDate: Date;
+	initialTransactions: Transaction[];
+	initialMonth: number;
+	initialYear: number;
+	initialStartDate: Date;
 }
 
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
