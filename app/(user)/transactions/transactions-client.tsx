@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import MonthYearPicker from './month-year-picker';
 import TransactionsList from './transactions-list';
-import EmptyState from '@/components/shared/empty-state';
+import EmptyState from '@/components/empty-state';
 import { calculateTotal } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
 import Loading from './loading';
+import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 
 export default function TransactionsClient({
 	initialTransactions,
@@ -79,6 +80,26 @@ export default function TransactionsClient({
 		setTransactions((prev) => prev.filter((t) => t.id !== id));
 	};
 
+	const handleEdit = (updatedTransaction: Transaction) => {
+		setTransactions((prev) =>
+			prev.map((t) =>
+				t.id === updatedTransaction.id
+					? {
+							...updatedTransaction,
+							transactionDate: normalizeToUtcMidnight(
+								new Date(updatedTransaction.transactionDate),
+							),
+						}
+					: t,
+			),
+		);
+	};
+
+	// For checking
+	// useEffect(() => {
+	// 	console.log('Transactions state updated:', transactions);
+	// }, [transactions]); // This effect runs whenever 'transactions' changes
+
 	return (
 		<div>
 			<MonthYearPicker
@@ -118,6 +139,7 @@ export default function TransactionsClient({
 						<TransactionsList
 							transactions={filteredTransactions}
 							onDelete={handleDelete}
+							onEdit={handleEdit}
 						/>
 					</div>
 				</>

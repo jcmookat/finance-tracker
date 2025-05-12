@@ -3,7 +3,7 @@ import {
 	groupTransactionsByDate,
 } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { TransactionsListProps } from '@/types/transaction';
+import { Transaction, TransactionsListProps } from '@/types/transaction';
 import { categoryIconMap } from '@/lib/constants';
 import {
 	DropdownMenu,
@@ -13,35 +13,43 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PenBox, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { useState } from 'react';
-import ResponsiveDialog from '@/components/shared/responsive-dialog';
-import DeleteForm from '@/components/shared/delete-form';
+import ResponsiveDialog from '@/components/responsive-dialog';
+import DeleteForm from '@/components/delete-form';
 import { deleteTransaction } from '@/lib/actions/transaction.actions';
+import TransactionForm from '@/components/form/transaction-form';
+import { formatFullDate } from '@/lib/utils/dateHelpers';
 
 export default function TransactionsList({
 	transactions,
 	onDelete,
+	onEdit,
 }: TransactionsListProps) {
 	const groupedTransactionsByDate = groupTransactionsByDate(transactions);
 	const sortedDates = Object.keys(groupedTransactionsByDate).sort((a, b) =>
 		b.localeCompare(a),
 	);
-	const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-	const [transactionIdToDelete, setTransactionIdToDelete] = useState<
-		string | null
-	>(null);
 
-	const handleOpenDeleteDialog = (id: string) => {
-		setTransactionIdToDelete(id);
-		setIsDeleteOpen(true);
+	const [dialogMode, setDialogMode] = useState<'DELETE' | 'EDIT' | null>(null);
+	const [selectedTransaction, setSelectedTransaction] =
+		useState<Transaction | null>(null);
+	const isDialogOpen = dialogMode !== null;
+
+	const handleOpenDeleteDialog = (transaction: Transaction) => {
+		setSelectedTransaction(transaction);
+		setDialogMode('DELETE');
 	};
 
-	const handleCloseDeleteDialog = () => {
-		setIsDeleteOpen(false);
+	const handleOpenEditDialog = (transaction: Transaction) => {
+		setSelectedTransaction(transaction);
+		setDialogMode('EDIT');
+	};
+
+	const handleCloseDialog = () => {
+		setDialogMode(null);
 		// Add a small delay before clearing the ID to prevent UI flicker
 		setTimeout(() => {
-			setTransactionIdToDelete(null);
+			setSelectedTransaction(null);
 		}, 200);
 	};
 
@@ -55,8 +63,8 @@ export default function TransactionsList({
 			<div
 				key={date}
 				className='rounded-xl drop-shadow-lg bg-muted p-4 pb-10 relative'>
-				<h3 className='text-sm text-center font-bold mb-2 border-b border-b-black/15 pb-2'>
-					{new Date(date).toLocaleDateString()}
+				<h3 className='text-xs text-muted-foreground mb-2 border-b border-b-black/15 pb-2'>
+					{formatFullDate(date)}
 				</h3>
 				{incomes.length > 0 && (
 					<div className='mb-2'>
@@ -79,17 +87,16 @@ export default function TransactionsList({
 														)}
 														{tr.category}
 													</span>
-													<span>{formatCurrency(Number(tr.amount))}</span>
+													<span>+{formatCurrency(Number(tr.amount))}</span>
 												</Button>
 											</DropdownMenuTrigger>
 											<DropdownMenuContent align='end' className='min-w-0'>
-												<DropdownMenuItem asChild>
-													<Link href={`/transactions/${tr.id}`}>
-														<PenBox className='text-orange-400 w-5 h-5' />
-													</Link>
+												<DropdownMenuItem
+													onClick={() => handleOpenEditDialog(tr)}>
+													<PenBox className='text-orange-400 w-5 h-5' />
 												</DropdownMenuItem>
 												<DropdownMenuItem
-													onClick={() => handleOpenDeleteDialog(tr.id)}>
+													onClick={() => handleOpenDeleteDialog(tr)}>
 													<Trash2 className='text-red-400 w-6 h-6' />
 												</DropdownMenuItem>
 											</DropdownMenuContent>
@@ -126,17 +133,16 @@ export default function TransactionsList({
 															</span>
 														)}
 													</span>
-													<span>{formatCurrency(Number(tr.amount))}</span>
+													<span>-{formatCurrency(Number(tr.amount))}</span>
 												</Button>
 											</DropdownMenuTrigger>
 											<DropdownMenuContent align='end' className='min-w-0'>
-												<DropdownMenuItem asChild>
-													<Link href={`/transactions/${tr.id}`}>
-														<PenBox className='text-orange-400 w-5 h-5' />
-													</Link>
+												<DropdownMenuItem
+													onClick={() => handleOpenEditDialog(tr)}>
+													<PenBox className='text-orange-400 w-5 h-5' />
 												</DropdownMenuItem>
 												<DropdownMenuItem
-													onClick={() => handleOpenDeleteDialog(tr.id)}>
+													onClick={() => handleOpenDeleteDialog(tr)}>
 													<Trash2 className='text-red-400 w-6 h-6' />
 												</DropdownMenuItem>
 											</DropdownMenuContent>
@@ -160,18 +166,35 @@ export default function TransactionsList({
 		<>
 			{sortedDates.map(renderTransactionGroup)}
 			{/* Single dialog instance for all transactions */}
-			{transactionIdToDelete && (
+			{selectedTransaction && (
 				<ResponsiveDialog
-					isOpen={isDeleteOpen}
-					setIsOpenAction={handleCloseDeleteDialog}
-					title='Delete Transaction'
-					description='Are you sure you want to delete this transaction?'>
-					<DeleteForm
-						transactionId={transactionIdToDelete}
-						setIsOpenAction={handleCloseDeleteDialog}
-						action={deleteTransaction}
-						onDeleteAction={onDelete}
-					/>
+					isOpen={isDialogOpen}
+					setIsOpenAction={handleCloseDialog}
+					title={
+						dialogMode === 'DELETE' ? 'Delete Transaction' : 'Edit Transaction'
+					}
+					description={
+						dialogMode === 'DELETE'
+							? 'Are you sure you want to delete this transaction?'
+							: 'Edit your transaction below'
+					}>
+					{dialogMode === 'DELETE' ? (
+						<DeleteForm
+							transactionId={selectedTransaction.id}
+							setIsOpenAction={handleCloseDialog}
+							action={deleteTransaction}
+							onDeleteAction={onDelete}
+						/>
+					) : (
+						<TransactionForm
+							mode='Update'
+							userId={selectedTransaction.userId}
+							transactionId={selectedTransaction.id}
+							transaction={selectedTransaction}
+							onEditAction={onEdit}
+							setIsOpenAction={handleCloseDialog}
+						/>
+					)}
 				</ResponsiveDialog>
 			)}
 		</>

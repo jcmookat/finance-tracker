@@ -1,7 +1,7 @@
 import { type ReactElement } from 'react';
 import { Metadata } from 'next';
 import { auth } from '@/auth';
-import TransactionForm from '@/components/user/transaction-form';
+import TransactionForm from '@/components/form/transaction-form';
 import { getTransactionById } from '@/lib/data/transaction';
 
 export const metadata: Metadata = {

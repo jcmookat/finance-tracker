@@ -1,8 +1,8 @@
 'use client';
 
 import { Form } from '@/components/ui/form';
-import BaseFormField from '@/components/shared/base-form-field';
-import { ReactElement, useEffect } from 'react';
+import BaseFormField from '@/components/base-form-field';
+import { Dispatch, ReactElement, SetStateAction, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
 	insertTransactionSchema,
@@ -10,7 +10,7 @@ import {
 } from '@/lib/validators/transaction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { InsertTransaction, Transaction } from '@/types/transaction';
-import SubmitButton from '../shared/submit-button';
+import SubmitButton from '../submit-button';
 import {
 	expenseSubCategories,
 	transactionDefaultValues,
@@ -30,11 +30,15 @@ export default function TransactionForm({
 	userId,
 	transaction,
 	transactionId,
+	onEditAction,
+	setIsOpenAction,
 }: {
 	mode: 'Create' | 'Update';
 	userId: string;
 	transaction?: Transaction;
 	transactionId?: string;
+	onEditAction?: (updatedTransaction: Transaction) => void;
+	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
 }): ReactElement {
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -113,6 +117,11 @@ export default function TransactionForm({
 				id: transactionId,
 			});
 			handleResponse(res);
+			onEditAction?.({
+				...fullData,
+				id: transactionId,
+			});
+			setIsOpenAction?.(false);
 		}
 	};
 

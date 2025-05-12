@@ -10,6 +10,7 @@ export type Transaction = z.infer<typeof transactionWithIdSchema>;
 export interface TransactionsListProps {
 	transactions: Transaction[];
 	onDelete: (id: string) => void;
+	onEdit: (updatedTransaction: Transaction) => void;
 }
 
 export interface TransactionsClientProps {

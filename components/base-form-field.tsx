@@ -147,7 +147,10 @@ const BaseFormField = <TSchema extends ZodType>({
 								className='resize-none'
 							/>
 						) : inputType === 'datepicker' ? (
-							<Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+							<Popover
+								open={isCalendarOpen}
+								onOpenChange={setIsCalendarOpen}
+								modal>
 								<PopoverTrigger asChild>
 									<Button
 										id={field.name}
