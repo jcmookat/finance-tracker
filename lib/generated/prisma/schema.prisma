@@ -69,6 +69,8 @@ model Transaction {
   id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String          @db.Uuid
   type            TransactionType
+  paymentMethod   String? // Cash or Credit Card
+  creditCardType  String?
   category        String
   subcategory     String?
   amount          Decimal         @db.Decimal(10, 2)

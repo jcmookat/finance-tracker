@@ -17,6 +17,8 @@ import {
 	expenseCategories,
 	incomeCategories,
 	transactionType,
+	expensePaymentMethod,
+	expenseCreditCardType,
 } from '@/lib/constants';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
@@ -69,12 +71,16 @@ export default function TransactionForm({
 				: {
 						...formDefaults,
 						userId,
-						type: typeParam || 'EXPENSE',
+						type:
+							typeParam === 'INCOME' || typeParam === 'EXPENSE'
+								? typeParam
+								: 'EXPENSE',
 						category: typeParam === 'INCOME' ? 'Salary' : formDefaults.category,
 					},
 	});
 
 	const type = form.watch('type');
+	const paymentMethod = form.watch('paymentMethod');
 	const categories = type === 'INCOME' ? incomeCategories : expenseCategories;
 
 	useEffect(() => {
@@ -152,10 +158,32 @@ export default function TransactionForm({
 						inputType='number'
 						formControl={form.control}
 					/>
+					{type === 'EXPENSE' && (
+						<BaseFormField<typeof insertTransactionSchema>
+							name='paymentMethod'
+							label='Payment Method'
+							placeholder='Select a payment method'
+							inputType='select'
+							dataArr={expensePaymentMethod}
+							formControl={form.control}
+						/>
+					)}
+
+					{type === 'EXPENSE' && paymentMethod === 'Credit Card' && (
+						<BaseFormField<typeof insertTransactionSchema>
+							name='creditCardType'
+							label='Credit Card Type'
+							placeholder='Select a credit card type'
+							inputType='select'
+							dataArr={expenseCreditCardType}
+							formControl={form.control}
+						/>
+					)}
+
 					<BaseFormField<typeof insertTransactionSchema>
 						name='category'
 						label='Category'
-						placeholder='Enter a category'
+						placeholder='Select a category'
 						inputType='select'
 						dataArr={categories}
 						formControl={form.control}
@@ -170,6 +198,7 @@ export default function TransactionForm({
 							formControl={form.control}
 						/>
 					)}
+
 					<BaseFormField<typeof insertTransactionSchema>
 						name='description'
 						label='Description'

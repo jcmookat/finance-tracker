@@ -9,6 +9,7 @@ import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
 import Loading from './loading';
 import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
+import CreateTransactionButtons from '@/components/form/transaction-buttons';
 
 export default function TransactionsClient({
 	initialTransactions,
@@ -102,11 +103,15 @@ export default function TransactionsClient({
 
 	return (
 		<div>
-			<MonthYearPicker
-				initialMonth={month}
-				initialYear={year}
-				onMonthYearChangeAction={handleMonthYearChange}
-			/>
+			<div className='flex justify-between mb-2 flex-col-reverse md:flex-row gap-4'>
+				<MonthYearPicker
+					initialMonth={month}
+					initialYear={year}
+					onMonthYearChangeAction={handleMonthYearChange}
+				/>
+				<CreateTransactionButtons />
+			</div>
+
 			{isLoading ? (
 				<Loading />
 			) : filteredTransactions.length === 0 ? (

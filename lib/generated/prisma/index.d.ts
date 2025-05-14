@@ -5753,6 +5753,8 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     type: $Enums.TransactionType | null
+    paymentMethod: string | null
+    creditCardType: string | null
     category: string | null
     subcategory: string | null
     amount: Decimal | null
@@ -5766,6 +5768,8 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     type: $Enums.TransactionType | null
+    paymentMethod: string | null
+    creditCardType: string | null
     category: string | null
     subcategory: string | null
     amount: Decimal | null
@@ -5779,6 +5783,8 @@ export namespace Prisma {
     id: number
     userId: number
     type: number
+    paymentMethod: number
+    creditCardType: number
     category: number
     subcategory: number
     amount: number
@@ -5802,6 +5808,8 @@ export namespace Prisma {
     id?: true
     userId?: true
     type?: true
+    paymentMethod?: true
+    creditCardType?: true
     category?: true
     subcategory?: true
     amount?: true
@@ -5815,6 +5823,8 @@ export namespace Prisma {
     id?: true
     userId?: true
     type?: true
+    paymentMethod?: true
+    creditCardType?: true
     category?: true
     subcategory?: true
     amount?: true
@@ -5828,6 +5838,8 @@ export namespace Prisma {
     id?: true
     userId?: true
     type?: true
+    paymentMethod?: true
+    creditCardType?: true
     category?: true
     subcategory?: true
     amount?: true
@@ -5928,6 +5940,8 @@ export namespace Prisma {
     id: string
     userId: string
     type: $Enums.TransactionType
+    paymentMethod: string | null
+    creditCardType: string | null
     category: string
     subcategory: string | null
     amount: Decimal
@@ -5960,6 +5974,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     type?: boolean
+    paymentMethod?: boolean
+    creditCardType?: boolean
     category?: boolean
     subcategory?: boolean
     amount?: boolean
@@ -5974,6 +5990,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     type?: boolean
+    paymentMethod?: boolean
+    creditCardType?: boolean
     category?: boolean
     subcategory?: boolean
     amount?: boolean
@@ -5988,6 +6006,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     type?: boolean
+    paymentMethod?: boolean
+    creditCardType?: boolean
     category?: boolean
     subcategory?: boolean
     amount?: boolean
@@ -6002,6 +6022,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     type?: boolean
+    paymentMethod?: boolean
+    creditCardType?: boolean
     category?: boolean
     subcategory?: boolean
     amount?: boolean
@@ -6011,7 +6033,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "category" | "subcategory" | "amount" | "description" | "transactionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "paymentMethod" | "creditCardType" | "category" | "subcategory" | "amount" | "description" | "transactionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -6031,6 +6053,8 @@ export namespace Prisma {
       id: string
       userId: string
       type: $Enums.TransactionType
+      paymentMethod: string | null
+      creditCardType: string | null
       category: string
       subcategory: string | null
       amount: Prisma.Decimal
@@ -6465,6 +6489,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Transaction", 'String'>
     readonly userId: FieldRef<"Transaction", 'String'>
     readonly type: FieldRef<"Transaction", 'TransactionType'>
+    readonly paymentMethod: FieldRef<"Transaction", 'String'>
+    readonly creditCardType: FieldRef<"Transaction", 'String'>
     readonly category: FieldRef<"Transaction", 'String'>
     readonly subcategory: FieldRef<"Transaction", 'String'>
     readonly amount: FieldRef<"Transaction", 'Decimal'>
@@ -6960,6 +6986,8 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     type: 'type',
+    paymentMethod: 'paymentMethod',
+    creditCardType: 'creditCardType',
     category: 'category',
     subcategory: 'subcategory',
     amount: 'amount',
@@ -7382,6 +7410,8 @@ export namespace Prisma {
     id?: UuidFilter<"Transaction"> | string
     userId?: UuidFilter<"Transaction"> | string
     type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
+    paymentMethod?: StringNullableFilter<"Transaction"> | string | null
+    creditCardType?: StringNullableFilter<"Transaction"> | string | null
     category?: StringFilter<"Transaction"> | string
     subcategory?: StringNullableFilter<"Transaction"> | string | null
     amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
@@ -7396,6 +7426,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    creditCardType?: SortOrderInput | SortOrder
     category?: SortOrder
     subcategory?: SortOrderInput | SortOrder
     amount?: SortOrder
@@ -7413,6 +7445,8 @@ export namespace Prisma {
     NOT?: TransactionWhereInput | TransactionWhereInput[]
     userId?: UuidFilter<"Transaction"> | string
     type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
+    paymentMethod?: StringNullableFilter<"Transaction"> | string | null
+    creditCardType?: StringNullableFilter<"Transaction"> | string | null
     category?: StringFilter<"Transaction"> | string
     subcategory?: StringNullableFilter<"Transaction"> | string | null
     amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
@@ -7427,6 +7461,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    creditCardType?: SortOrderInput | SortOrder
     category?: SortOrder
     subcategory?: SortOrderInput | SortOrder
     amount?: SortOrder
@@ -7448,6 +7484,8 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Transaction"> | string
     userId?: UuidWithAggregatesFilter<"Transaction"> | string
     type?: EnumTransactionTypeWithAggregatesFilter<"Transaction"> | $Enums.TransactionType
+    paymentMethod?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    creditCardType?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     category?: StringWithAggregatesFilter<"Transaction"> | string
     subcategory?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     amount?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
@@ -7778,6 +7816,8 @@ export namespace Prisma {
   export type TransactionCreateInput = {
     id?: string
     type: $Enums.TransactionType
+    paymentMethod?: string | null
+    creditCardType?: string | null
     category: string
     subcategory?: string | null
     amount: Decimal | DecimalJsLike | number | string
@@ -7792,6 +7832,8 @@ export namespace Prisma {
     id?: string
     userId: string
     type: $Enums.TransactionType
+    paymentMethod?: string | null
+    creditCardType?: string | null
     category: string
     subcategory?: string | null
     amount: Decimal | DecimalJsLike | number | string
@@ -7804,6 +7846,8 @@ export namespace Prisma {
   export type TransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -7818,6 +7862,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -7831,6 +7877,8 @@ export namespace Prisma {
     id?: string
     userId: string
     type: $Enums.TransactionType
+    paymentMethod?: string | null
+    creditCardType?: string | null
     category: string
     subcategory?: string | null
     amount: Decimal | DecimalJsLike | number | string
@@ -7843,6 +7891,8 @@ export namespace Prisma {
   export type TransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -7856,6 +7906,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -8247,6 +8299,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
+    paymentMethod?: SortOrder
+    creditCardType?: SortOrder
     category?: SortOrder
     subcategory?: SortOrder
     amount?: SortOrder
@@ -8264,6 +8318,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
+    paymentMethod?: SortOrder
+    creditCardType?: SortOrder
     category?: SortOrder
     subcategory?: SortOrder
     amount?: SortOrder
@@ -8277,6 +8333,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
+    paymentMethod?: SortOrder
+    creditCardType?: SortOrder
     category?: SortOrder
     subcategory?: SortOrder
     amount?: SortOrder
@@ -8817,6 +8875,8 @@ export namespace Prisma {
   export type TransactionCreateWithoutUserInput = {
     id?: string
     type: $Enums.TransactionType
+    paymentMethod?: string | null
+    creditCardType?: string | null
     category: string
     subcategory?: string | null
     amount: Decimal | DecimalJsLike | number | string
@@ -8829,6 +8889,8 @@ export namespace Prisma {
   export type TransactionUncheckedCreateWithoutUserInput = {
     id?: string
     type: $Enums.TransactionType
+    paymentMethod?: string | null
+    creditCardType?: string | null
     category: string
     subcategory?: string | null
     amount: Decimal | DecimalJsLike | number | string
@@ -8933,6 +8995,8 @@ export namespace Prisma {
     id?: UuidFilter<"Transaction"> | string
     userId?: UuidFilter<"Transaction"> | string
     type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
+    paymentMethod?: StringNullableFilter<"Transaction"> | string | null
+    creditCardType?: StringNullableFilter<"Transaction"> | string | null
     category?: StringFilter<"Transaction"> | string
     subcategory?: StringNullableFilter<"Transaction"> | string | null
     amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
@@ -9207,6 +9271,8 @@ export namespace Prisma {
   export type TransactionCreateManyUserInput = {
     id?: string
     type: $Enums.TransactionType
+    paymentMethod?: string | null
+    creditCardType?: string | null
     category: string
     subcategory?: string | null
     amount: Decimal | DecimalJsLike | number | string
@@ -9285,6 +9351,8 @@ export namespace Prisma {
   export type TransactionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -9297,6 +9365,8 @@ export namespace Prisma {
   export type TransactionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -9309,6 +9379,8 @@ export namespace Prisma {
   export type TransactionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    creditCardType?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string

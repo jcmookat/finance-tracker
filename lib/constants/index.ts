@@ -1,16 +1,8 @@
 import {
-	Shirt,
-	Utensils,
-	Gamepad2,
-	Fuel,
-	Gift,
-	Plane,
 	ShoppingBag,
 	ShoppingCart,
-	Dumbbell,
 	Train,
 	GraduationCap,
-	Carrot,
 	Wallet,
 	Briefcase,
 	Repeat,
@@ -25,7 +17,6 @@ import {
 	House,
 	Router,
 	Zap,
-	Droplet,
 	GlassWater,
 	Bus,
 	Smartphone,
@@ -33,6 +24,8 @@ import {
 	ForkKnife,
 	BanknoteArrowUp,
 	ShowerHead,
+	Banknote,
+	CreditCard,
 } from 'lucide-react';
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'Gastos ni Grasya';
 export const APP_DESCRIPTION =
@@ -58,9 +51,22 @@ export const transactionDefaultValues = () => ({
 	category: '',
 	subCategory: '',
 	amount: 100,
+	paymentMethod: 'Cash' as 'Cash' | 'Credit Card',
+	creditCardType: null,
 	description: '',
 	transactionDate: new Date(),
 });
+
+export const expensePaymentMethod = [
+	{ label: 'Cash', value: 'Cash', icon: Banknote },
+	{ label: 'Credit Card', value: 'Credit Card', icon: CreditCard },
+];
+
+export const expenseCreditCardType = [
+	{ label: 'VPASS', value: 'VPASS', icon: CreditCard },
+	{ label: 'UCS', value: 'UCS', icon: CreditCard },
+	{ label: 'RAKUTEN', value: 'RAKUTEN', icon: CreditCard },
+];
 
 export const expenseCategories = [
 	{ label: 'Groceries', value: 'Groceries', icon: ShoppingCart },
