@@ -2,16 +2,19 @@
 
 import { useState } from 'react';
 import MonthYearPicker from '@/components/month-year-picker';
-import TransactionsList from './transactions-list';
+import ReportsList from './reports-list';
 import EmptyState from '@/components/empty-state';
-import { calculateTotal } from '@/lib/utils/transactionHelpers';
+import {
+	calculateTotal,
+	groupTransactionsByMonth,
+} from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
 import Loading from '@/components/loading';
-import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 import CreateTransactionButtons from '@/components/form/transaction-buttons';
+import ReportsSummary from './reports-summary';
 
-export default function TransactionsClient({
+export default function ReportsClient({
 	initialTransactions,
 	initialMonth,
 	initialYear,
@@ -28,6 +31,9 @@ export default function TransactionsClient({
 		const date = new Date(t.transactionDate);
 		return date.getMonth() + 1 === month && date.getFullYear() === year;
 	});
+
+	const groupedTransactionsByMonth =
+		groupTransactionsByMonth(filteredTransactions);
 
 	const monthIncome = calculateTotal(filteredTransactions, 'INCOME');
 	const monthExpense = calculateTotal(filteredTransactions, 'EXPENSE');
@@ -77,25 +83,6 @@ export default function TransactionsClient({
 		}
 	};
 
-	const handleDelete = (id: string) => {
-		setTransactions((prev) => prev.filter((t) => t.id !== id));
-	};
-
-	const handleEdit = (updatedTransaction: Transaction) => {
-		setTransactions((prev) =>
-			prev.map((t) =>
-				t.id === updatedTransaction.id
-					? {
-							...updatedTransaction,
-							transactionDate: normalizeToUtcMidnight(
-								new Date(updatedTransaction.transactionDate),
-							),
-						}
-					: t,
-			),
-		);
-	};
-
 	return (
 		<div>
 			<div className='flex justify-between mb-2 flex-col-reverse md:flex-row gap-4'>
@@ -138,12 +125,11 @@ export default function TransactionsClient({
 							</p>
 						</div>
 					</div>
-					<div className='flex flex-wrap gap-4'>
-						<TransactionsList
-							transactions={filteredTransactions}
-							onDelete={handleDelete}
-							onEdit={handleEdit}
-						/>
+					<div className='mb-4'>
+						<ReportsSummary transactions={groupedTransactionsByMonth} />
+					</div>
+					<div>
+						<ReportsList transactions={filteredTransactions} />
 					</div>
 				</>
 			)}

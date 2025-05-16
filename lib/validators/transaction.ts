@@ -10,8 +10,8 @@ const baseTransactionSchema = z.object({
 		.refine((val) => val === 'INCOME' || val === 'EXPENSE', {
 			message: 'Select a transaction type',
 		}) as z.ZodType<TransactionType>,
-	paymentMethod: z.enum(['Cash', 'Credit Card']).optional(),
-	creditCardType: z.enum(['VPASS', 'UCS', 'RAKUTEN']).optional().nullable(),
+	paymentMethod: z.string().optional().nullable(),
+	creditCardType: z.string().optional().nullable(),
 	category: z.string().min(3, 'Select a category'),
 	subcategory: z.string().optional(),
 	amount: z.coerce

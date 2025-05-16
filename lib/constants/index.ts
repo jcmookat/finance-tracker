@@ -27,7 +27,7 @@ import {
 	Banknote,
 	CreditCard,
 } from 'lucide-react';
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'Gastos ni Grasya';
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'Gastos at Grasya';
 export const APP_DESCRIPTION =
 	process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
 	'Finance tracker of gastos ni Grasya';
@@ -51,8 +51,8 @@ export const transactionDefaultValues = () => ({
 	category: '',
 	subCategory: '',
 	amount: 100,
-	paymentMethod: 'Cash' as 'Cash' | 'Credit Card',
-	creditCardType: null,
+	paymentMethod: '',
+	creditCardType: '',
 	description: '',
 	transactionDate: new Date(),
 });

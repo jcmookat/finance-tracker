@@ -3,13 +3,13 @@ import { auth } from '@/auth';
 import { type ReactElement } from 'react';
 import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
-import ReportsClient from './reports-client';
+import AnnualClient from './annual-client';
 
 export const metadata: Metadata = {
 	title: 'Reports',
 };
 
-export default async function ReportsPage(): Promise<ReactElement> {
+export default async function AnnualPage(): Promise<ReactElement> {
 	const session = await auth();
 	if (!session) {
 		throw new Error('User is not authenticated');
@@ -17,9 +17,12 @@ export default async function ReportsPage(): Promise<ReactElement> {
 	const userId = session.user.id;
 	const { month, year } = getCurrentMonthAndYear();
 
-	// Calculate start and end dates for a 1-year period
-	const startDate = new Date(year, month - 13, 1); // Current month and 12 months before
-	const endDate = new Date(year, month, 1); // First day of next month
+	// Start and end dates for current year
+	const startDate = new Date(year - 1, 0, 1);
+	const endDate = new Date(year + 1, 0, 1);
+
+	console.log(startDate);
+	console.log(endDate);
 
 	const transactions = await getTransactionsForPeriod(
 		userId,
@@ -29,11 +32,10 @@ export default async function ReportsPage(): Promise<ReactElement> {
 
 	return (
 		<>
-			<ReportsClient
+			<AnnualClient
 				initialTransactions={transactions}
 				initialMonth={month}
 				initialYear={year}
-				initialStartDate={startDate}
 			/>
 		</>
 	);

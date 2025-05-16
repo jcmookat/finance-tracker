@@ -28,7 +28,7 @@ export const sessionUserSchema = z.object({
 	id: z.string(),
 	name: z.string().nullable().optional(),
 	email: z.string().nullable().optional(),
-	image: z.string().optional(), // Important: allow null
+	image: z.string().optional(),
 	role: z.string(),
 	isOauth: z.boolean(),
 });
@@ -38,6 +38,19 @@ export const sessionSchema = z.object({
 	expires: z.string(),
 });
 
+// Session types
+export type SessionUser = {
+	id: string;
+	name?: string | null;
+	email?: string | null;
+	image?: string | null;
+	role: string;
+	isOauth: boolean;
+};
+export interface Session extends DefaultSession {
+	user: SessionUser;
+}
+
 declare module 'next-auth' {
 	interface Session {
 		user: {
@@ -46,17 +59,4 @@ declare module 'next-auth' {
 			isOauth: boolean;
 		} & DefaultSession['user'];
 	}
-}
-
-// Session types
-export type SessionUser = {
-	id: string;
-	name?: string | null;
-	email?: string | null;
-	image?: string | null; // Allow null
-	role: string;
-	isOauth: boolean;
-};
-export interface Session extends DefaultSession {
-	user: SessionUser;
 }

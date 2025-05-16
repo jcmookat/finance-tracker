@@ -23,10 +23,16 @@ const items = [
 		icon: Inbox,
 	},
 	{
-		title: 'Reports',
+		title: 'Monthly Reports',
 		url: '/reports',
 		icon: Calendar,
 	},
+	{
+		title: 'Annual Reports',
+		url: '/annual',
+		icon: Calendar,
+	},
+
 	{
 		title: 'Search',
 		url: '#',
