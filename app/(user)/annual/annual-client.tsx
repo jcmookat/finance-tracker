@@ -8,7 +8,6 @@ import { calculateTotal } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { Transaction, TransactionsClientProps } from '@/types/transaction';
 import Loading from '@/components/loading';
-import CreateTransactionButtons from '@/components/form/transaction-buttons';
 
 type Props = Omit<TransactionsClientProps, 'initialStartDate'>;
 
@@ -68,7 +67,7 @@ export default function AnnualClient({
 	};
 
 	return (
-		<div>
+		<>
 			<div className='flex justify-between mb-2 flex-col-reverse md:flex-row gap-4'>
 				<MonthYearPicker
 					initialMonth={month}
@@ -76,7 +75,6 @@ export default function AnnualClient({
 					onMonthYearChangeAction={handleYearChange}
 					withMonth={false}
 				/>
-				<CreateTransactionButtons />
 			</div>
 
 			{isLoading ? (
@@ -88,12 +86,16 @@ export default function AnnualClient({
 				/>
 			) : (
 				<>
+					<h2 className='text-2xl font-bold mb-4'>
+						{new Date(year, month - 1).toLocaleString('default', {
+							year: 'numeric',
+						})}
+					</h2>
+					<div className='mb-4'>
+						<AnnualList transactions={filteredTransactionsByYear} />
+					</div>
+
 					<div className='mb-6 flex gap-4 items-center flex-between flex-col md:flex-row'>
-						<h2 className='text-2xl font-bold'>
-							{new Date(year, month - 1).toLocaleString('default', {
-								year: 'numeric',
-							})}
-						</h2>
 						<div className='flex gap-4'>
 							<p className='text-lg font-bold text-green-600'>
 								Income: +{formatCurrency(Math.abs(yearIncome))}
@@ -108,11 +110,8 @@ export default function AnnualClient({
 							</p>
 						</div>
 					</div>
-					<div>
-						<AnnualList transactions={filteredTransactionsByYear} />
-					</div>
 				</>
 			)}
-		</div>
+		</>
 	);
 }

@@ -80,30 +80,68 @@ export function prepareAnnualReport(transactions: Transaction[]) {
 	];
 
 	const allKeys = new Set<string>();
+	const incomeKeys = new Set<string>();
+
+	// Separate sets to maintain order
+	const categoryKeys = new Set<string>();
+	const subcategoryKeys = new Set<string>();
+	const paymentMethodKeys = new Set<string>();
+	const creditCardTypeKeys = new Set<string>();
+
 	const monthlyTotals: Record<string, Record<string, number>> = {};
+	const annualTotals: Record<string, number> = {};
 
 	for (const tx of transactions) {
 		const date = new Date(tx.transactionDate);
 		const month = months[date.getMonth()];
 		if (!monthlyTotals[month]) monthlyTotals[month] = {};
 
-		const addTotal = (key: string | null | undefined) => {
+		const addTotal = (key: string | null | undefined, isIncome: boolean) => {
 			if (!key) return;
 			allKeys.add(key);
+			if (isIncome) incomeKeys.add(key);
+
 			monthlyTotals[month][key] = (monthlyTotals[month][key] || 0) + tx.amount;
+			annualTotals[key] = (annualTotals[key] || 0) + tx.amount;
 		};
 
 		if (tx.type === 'INCOME') {
-			addTotal(tx.category);
+			addTotal(tx.category, true);
 		} else {
-			addTotal(tx.category);
-			addTotal(tx.subcategory);
-			addTotal(tx.paymentMethod);
-			addTotal(tx.creditCardType);
+			if (tx.category) {
+				categoryKeys.add(tx.category);
+				addTotal(tx.category, false);
+			}
+			if (tx.subcategory) {
+				subcategoryKeys.add(tx.subcategory);
+				addTotal(tx.subcategory, false);
+			}
+			if (tx.paymentMethod) {
+				paymentMethodKeys.add(tx.paymentMethod);
+				addTotal(tx.paymentMethod, false);
+			}
+			if (tx.creditCardType) {
+				creditCardTypeKeys.add(tx.creditCardType);
+				addTotal(tx.creditCardType, false);
+			}
 		}
 	}
 
-	const sortedKeys = Array.from(allKeys);
+	// Sort keys: income keys first, then others in specific order
+	const sortedKeys = [
+		...Array.from(incomeKeys).sort(),
+		...Array.from(categoryKeys).sort(),
+		...Array.from(subcategoryKeys).sort(),
+		...Array.from(paymentMethodKeys).sort(),
+		...Array.from(creditCardTypeKeys).sort(),
+	];
+	// Ensure months are sorted from January to December
+	const sortedMonthlyTotals: Record<string, Record<string, number>> = {};
+	for (const month of months) {
+		if (monthlyTotals[month]) {
+			sortedMonthlyTotals[month] = monthlyTotals[month];
+		}
+	}
 
-	return { sortedKeys, monthlyTotals };
+	return { sortedKeys, monthlyTotals: sortedMonthlyTotals, annualTotals };
 }

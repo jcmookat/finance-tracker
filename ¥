@@ -20,7 +20,7 @@ export default function AnnualList({ transactions }: Props) {
 		prepareAnnualReport(transactions);
 
 	return (
-		<div className='overflow-auto rounded-xl border'>
+		<div className='overflow-auto rounded-xl border w-full'>
 			<Table>
 				<TableHeader>
 					<TableRow>

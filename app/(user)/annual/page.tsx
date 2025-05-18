@@ -21,9 +21,6 @@ export default async function AnnualPage(): Promise<ReactElement> {
 	const startDate = new Date(year - 1, 0, 1);
 	const endDate = new Date(year + 1, 0, 1);
 
-	console.log(startDate);
-	console.log(endDate);
-
 	const transactions = await getTransactionsForPeriod(
 		userId,
 		startDate,

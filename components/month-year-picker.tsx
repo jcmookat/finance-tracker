@@ -22,7 +22,7 @@ export default function MonthYearPicker({
 	initialMonth,
 	initialYear,
 	onMonthYearChangeAction,
-	withMonth,
+	withMonth = true,
 }: MonthYearPickerProps) {
 	const { month: currentMonth, year: currentYear } = getCurrentMonthAndYear();
 	const [month, setMonth] = useState(initialMonth);

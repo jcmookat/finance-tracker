@@ -24,7 +24,7 @@ const items = [
 	},
 	{
 		title: 'Monthly Reports',
-		url: '/reports',
+		url: '/monthly',
 		icon: Calendar,
 	},
 	{

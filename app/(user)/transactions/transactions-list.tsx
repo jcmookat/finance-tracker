@@ -72,38 +72,55 @@ export default function TransactionsList({
 								Income
 							</h4>
 							<ul>
-								{incomes.map((tr) => {
-									const Icon = categoryIconMap[tr.category];
-									return (
-										<li key={tr.id} className='w-full'>
-											<DropdownMenu modal={false}>
-												<DropdownMenuTrigger asChild>
-													<Button
-														variant='ghost'
-														className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
-														<span className='flex items-center gap-2 mr-2'>
-															{Icon && (
-																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
-															)}
-															{tr.category}
-														</span>
-														<span>+{formatCurrency(Number(tr.amount))}</span>
-													</Button>
-												</DropdownMenuTrigger>
-												<DropdownMenuContent align='end' className='min-w-0'>
-													<DropdownMenuItem
-														onClick={() => handleOpenEditDialog(tr)}>
-														<PenBox className='text-orange-400 w-5 h-5' />
-													</DropdownMenuItem>
-													<DropdownMenuItem
-														onClick={() => handleOpenDeleteDialog(tr)}>
-														<Trash2 className='text-red-400 w-6 h-6' />
-													</DropdownMenuItem>
-												</DropdownMenuContent>
-											</DropdownMenu>
-										</li>
-									);
-								})}
+								{incomes
+									.slice() // clone the array to avoid mutating original
+									.sort((a, b) => {
+										const categoryCompare = a.category.localeCompare(
+											b.category,
+											undefined,
+											{ sensitivity: 'base' },
+										);
+										if (categoryCompare !== 0) return categoryCompare;
+
+										// Optional: sort by subcategory if categories are the same
+										return (a.subcategory || '').localeCompare(
+											b.subcategory || '',
+											undefined,
+											{ sensitivity: 'base' },
+										);
+									})
+									.map((tr) => {
+										const Icon = categoryIconMap[tr.category];
+										return (
+											<li key={tr.id} className='w-full'>
+												<DropdownMenu modal={false}>
+													<DropdownMenuTrigger asChild>
+														<Button
+															variant='ghost'
+															className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
+															<span className='flex items-center gap-2 mr-2'>
+																{Icon && (
+																	<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
+																)}
+																{tr.category}
+															</span>
+															<span>+{formatCurrency(Number(tr.amount))}</span>
+														</Button>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent align='end' className='min-w-0'>
+														<DropdownMenuItem
+															onClick={() => handleOpenEditDialog(tr)}>
+															<PenBox className='text-orange-400 w-5 h-5' />
+														</DropdownMenuItem>
+														<DropdownMenuItem
+															onClick={() => handleOpenDeleteDialog(tr)}>
+															<Trash2 className='text-red-400 w-6 h-6' />
+														</DropdownMenuItem>
+													</DropdownMenuContent>
+												</DropdownMenu>
+											</li>
+										);
+									})}
 							</ul>
 						</div>
 					)}
@@ -113,50 +130,67 @@ export default function TransactionsList({
 								Expenses
 							</h4>
 							<ul>
-								{expenses.map((tr) => {
-									const Icon = categoryIconMap[tr.category];
-									return (
-										<li key={tr.id} className='w-full'>
-											<DropdownMenu modal={false}>
-												<DropdownMenuTrigger asChild>
-													<Button
-														variant='ghost'
-														className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
-														<span className='flex items-center gap-2 mr-2'>
-															{Icon && (
-																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
-															)}
-															{tr.category}
-															{tr.subcategory && (
-																<span className='text-xs'>
-																	({tr.subcategory})
-																</span>
-															)}
-														</span>
-														<span className='text-right flex items-center gap-1.5'>
-															-{formatCurrency(Number(tr.amount))}
-															{tr.paymentMethod === 'Cash' ? (
-																<Banknote />
-															) : (
-																<CreditCard />
-															)}
-														</span>
-													</Button>
-												</DropdownMenuTrigger>
-												<DropdownMenuContent align='end' className='min-w-0'>
-													<DropdownMenuItem
-														onClick={() => handleOpenEditDialog(tr)}>
-														<PenBox className='text-orange-400 w-5 h-5' />
-													</DropdownMenuItem>
-													<DropdownMenuItem
-														onClick={() => handleOpenDeleteDialog(tr)}>
-														<Trash2 className='text-red-400 w-6 h-6' />
-													</DropdownMenuItem>
-												</DropdownMenuContent>
-											</DropdownMenu>
-										</li>
-									);
-								})}
+								{expenses
+									.slice() // clone the array to avoid mutating original
+									.sort((a, b) => {
+										const categoryCompare = a.category.localeCompare(
+											b.category,
+											undefined,
+											{ sensitivity: 'base' },
+										);
+										if (categoryCompare !== 0) return categoryCompare;
+
+										// Optional: sort by subcategory if categories are the same
+										return (a.subcategory || '').localeCompare(
+											b.subcategory || '',
+											undefined,
+											{ sensitivity: 'base' },
+										);
+									})
+									.map((tr) => {
+										const Icon = categoryIconMap[tr.category];
+										return (
+											<li key={tr.id} className='w-full'>
+												<DropdownMenu modal={false}>
+													<DropdownMenuTrigger asChild>
+														<Button
+															variant='ghost'
+															className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
+															<span className='flex items-center gap-2 mr-2'>
+																{Icon && (
+																	<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
+																)}
+																{tr.category}
+																{tr.subcategory && (
+																	<span className='text-xs'>
+																		({tr.subcategory})
+																	</span>
+																)}
+															</span>
+															<span className='text-right flex items-center gap-1.5'>
+																-{formatCurrency(Number(tr.amount))}
+																{tr.paymentMethod === 'Cash' ? (
+																	<Banknote />
+																) : (
+																	<CreditCard />
+																)}
+															</span>
+														</Button>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent align='end' className='min-w-0'>
+														<DropdownMenuItem
+															onClick={() => handleOpenEditDialog(tr)}>
+															<PenBox className='text-orange-400 w-5 h-5' />
+														</DropdownMenuItem>
+														<DropdownMenuItem
+															onClick={() => handleOpenDeleteDialog(tr)}>
+															<Trash2 className='text-red-400 w-6 h-6' />
+														</DropdownMenuItem>
+													</DropdownMenuContent>
+												</DropdownMenu>
+											</li>
+										);
+									})}
 							</ul>
 						</div>
 					)}

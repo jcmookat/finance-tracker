@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import MonthYearPicker from '@/components/month-year-picker';
-import ReportsList from './reports-list';
+import ReportsList from './montly-list';
 import EmptyState from '@/components/empty-state';
 import {
 	calculateTotal,
@@ -11,10 +11,9 @@ import {
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
 import Loading from '@/components/loading';
-import CreateTransactionButtons from '@/components/form/transaction-buttons';
-import ReportsSummary from './reports-summary';
+import MonthlySummary from './monthly-summary';
 
-export default function ReportsClient({
+export default function MonthlyClient({
 	initialTransactions,
 	initialMonth,
 	initialYear,
@@ -90,9 +89,7 @@ export default function ReportsClient({
 					initialMonth={month}
 					initialYear={year}
 					onMonthYearChangeAction={handleMonthYearChange}
-					withMonth={true}
 				/>
-				<CreateTransactionButtons />
 			</div>
 
 			{isLoading ? (
@@ -126,7 +123,7 @@ export default function ReportsClient({
 						</div>
 					</div>
 					<div className='mb-4'>
-						<ReportsSummary transactions={groupedTransactionsByMonth} />
+						<MonthlySummary transactions={groupedTransactionsByMonth} />
 					</div>
 					<div>
 						<ReportsList transactions={filteredTransactions} />

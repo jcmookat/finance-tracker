@@ -103,7 +103,6 @@ export default function TransactionsClient({
 					initialMonth={month}
 					initialYear={year}
 					onMonthYearChangeAction={handleMonthYearChange}
-					withMonth={true}
 				/>
 				<CreateTransactionButtons />
 			</div>

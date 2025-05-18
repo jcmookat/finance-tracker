@@ -12,11 +12,11 @@ export interface TransactionsListProps {
 	onDelete: (id: string) => void;
 	onEdit: (updatedTransaction: Transaction) => void;
 }
-export interface ReportListProps {
+export interface MonthlyListProps {
 	transactions: Transaction[];
 }
 
-export interface ReportsSummaryProps {
+export interface MonthlySummaryProps {
 	transactions: Record<string, Transaction[]>; // e.g. output of groupTransactionsByMonth
 }
 

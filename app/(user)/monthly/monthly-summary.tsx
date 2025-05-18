@@ -9,13 +9,16 @@ import {
 } from '@/components/ui/table';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { getTotalsByKey } from '@/lib/utils/transactionHelpers';
-import { ReportsSummaryProps } from '@/types/transaction';
+import { MonthlySummaryProps } from '@/types/transaction';
 
 function renderTotalsTable(data: Record<string, number>, label: string) {
-	const validKeys = Object.keys(data).filter((key) => key && key !== 'N/A'); // Only keys that are not empty or "N/A"
-	const validValues = Object.entries(data).filter(
-		([key]) => key && key !== 'N/A',
-	);
+	const validEntries = Object.entries(data)
+		.filter(([key]) => key && key !== 'N/A')
+		.sort(([a], [b]) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+
+	const sortedKeys = validEntries.map(([key]) => key);
+	const sortedValues = validEntries.map(([, value]) => value);
+
 	return (
 		<Card>
 			<CardHeader>
@@ -25,7 +28,7 @@ function renderTotalsTable(data: Record<string, number>, label: string) {
 				<Table className='w-full'>
 					<TableHeader>
 						<TableRow>
-							{validKeys.map((key) => (
+							{sortedKeys.map((key) => (
 								<TableHead
 									key={`${label}-head-${key}`}
 									className='text-center font-bold'>
@@ -36,7 +39,7 @@ function renderTotalsTable(data: Record<string, number>, label: string) {
 					</TableHeader>
 					<TableBody>
 						<TableRow>
-							{validValues.map(([, total], idx) => (
+							{sortedValues.map((total, idx) => (
 								<TableCell
 									key={`${label}-val-${idx}`}
 									className='text-center font-medium'>
@@ -51,7 +54,7 @@ function renderTotalsTable(data: Record<string, number>, label: string) {
 	);
 }
 
-export default function ReportsSummary({ transactions }: ReportsSummaryProps) {
+export default function MonthlySummary({ transactions }: MonthlySummaryProps) {
 	return (
 		<div className='space-y-4'>
 			{Object.entries(transactions).map(([month, transactions]) => {

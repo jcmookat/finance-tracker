@@ -3,7 +3,7 @@ import { auth } from '@/auth';
 import { type ReactElement } from 'react';
 import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
-import ReportsClient from './reports-client';
+import MonthlySummary from './monthly-client';
 
 export const metadata: Metadata = {
 	title: 'Reports',
@@ -29,7 +29,7 @@ export default async function ReportsPage(): Promise<ReactElement> {
 
 	return (
 		<>
-			<ReportsClient
+			<MonthlySummary
 				initialTransactions={transactions}
 				initialMonth={month}
 				initialYear={year}

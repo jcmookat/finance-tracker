@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { ReportListProps } from '@/types/transaction';
+import { MonthlyListProps } from '@/types/transaction';
 import {
 	Table,
 	TableBody,
@@ -11,7 +11,7 @@ import {
 import { formatFullDate } from '@/lib/utils/dateHelpers';
 import { Card, CardContent } from '@/components/ui/card';
 
-export default function ReportsList({ transactions }: ReportListProps) {
+export default function MonthlyList({ transactions }: MonthlyListProps) {
 	return (
 		<Card>
 			<CardContent>

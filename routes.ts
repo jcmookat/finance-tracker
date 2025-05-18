@@ -4,4 +4,5 @@ export const privateRoutes = [
 	'/profile',
 	'/reports',
 	'/annual',
+	'/monthly',
 ];
