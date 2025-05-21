@@ -6,7 +6,7 @@ import { getTransactionsForPeriod } from '@/lib/data/transaction';
 import AnnualClient from './annual-client';
 
 export const metadata: Metadata = {
-	title: 'Reports',
+	title: 'Annual Reports',
 };
 
 export default async function AnnualPage(): Promise<ReactElement> {

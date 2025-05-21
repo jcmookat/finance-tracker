@@ -2,27 +2,9 @@ import { prisma } from '@/db/prisma';
 import { convertToPlainObject } from '../utils/formatHelpers';
 
 // Get transactions by User ID, with optional month/year filtering
-export async function getTransactionsByUserId(
-	userId: string,
-	month?: number, // 1-12
-	year?: number, // ex: 2025
-) {
-	let dateFilter = {};
-
-	if (month && year) {
-		const startDate = new Date(year, month - 1, 1); // Month is 0-indexed in JS, (start of the month)
-		const endDate = new Date(year, month, 1); // First day of next month, (end of the month)
-
-		dateFilter = {
-			transactionDate: {
-				gte: startDate,
-				lt: endDate,
-			},
-		};
-	}
-
+export async function getTransactionsByUserId(userId: string) {
 	const rawTransactions = await prisma.transaction.findMany({
-		where: { userId, ...dateFilter },
+		where: { userId },
 		orderBy: { transactionDate: 'desc' }, // most recent first
 	});
 	const transactions = rawTransactions.map((tr) => ({

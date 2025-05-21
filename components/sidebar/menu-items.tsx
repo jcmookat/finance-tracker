@@ -32,7 +32,11 @@ const items = [
 		url: '/annual',
 		icon: Calendar,
 	},
-
+	{
+		title: 'All Reports',
+		url: '/reports',
+		icon: Calendar,
+	},
 	{
 		title: 'Search',
 		url: '#',

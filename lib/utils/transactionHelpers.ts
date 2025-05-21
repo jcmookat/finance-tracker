@@ -49,6 +49,21 @@ export function groupTransactionsByMonth(transactions: Transaction[]) {
 	return grouped;
 }
 
+export function groupTransactionsByYear(transactions: Transaction[]) {
+	const grouped: Record<string, Transaction[]> = {};
+
+	transactions.forEach((tr) => {
+		const date = new Date(tr.transactionDate);
+		const year = date.getFullYear();
+		const yearKey = `${year}`;
+
+		if (!grouped[yearKey]) grouped[yearKey] = [];
+		grouped[yearKey].push(tr);
+	});
+
+	return grouped;
+}
+
 export function getTotalsByKey(
 	transactions: Transaction[],
 	key: keyof Transaction,
@@ -106,35 +121,37 @@ export function prepareAnnualReport(transactions: Transaction[]) {
 		};
 
 		if (tx.type === 'INCOME') {
-			addTotal(tx.category, true);
+			addTotal(`income:${tx.category}`, true);
 		} else {
 			if (tx.category) {
-				categoryKeys.add(tx.category);
-				addTotal(tx.category, false);
+				categoryKeys.add(`category:${tx.category}`);
+				addTotal(`category:${tx.category}`, false);
 			}
 			if (tx.subcategory) {
-				subcategoryKeys.add(tx.subcategory);
-				addTotal(tx.subcategory, false);
+				subcategoryKeys.add(`subcategory:${tx.subcategory}`);
+				addTotal(`subcategory:${tx.subcategory}`, false);
 			}
 			if (tx.paymentMethod) {
-				paymentMethodKeys.add(tx.paymentMethod);
-				addTotal(tx.paymentMethod, false);
+				paymentMethodKeys.add(`paymentMethod:${tx.paymentMethod}`);
+				addTotal(`paymentMethod:${tx.paymentMethod}`, false);
 			}
 			if (tx.creditCardType) {
-				creditCardTypeKeys.add(tx.creditCardType);
-				addTotal(tx.creditCardType, false);
+				creditCardTypeKeys.add(`creditCard:${tx.creditCardType}`);
+				addTotal(`creditCard:${tx.creditCardType}`, false);
 			}
 		}
 	}
 
-	// Sort keys: income keys first, then others in specific order
-	const sortedKeys = [
-		...Array.from(incomeKeys).sort(),
-		...Array.from(categoryKeys).sort(),
-		...Array.from(subcategoryKeys).sort(),
-		...Array.from(paymentMethodKeys).sort(),
-		...Array.from(creditCardTypeKeys).sort(),
-	];
+	const sortedKeys = Array.from(
+		new Set([
+			...Array.from(incomeKeys).sort(),
+			...Array.from(categoryKeys).sort(),
+			...Array.from(subcategoryKeys).sort(),
+			...Array.from(paymentMethodKeys).sort(),
+			...Array.from(creditCardTypeKeys).sort(),
+		]),
+	);
+
 	// Ensure months are sorted from January to December
 	const sortedMonthlyTotals: Record<string, Record<string, number>> = {};
 	for (const month of months) {
@@ -144,4 +161,79 @@ export function prepareAnnualReport(transactions: Transaction[]) {
 	}
 
 	return { sortedKeys, monthlyTotals: sortedMonthlyTotals, annualTotals };
+}
+
+// All reports
+export function prepareAllReport(transactions: Transaction[]) {
+	const allKeys = new Set<string>();
+	const incomeKeys = new Set<string>();
+	const categoryKeys = new Set<string>();
+	const subcategoryKeys = new Set<string>();
+	const paymentMethodKeys = new Set<string>();
+	const creditCardTypeKeys = new Set<string>();
+
+	const yearlyTotals: Record<string, Record<string, number>> = {};
+	const totalByKey: Record<string, number> = {};
+
+	for (const tx of transactions) {
+		const date = new Date(tx.transactionDate);
+		const year = String(date.getFullYear());
+		if (!yearlyTotals[year]) yearlyTotals[year] = {};
+
+		const addTotal = (key: string | null | undefined, isIncome: boolean) => {
+			if (!key) return;
+			allKeys.add(key);
+			if (isIncome) incomeKeys.add(key);
+
+			yearlyTotals[year][key] = (yearlyTotals[year][key] || 0) + tx.amount;
+			totalByKey[key] = (totalByKey[key] || 0) + tx.amount;
+		};
+
+		if (tx.type === 'INCOME') {
+			addTotal(`income:${tx.category}`, true);
+		} else {
+			if (tx.category) {
+				categoryKeys.add(`category:${tx.category}`);
+				addTotal(`category:${tx.category}`, false);
+			}
+			if (tx.subcategory) {
+				subcategoryKeys.add(`subcategory:${tx.subcategory}`);
+				addTotal(`subcategory:${tx.subcategory}`, false);
+			}
+			if (tx.paymentMethod) {
+				paymentMethodKeys.add(`paymentMethod:${tx.paymentMethod}`);
+				addTotal(`paymentMethod:${tx.paymentMethod}`, false);
+			}
+			if (tx.creditCardType) {
+				creditCardTypeKeys.add(`creditCard:${tx.creditCardType}`);
+				addTotal(`creditCard:${tx.creditCardType}`, false);
+			}
+		}
+	}
+
+	const sortedKeys = Array.from(
+		new Set([
+			...Array.from(incomeKeys).sort(),
+			...Array.from(categoryKeys).sort(),
+			...Array.from(subcategoryKeys).sort(),
+			...Array.from(paymentMethodKeys).sort(),
+			...Array.from(creditCardTypeKeys).sort(),
+		]),
+	);
+
+	const sortedYearKeys = Object.keys(yearlyTotals).sort(
+		(a, b) => Number(b) - Number(a),
+	);
+	const sortedYearMap = new Map();
+
+	for (const key of sortedYearKeys) {
+		sortedYearMap.set(key, yearlyTotals[key]);
+	}
+
+	return {
+		sortedKeys,
+		yearlyTotals,
+		sortedYearMap,
+		overallTotals: totalByKey,
+	};
 }

@@ -12,9 +12,6 @@ export interface TransactionsListProps {
 	onDelete: (id: string) => void;
 	onEdit: (updatedTransaction: Transaction) => void;
 }
-export interface MonthlyListProps {
-	transactions: Transaction[];
-}
 
 export interface MonthlySummaryProps {
 	transactions: Record<string, Transaction[]>; // e.g. output of groupTransactionsByMonth

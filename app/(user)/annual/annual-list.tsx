@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/table';
 import { prepareAnnualReport } from '@/lib/utils/transactionHelpers';
 
-type Props = {
+export default function AnnualList({
+	transactions,
+}: {
 	transactions: Transaction[];
-};
-
-export default function AnnualList({ transactions }: Props) {
+}) {
 	const { sortedKeys, monthlyTotals, annualTotals } =
 		prepareAnnualReport(transactions);
 
@@ -25,11 +25,14 @@ export default function AnnualList({ transactions }: Props) {
 				<TableHeader>
 					<TableRow>
 						<TableHead className='w-28'>Month</TableHead>
-						{sortedKeys.map((key) => (
-							<TableHead key={key} className='text-center font-bold'>
-								{key || 'N/A'}
-							</TableHead>
-						))}
+						{sortedKeys.map((key) => {
+							const label = key.split(':')[1] || 'N/A';
+							return (
+								<TableHead key={key} className='text-center font-bold'>
+									{label}
+								</TableHead>
+							);
+						})}
 					</TableRow>
 				</TableHeader>
 				<TableBody>

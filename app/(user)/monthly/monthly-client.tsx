@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import MonthYearPicker from '@/components/month-year-picker';
-import ReportsList from './montly-list';
 import EmptyState from '@/components/empty-state';
 import {
 	calculateTotal,
@@ -12,6 +11,7 @@ import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
 import Loading from '@/components/loading';
 import MonthlySummary from './monthly-summary';
+import MonthlyList from './montly-list';
 
 export default function MonthlyClient({
 	initialTransactions,
@@ -126,7 +126,7 @@ export default function MonthlyClient({
 						<MonthlySummary transactions={groupedTransactionsByMonth} />
 					</div>
 					<div>
-						<ReportsList transactions={filteredTransactions} />
+						<MonthlyList transactions={filteredTransactions} />
 					</div>
 				</>
 			)}

@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { MonthlyListProps } from '@/types/transaction';
+import { TransactionsListProps } from '@/types/transaction';
 import {
 	Table,
 	TableBody,
@@ -10,6 +10,8 @@ import {
 } from '@/components/ui/table';
 import { formatFullDate } from '@/lib/utils/dateHelpers';
 import { Card, CardContent } from '@/components/ui/card';
+
+type MonthlyListProps = Omit<TransactionsListProps, 'onDelete' | 'onEdit'>;
 
 export default function MonthlyList({ transactions }: MonthlyListProps) {
 	return (
