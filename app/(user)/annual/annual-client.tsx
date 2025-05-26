@@ -9,7 +9,10 @@ import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { Transaction, TransactionsClientProps } from '@/types/transaction';
 import Loading from '@/components/loading';
 
-type Props = Omit<TransactionsClientProps, 'initialStartDate'>;
+type Props = Omit<
+	TransactionsClientProps,
+	'initialStartDate' | 'userCategories'
+>;
 
 export default function AnnualClient({
 	initialTransactions,

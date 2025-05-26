@@ -25,6 +25,7 @@ export default function TransactionsList({
 	transactions,
 	onDelete,
 	onEdit,
+	userCategories,
 }: TransactionsListProps) {
 	const groupedTransactionsByDate = groupTransactionsByDate(transactions);
 	const sortedDates = Object.keys(groupedTransactionsByDate).sort((a, b) =>
@@ -75,8 +76,8 @@ export default function TransactionsList({
 								{incomes
 									.slice() // clone the array to avoid mutating original
 									.sort((a, b) => {
-										const categoryCompare = a.category.localeCompare(
-											b.category,
+										const categoryCompare = a.categoryName.localeCompare(
+											b.categoryName,
 											undefined,
 											{ sensitivity: 'base' },
 										);
@@ -90,7 +91,7 @@ export default function TransactionsList({
 										);
 									})
 									.map((tr) => {
-										const Icon = categoryIconMap[tr.category];
+										const Icon = categoryIconMap[tr.categoryName];
 										return (
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
@@ -102,7 +103,7 @@ export default function TransactionsList({
 																{Icon && (
 																	<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																)}
-																{tr.category}
+																{tr.categoryName}
 															</span>
 															<span>+{formatCurrency(Number(tr.amount))}</span>
 														</Button>
@@ -133,8 +134,8 @@ export default function TransactionsList({
 								{expenses
 									.slice() // clone the array to avoid mutating original
 									.sort((a, b) => {
-										const categoryCompare = a.category.localeCompare(
-											b.category,
+										const categoryCompare = a.categoryName.localeCompare(
+											b.categoryName,
 											undefined,
 											{ sensitivity: 'base' },
 										);
@@ -148,7 +149,7 @@ export default function TransactionsList({
 										);
 									})
 									.map((tr) => {
-										const Icon = categoryIconMap[tr.category];
+										const Icon = categoryIconMap[tr.categoryName];
 										return (
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
@@ -160,7 +161,7 @@ export default function TransactionsList({
 																{Icon && (
 																	<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																)}
-																{tr.category}
+																{tr.categoryName}
 																{tr.subcategory && (
 																	<span className='text-xs'>
 																		({tr.subcategory})
@@ -235,6 +236,7 @@ export default function TransactionsList({
 							transaction={selectedTransaction}
 							onEditAction={onEdit}
 							setIsOpenAction={handleCloseDialog}
+							userCategories={userCategories}
 						/>
 					)}
 				</ResponsiveDialog>

@@ -14,24 +14,26 @@ import SubmitButton from '../submit-button';
 import {
 	expenseSubCategories,
 	transactionDefaultValues,
-	expenseCategories,
-	incomeCategories,
 	transactionType,
 	expensePaymentMethod,
 	expenseCreditCardType,
+	iconMap,
 } from '@/lib/constants';
+import { Briefcase, ShoppingBag } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import {
 	createTransaction,
 	updateTransaction,
 } from '@/lib/actions/transaction.actions';
+import { Category } from '@/types/category';
 
 export default function TransactionForm({
 	mode,
 	userId,
 	transaction,
 	transactionId,
+	userCategories,
 	onEditAction,
 	setIsOpenAction,
 }: {
@@ -39,6 +41,7 @@ export default function TransactionForm({
 	userId: string;
 	transaction?: Transaction;
 	transactionId?: string;
+	userCategories?: Category[];
 	onEditAction?: (updatedTransaction: Transaction) => void;
 	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
 }): ReactElement {
@@ -46,6 +49,24 @@ export default function TransactionForm({
 	const searchParams = useSearchParams();
 	const typeParam = searchParams.get('type') as 'EXPENSE' | 'INCOME';
 	const formDefaults = transactionDefaultValues();
+
+	const expenseCategories =
+		userCategories
+			?.filter((item) => item.type === 'EXPENSE')
+			?.map((item) => ({
+				label: item.name,
+				value: item.name,
+				icon: item.icon ? iconMap[item.icon] : ShoppingBag,
+			})) || [];
+
+	const incomeCategories =
+		userCategories
+			?.filter((item) => item.type === 'INCOME')
+			?.map((item) => ({
+				label: item.name,
+				value: item.name,
+				icon: item.icon ? iconMap[item.icon] : Briefcase,
+			})) || [];
 
 	const modeConfig = {
 		Update: {
@@ -75,7 +96,8 @@ export default function TransactionForm({
 							typeParam === 'INCOME' || typeParam === 'EXPENSE'
 								? typeParam
 								: 'EXPENSE',
-						category: typeParam === 'INCOME' ? 'Salary' : formDefaults.category,
+						categoryName:
+							typeParam === 'INCOME' ? 'Salary' : formDefaults.categoryName,
 					},
 	});
 
@@ -168,7 +190,6 @@ export default function TransactionForm({
 							formControl={form.control}
 						/>
 					)}
-
 					{type === 'EXPENSE' && paymentMethod === 'Credit Card' && (
 						<BaseFormField<typeof insertTransactionSchema>
 							name='creditCardType'
@@ -179,9 +200,8 @@ export default function TransactionForm({
 							formControl={form.control}
 						/>
 					)}
-
 					<BaseFormField<typeof insertTransactionSchema>
-						name='category'
+						name='categoryName'
 						label='Category'
 						placeholder='Select a category'
 						inputType='select'
@@ -198,7 +218,6 @@ export default function TransactionForm({
 							formControl={form.control}
 						/>
 					)}
-
 					<BaseFormField<typeof insertTransactionSchema>
 						name='description'
 						label='Description'

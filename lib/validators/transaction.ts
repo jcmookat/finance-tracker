@@ -12,7 +12,7 @@ const baseTransactionSchema = z.object({
 		}) as z.ZodType<TransactionType>,
 	paymentMethod: z.string().optional().nullable(),
 	creditCardType: z.string().optional().nullable(),
-	category: z.string().min(3, 'Select a category'),
+	categoryName: z.string().min(3, 'Select a category'),
 	subcategory: z.string().optional(),
 	amount: z.coerce
 		.number({

@@ -16,6 +16,7 @@ export default function TransactionsClient({
 	initialMonth,
 	initialYear,
 	initialStartDate,
+	userCategories,
 }: TransactionsClientProps) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
@@ -142,6 +143,7 @@ export default function TransactionsClient({
 							transactions={filteredTransactions}
 							onDelete={handleDelete}
 							onEdit={handleEdit}
+							userCategories={userCategories}
 						/>
 					</div>
 				</>

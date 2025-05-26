@@ -4,6 +4,7 @@ import { type ReactElement } from 'react';
 import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
 import MonthlySummary from './monthly-client';
+import { getCategoriesByUserId } from '@/lib/data/category';
 
 export const metadata: Metadata = {
 	title: 'Monthly Reports',
@@ -27,6 +28,8 @@ export default async function ReportsPage(): Promise<ReactElement> {
 		endDate,
 	);
 
+	const userCategories = await getCategoriesByUserId(userId);
+
 	return (
 		<>
 			<MonthlySummary
@@ -34,6 +37,7 @@ export default async function ReportsPage(): Promise<ReactElement> {
 				initialMonth={month}
 				initialYear={year}
 				initialStartDate={startDate}
+				userCategories={userCategories}
 			/>
 		</>
 	);

@@ -11,7 +11,10 @@ import {
 import { formatFullDate } from '@/lib/utils/dateHelpers';
 import { Card, CardContent } from '@/components/ui/card';
 
-type MonthlyListProps = Omit<TransactionsListProps, 'onDelete' | 'onEdit'>;
+type MonthlyListProps = Omit<
+	TransactionsListProps,
+	'onDelete' | 'onEdit' | 'userCategories'
+>;
 
 export default function MonthlyList({ transactions }: MonthlyListProps) {
 	return (
@@ -36,7 +39,7 @@ export default function MonthlyList({ transactions }: MonthlyListProps) {
 								<TableRow key={tr.id} className='relative pb-10 pt-3'>
 									<TableCell>{formatFullDate(tr.transactionDate)}</TableCell>
 									<TableCell>{tr.type}</TableCell>
-									<TableCell>{tr.category}</TableCell>
+									<TableCell>{tr.categoryName}</TableCell>
 									<TableCell>{tr.subcategory}</TableCell>
 									<TableCell>{tr.description}</TableCell>
 									<TableCell>{formatCurrency(tr.amount)}</TableCell>

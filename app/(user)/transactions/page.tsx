@@ -4,6 +4,7 @@ import { type ReactElement } from 'react';
 import TransactionsClient from './transactions-client';
 import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
+import { getCategoriesByUserId } from '@/lib/data/category';
 
 export const metadata: Metadata = {
 	title: 'Transactions',
@@ -26,15 +27,15 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 		startDate,
 		endDate,
 	);
+	const userCategories = await getCategoriesByUserId(userId);
 
 	return (
-		<>
-			<TransactionsClient
-				initialTransactions={transactions}
-				initialMonth={month}
-				initialYear={year}
-				initialStartDate={startDate}
-			/>
-		</>
+		<TransactionsClient
+			initialTransactions={transactions}
+			initialMonth={month}
+			initialYear={year}
+			initialStartDate={startDate}
+			userCategories={userCategories}
+		/>
 	);
 }

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { auth } from '@/auth';
 import TransactionForm from '@/components/form/transaction-form';
 import { getTransactionById } from '@/lib/data/transaction';
+import { getCategoriesByUserId } from '@/lib/data/category';
 
 export const metadata: Metadata = {
 	title: 'Update Transaction',
@@ -20,6 +21,8 @@ export default async function UpdateTransactionPage(props: {
 	const { id } = await props.params;
 	const transaction = await getTransactionById(id);
 
+	const userCategories = await getCategoriesByUserId(userId);
+
 	return (
 		<div>
 			<TransactionForm
@@ -27,6 +30,7 @@ export default async function UpdateTransactionPage(props: {
 				userId={userId}
 				transactionId={id}
 				transaction={transaction}
+				userCategories={userCategories}
 			/>
 		</div>
 	);

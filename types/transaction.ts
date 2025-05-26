@@ -4,6 +4,7 @@ import {
 	transactionWithIdSchema,
 	updateTransactionSchema,
 } from '@/lib/validators/transaction';
+import { Category } from './category';
 
 export type Transaction = z.infer<typeof transactionWithIdSchema>;
 
@@ -11,6 +12,7 @@ export interface TransactionsListProps {
 	transactions: Transaction[];
 	onDelete: (id: string) => void;
 	onEdit: (updatedTransaction: Transaction) => void;
+	userCategories: Category[];
 }
 
 export interface MonthlySummaryProps {
@@ -22,6 +24,7 @@ export interface TransactionsClientProps {
 	initialMonth: number;
 	initialYear: number;
 	initialStartDate: Date;
+	userCategories: Category[];
 }
 
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;

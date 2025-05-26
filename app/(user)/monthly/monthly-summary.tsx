@@ -72,7 +72,7 @@ export default function MonthlySummary({ transactions }: MonthlySummaryProps) {
 							<>
 								<h3 className='text-lg font-medium text-green-600'>Income</h3>
 								{renderTotalsTable(
-									getTotalsByKey(incomeTransactions, 'category'),
+									getTotalsByKey(incomeTransactions, 'categoryName'),
 									'Categories',
 								)}
 							</>
@@ -83,7 +83,7 @@ export default function MonthlySummary({ transactions }: MonthlySummaryProps) {
 							<>
 								<h3 className='text-lg font-medium text-red-600'>Expenses</h3>
 								{renderTotalsTable(
-									getTotalsByKey(expenseTransactions, 'category'),
+									getTotalsByKey(expenseTransactions, 'categoryName'),
 									'Categories',
 								)}
 								{renderTotalsTable(

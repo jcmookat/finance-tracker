@@ -121,11 +121,11 @@ export function prepareAnnualReport(transactions: Transaction[]) {
 		};
 
 		if (tx.type === 'INCOME') {
-			addTotal(`income:${tx.category}`, true);
+			addTotal(`income:${tx.categoryName}`, true);
 		} else {
-			if (tx.category) {
-				categoryKeys.add(`category:${tx.category}`);
-				addTotal(`category:${tx.category}`, false);
+			if (tx.categoryName) {
+				categoryKeys.add(`category:${tx.categoryName}`);
+				addTotal(`category:${tx.categoryName}`, false);
 			}
 			if (tx.subcategory) {
 				subcategoryKeys.add(`subcategory:${tx.subcategory}`);
@@ -190,11 +190,11 @@ export function prepareAllReport(transactions: Transaction[]) {
 		};
 
 		if (tx.type === 'INCOME') {
-			addTotal(`income:${tx.category}`, true);
+			addTotal(`income:${tx.categoryName}`, true);
 		} else {
-			if (tx.category) {
-				categoryKeys.add(`category:${tx.category}`);
-				addTotal(`category:${tx.category}`, false);
+			if (tx.categoryName) {
+				categoryKeys.add(`category:${tx.categoryName}`);
+				addTotal(`category:${tx.categoryName}`, false);
 			}
 			if (tx.subcategory) {
 				subcategoryKeys.add(`subcategory:${tx.subcategory}`);

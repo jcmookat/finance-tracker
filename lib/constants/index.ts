@@ -26,6 +26,7 @@ import {
 	ShowerHead,
 	Banknote,
 	CreditCard,
+	LucideIcon,
 } from 'lucide-react';
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'Gastos at Grasya';
 export const APP_DESCRIPTION =
@@ -48,7 +49,7 @@ export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 export const transactionDefaultValues = () => ({
 	userId: '',
 	type: 'EXPENSE' as 'EXPENSE' | 'INCOME',
-	category: '',
+	categoryName: '',
 	subCategory: '',
 	amount: 100,
 	paymentMethod: '',
@@ -133,4 +134,34 @@ export const categoryIconMap: Record<string, React.ElementType> = {
 	Salary: Briefcase,
 	'Carry Over': Repeat,
 	Freelance: PenTool,
+};
+
+export const iconMap: Record<string, LucideIcon> = {
+	ShoppingBag,
+	ShoppingCart,
+	Train,
+	GraduationCap,
+	Wallet,
+	Briefcase,
+	Repeat,
+	PenTool,
+	JapaneseYen,
+	ReceiptText,
+	HeartPulse,
+	PhilippinePeso,
+	Podcast,
+	MapPlus,
+	HeartHandshake,
+	House,
+	Router,
+	Zap,
+	GlassWater,
+	Bus,
+	Smartphone,
+	Wifi,
+	ForkKnife,
+	BanknoteArrowUp,
+	ShowerHead,
+	Banknote,
+	CreditCard,
 };
