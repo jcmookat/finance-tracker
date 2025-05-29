@@ -1,10 +1,11 @@
+'use client';
+
 import {
 	calculateTotal,
 	groupTransactionsByDate,
 } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { Transaction, TransactionsListProps } from '@/types/transaction';
-import { categoryIconMap } from '@/lib/constants';
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -12,7 +13,7 @@ import {
 	DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { Card, CardContent } from '@/components/ui/card';
-import { Banknote, CreditCard, PenBox, Trash2 } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import ResponsiveDialog from '@/components/responsive-dialog';
@@ -23,8 +24,8 @@ import { formatFullDate } from '@/lib/utils/dateHelpers';
 
 export default function TransactionsList({
 	transactions,
-	onDelete,
-	onEdit,
+	onDeleteAction,
+	onEditAction,
 	userCategories,
 }: TransactionsListProps) {
 	const groupedTransactionsByDate = groupTransactionsByDate(transactions);
@@ -54,6 +55,37 @@ export default function TransactionsList({
 			setSelectedTransaction(null);
 		}, 200);
 	};
+
+	type LucideIconComponent = React.ForwardRefExoticComponent<
+		Omit<LucideIcons.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+	>;
+
+	const iconMap = userCategories.reduce(
+		(acc, category) => {
+			let resolvedIconComponent: LucideIconComponent;
+
+			if (category.icon) {
+				const iconName = category.icon as keyof typeof LucideIcons;
+				const potentialIcon = LucideIcons[iconName];
+
+				if (potentialIcon) {
+					resolvedIconComponent = potentialIcon as LucideIconComponent;
+				} else {
+					console.warn(
+						`Warning: Icon '${category.icon}' not found in LucideIcons or is not a valid component. Using ShoppingBag as default for '${category.name}'.`,
+					);
+					resolvedIconComponent = LucideIcons.ShoppingBag;
+				}
+			} else {
+				// If category.icon is null, use ShoppingBag
+				resolvedIconComponent = LucideIcons.ShoppingBag;
+			}
+
+			acc[category.name] = resolvedIconComponent;
+			return acc;
+		},
+		{} as Record<string, LucideIconComponent>,
+	);
 
 	const renderTransactionGroup = (date: string) => {
 		const dayTransactions = groupedTransactionsByDate[date];
@@ -91,7 +123,7 @@ export default function TransactionsList({
 										);
 									})
 									.map((tr) => {
-										const Icon = categoryIconMap[tr.categoryName];
+										const Icon = iconMap[tr.categoryName];
 										return (
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
@@ -100,9 +132,7 @@ export default function TransactionsList({
 															variant='ghost'
 															className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
 															<span className='flex items-center gap-2 mr-2'>
-																{Icon && (
-																	<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
-																)}
+																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 															</span>
 															<span>+{formatCurrency(Number(tr.amount))}</span>
@@ -111,11 +141,11 @@ export default function TransactionsList({
 													<DropdownMenuContent align='end' className='min-w-0'>
 														<DropdownMenuItem
 															onClick={() => handleOpenEditDialog(tr)}>
-															<PenBox className='text-orange-400 w-5 h-5' />
+															<LucideIcons.PenBox className='text-orange-400 w-5 h-5' />
 														</DropdownMenuItem>
 														<DropdownMenuItem
 															onClick={() => handleOpenDeleteDialog(tr)}>
-															<Trash2 className='text-red-400 w-6 h-6' />
+															<LucideIcons.Trash2 className='text-red-400 w-6 h-6' />
 														</DropdownMenuItem>
 													</DropdownMenuContent>
 												</DropdownMenu>
@@ -149,7 +179,7 @@ export default function TransactionsList({
 										);
 									})
 									.map((tr) => {
-										const Icon = categoryIconMap[tr.categoryName];
+										const Icon = iconMap[tr.categoryName];
 										return (
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
@@ -158,9 +188,7 @@ export default function TransactionsList({
 															variant='ghost'
 															className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
 															<span className='flex items-center gap-2 mr-2'>
-																{Icon && (
-																	<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
-																)}
+																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 																{tr.subcategory && (
 																	<span className='text-xs'>
@@ -171,9 +199,9 @@ export default function TransactionsList({
 															<span className='text-right flex items-center gap-1.5'>
 																-{formatCurrency(Number(tr.amount))}
 																{tr.paymentMethod === 'Cash' ? (
-																	<Banknote />
+																	<LucideIcons.Banknote />
 																) : (
-																	<CreditCard />
+																	<LucideIcons.CreditCard />
 																)}
 															</span>
 														</Button>
@@ -181,11 +209,11 @@ export default function TransactionsList({
 													<DropdownMenuContent align='end' className='min-w-0'>
 														<DropdownMenuItem
 															onClick={() => handleOpenEditDialog(tr)}>
-															<PenBox className='text-orange-400 w-5 h-5' />
+															<LucideIcons.PenBox className='text-orange-400 w-5 h-5' />
 														</DropdownMenuItem>
 														<DropdownMenuItem
 															onClick={() => handleOpenDeleteDialog(tr)}>
-															<Trash2 className='text-red-400 w-6 h-6' />
+															<LucideIcons.Trash2 className='text-red-400 w-6 h-6' />
 														</DropdownMenuItem>
 													</DropdownMenuContent>
 												</DropdownMenu>
@@ -226,7 +254,7 @@ export default function TransactionsList({
 							transactionId={selectedTransaction.id}
 							setIsOpenAction={handleCloseDialog}
 							action={deleteTransaction}
-							onDeleteAction={onDelete}
+							onDeleteAction={onDeleteAction}
 						/>
 					) : (
 						<TransactionForm
@@ -234,7 +262,7 @@ export default function TransactionsList({
 							userId={selectedTransaction.userId}
 							transactionId={selectedTransaction.id}
 							transaction={selectedTransaction}
-							onEditAction={onEdit}
+							onEditAction={onEditAction}
 							setIsOpenAction={handleCloseDialog}
 							userCategories={userCategories}
 						/>

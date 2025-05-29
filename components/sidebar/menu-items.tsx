@@ -6,7 +6,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { Calendar, Home, Inbox, Settings } from 'lucide-react';
 import ModeToggle from '../mode-toggle';
 import Link from 'next/link';
 
@@ -38,9 +38,9 @@ const items = [
 		icon: Calendar,
 	},
 	{
-		title: 'Search',
-		url: '#',
-		icon: Search,
+		title: 'Categories',
+		url: '/categories',
+		icon: Inbox,
 	},
 	{
 		title: 'Settings',

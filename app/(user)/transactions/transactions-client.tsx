@@ -6,7 +6,7 @@ import TransactionsList from './transactions-list';
 import EmptyState from '@/components/empty-state';
 import { calculateTotal } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
-import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
+import { TransactionsClientProps, Transaction } from '@/types/transaction';
 import Loading from '@/components/loading';
 import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 import CreateTransactionButtons from '@/components/form/transaction-buttons';
@@ -141,8 +141,8 @@ export default function TransactionsClient({
 					<div className='flex flex-wrap gap-4'>
 						<TransactionsList
 							transactions={filteredTransactions}
-							onDelete={handleDelete}
-							onEdit={handleEdit}
+							onDeleteAction={handleDelete}
+							onEditAction={handleEdit}
 							userCategories={userCategories}
 						/>
 					</div>

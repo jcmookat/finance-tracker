@@ -17,9 +17,8 @@ import {
 	transactionType,
 	expensePaymentMethod,
 	expenseCreditCardType,
-	iconMap,
 } from '@/lib/constants';
-import { Briefcase, ShoppingBag } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -27,6 +26,7 @@ import {
 	updateTransaction,
 } from '@/lib/actions/transaction.actions';
 import { Category } from '@/types/category';
+// import { ComboBox } from '../combo-box';
 
 export default function TransactionForm({
 	mode,
@@ -50,13 +50,44 @@ export default function TransactionForm({
 	const typeParam = searchParams.get('type') as 'EXPENSE' | 'INCOME';
 	const formDefaults = transactionDefaultValues();
 
+	type LucideIconComponent = React.ForwardRefExoticComponent<
+		Omit<LucideIcons.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+	>;
+
+	const iconMap = userCategories?.reduce(
+		(acc, category) => {
+			let resolvedIconComponent: LucideIconComponent;
+
+			if (category.icon) {
+				const iconName = category.icon as keyof typeof LucideIcons;
+				const potentialIcon = LucideIcons[iconName];
+
+				if (potentialIcon) {
+					resolvedIconComponent = potentialIcon as LucideIconComponent;
+				} else {
+					console.warn(
+						`Warning: Icon '${category.icon}' not found in LucideIcons or is not a valid component. Using ShoppingBag as default for '${category.name}'.`,
+					);
+					resolvedIconComponent = LucideIcons.ShoppingBag;
+				}
+			} else {
+				// If category.icon is null, use ShoppingBag
+				resolvedIconComponent = LucideIcons.ShoppingBag;
+			}
+
+			acc[category.name] = resolvedIconComponent;
+			return acc;
+		},
+		{} as Record<string, LucideIconComponent>,
+	);
+
 	const expenseCategories =
 		userCategories
 			?.filter((item) => item.type === 'EXPENSE')
 			?.map((item) => ({
 				label: item.name,
 				value: item.name,
-				icon: item.icon ? iconMap[item.icon] : ShoppingBag,
+				icon: iconMap?.[item.name],
 			})) || [];
 
 	const incomeCategories =
@@ -65,7 +96,7 @@ export default function TransactionForm({
 			?.map((item) => ({
 				label: item.name,
 				value: item.name,
-				icon: item.icon ? iconMap[item.icon] : Briefcase,
+				icon: iconMap?.[item.name],
 			})) || [];
 
 	const modeConfig = {
@@ -104,6 +135,8 @@ export default function TransactionForm({
 	const type = form.watch('type');
 	const paymentMethod = form.watch('paymentMethod');
 	const categories = type === 'INCOME' ? incomeCategories : expenseCategories;
+
+	console.log(categories);
 
 	useEffect(() => {
 		if (type === 'INCOME') {
@@ -208,6 +241,13 @@ export default function TransactionForm({
 						dataArr={categories}
 						formControl={form.control}
 					/>
+					{/* <ComboBox<typeof insertTransactionSchema>
+						name='categoryName'
+						label='User Category'
+						placeholder='Select or add a category'
+						dataArr={categories}
+						formControl={form.control}
+					/> */}
 					{type === 'EXPENSE' && (
 						<BaseFormField<typeof insertTransactionSchema>
 							name='subcategory'
