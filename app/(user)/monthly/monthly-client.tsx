@@ -108,17 +108,26 @@ export default function MonthlyClient({
 								year: 'numeric',
 							})}
 						</h2>
-						<div className='flex gap-4'>
-							<p className='text-lg font-bold text-green-600'>
-								Income: +{formatCurrency(Math.abs(monthIncome))}
+						<div className='flex flex-col md:flex-row gap-2 md:gap-4'>
+							<p className='font-bold text-right text-muted-foreground'>
+								Income:{' '}
+								<span className='text-lg text-green-700'>
+									+{formatCurrency(Math.abs(monthIncome))}
+								</span>
 							</p>
-							<p className='text-lg font-bold text-red-600'>
-								Expense: -{formatCurrency(Math.abs(monthExpense))}
+							<p className='font-bold text-right text-muted-foreground'>
+								Expense:{' '}
+								<span className='text-lg text-red-700'>
+									-{formatCurrency(Math.abs(monthExpense))}
+								</span>
 							</p>
-							<p
-								className={`text-lg font-bold ${monthTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-								Total: {monthTotal >= 0 ? '+' : '-'}
-								{formatCurrency(Math.abs(monthTotal))}
+							<p className='font-bold text-right text-muted-foreground'>
+								Total:{' '}
+								<span
+									className={`text-lg ${monthTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+									{monthTotal >= 0 ? '+' : '-'}
+									{formatCurrency(Math.abs(monthTotal))}
+								</span>
 							</p>
 						</div>
 					</div>

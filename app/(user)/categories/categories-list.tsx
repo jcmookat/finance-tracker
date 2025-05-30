@@ -88,37 +88,49 @@ export default function CategoriesList({
 
 	return (
 		<div>
-			<Button onClick={() => handleOpenCreateDialog()}>Add Category</Button>
-			<ul>
-				{incomeCategories.map((item) => {
-					const Icon = iconMap[item.name];
-					return (
-						<li key={item.id}>
-							<Button
-								variant='ghost'
-								onClick={() => handleOpenEditDialog(item)}>
-								<Icon className='h-4 w-4' />
-								{item.name}
-							</Button>
-						</li>
-					);
-				})}
-			</ul>
-			<ul>
-				{expenseCategories.map((item) => {
-					const Icon = iconMap[item.name];
-					return (
-						<li key={item.id}>
-							<Button
-								variant='ghost'
-								onClick={() => handleOpenEditDialog(item)}>
-								<Icon className='h-4 w-4' />
-								{item.name}
-							</Button>
-						</li>
-					);
-				})}
-			</ul>
+			<div className='mb-4'>
+				<Button onClick={() => handleOpenCreateDialog()}>Add Category</Button>
+			</div>
+			<div className='mb-4'>
+				<h3 className='mb-2 font-bold text-green-700'>Income Categories</h3>
+				<ul>
+					{incomeCategories
+						.sort((a, b) => a.name.localeCompare(b.name))
+						.map((item) => {
+							const Icon = iconMap[item.name];
+							return (
+								<li key={item.id}>
+									<Button
+										variant='ghost'
+										onClick={() => handleOpenEditDialog(item)}>
+										<Icon className='h-4 w-4' />
+										{item.name}
+									</Button>
+								</li>
+							);
+						})}
+				</ul>
+			</div>
+			<div className='mb-4'>
+				<h3 className='mb-2 font-bold text-red-700'>Expense Categories</h3>
+				<ul>
+					{expenseCategories
+						.sort((a, b) => a.name.localeCompare(b.name))
+						.map((item) => {
+							const Icon = iconMap[item.name];
+							return (
+								<li key={item.id}>
+									<Button
+										variant='ghost'
+										onClick={() => handleOpenEditDialog(item)}>
+										<Icon className='h-4 w-4' />
+										{item.name}
+									</Button>
+								</li>
+							);
+						})}
+				</ul>
+			</div>
 
 			<ResponsiveDialog
 				isOpen={isDialogOpen}

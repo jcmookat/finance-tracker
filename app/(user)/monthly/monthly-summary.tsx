@@ -70,7 +70,7 @@ export default function MonthlySummary({ transactions }: MonthlySummaryProps) {
 						{/* INCOME totals first */}
 						{incomeTransactions.length > 0 && (
 							<>
-								<h3 className='text-lg font-medium text-green-600'>Income</h3>
+								<h3 className='font-bold text-green-700'>Income</h3>
 								{renderTotalsTable(
 									getTotalsByKey(incomeTransactions, 'categoryName'),
 									'Categories',
@@ -81,7 +81,7 @@ export default function MonthlySummary({ transactions }: MonthlySummaryProps) {
 						{/* Other types (e.g. EXPENSE) */}
 						{expenseTransactions.length > 0 && (
 							<>
-								<h3 className='text-lg font-medium text-red-600'>Expenses</h3>
+								<h3 className='font-bold text-red-700'>Expenses</h3>
 								{renderTotalsTable(
 									getTotalsByKey(expenseTransactions, 'categoryName'),
 									'Categories',

@@ -123,17 +123,19 @@ const BaseFormField = <TSchema extends ZodType>({
 									<SelectValue placeholder={placeholder} />
 								</SelectTrigger>
 								<SelectContent className='w-full'>
-									{dataArr?.map((item) => {
-										const Icon = item.icon;
-										return (
-											<SelectItem key={item.value} value={item.value}>
-												<div className='flex items-center gap-2'>
-													{Icon && <Icon className='h-4 w-4' />}
-													{item.label}
-												</div>
-											</SelectItem>
-										);
-									})}
+									{dataArr
+										?.sort((a, b) => a.label.localeCompare(b.label))
+										.map((item) => {
+											const Icon = item.icon;
+											return (
+												<SelectItem key={item.value} value={item.value}>
+													<div className='flex items-center gap-2'>
+														{Icon && <Icon className='h-4 w-4' />}
+														{item.label}
+													</div>
+												</SelectItem>
+											);
+										})}
 								</SelectContent>
 							</Select>
 						) : inputType === 'textarea' ? (

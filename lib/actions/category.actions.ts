@@ -57,8 +57,6 @@ export async function updateCategory(data: UpdateCategory) {
 	const category = { ...parsed.data };
 	const { id, ...updateCategory } = category;
 
-	console.log(category);
-
 	try {
 		// Validate and find category
 		const categoryExists = await prisma.category.findFirst({

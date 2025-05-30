@@ -7,10 +7,8 @@ import {
 	SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { Calendar, Home, Inbox, Settings } from 'lucide-react';
-import ModeToggle from '../mode-toggle';
 import Link from 'next/link';
 
-// Menu items.
 const items = [
 	{
 		title: 'Dashboard',
@@ -44,7 +42,7 @@ const items = [
 	},
 	{
 		title: 'Settings',
-		url: '#',
+		url: '/settings',
 		icon: Settings,
 	},
 ];
@@ -64,7 +62,6 @@ export default function AppSidebarMenu(): ReactElement {
 							</SidebarMenuButton>
 						</SidebarMenuItem>
 					))}
-					<ModeToggle />
 				</SidebarMenu>
 			</SidebarGroupContent>
 		</SidebarGroup>

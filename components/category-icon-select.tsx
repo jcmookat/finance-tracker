@@ -10,7 +10,7 @@ import {
 	FormMessage,
 } from './ui/form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import * as LucideIcons from 'lucide-react';
+import { icons } from '@/lib/constants';
 
 const CategoryIconSelect = <Tschema extends ZodType>({
 	name,
@@ -27,17 +27,22 @@ const CategoryIconSelect = <Tschema extends ZodType>({
 					<FormControl>
 						<ToggleGroup
 							type='single'
+							size='lg'
 							onValueChange={field.onChange}
-							value={field.value}>
-							<ToggleGroupItem value='ReceiptJapaneseYen' id={field.name}>
-								<LucideIcons.ReceiptJapaneseYen className='w-4 h-4' />
-							</ToggleGroupItem>
-							<ToggleGroupItem value='HeartPulse' size='lg'>
-								<LucideIcons.HeartPulse />
-							</ToggleGroupItem>
-							<ToggleGroupItem value='ShoppingBasket' size='lg'>
-								<LucideIcons.ShoppingBasket />
-							</ToggleGroupItem>
+							value={field.value}
+							className='block'>
+							{Object.entries(icons)
+								.sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
+								.map(([iconName, IconComponent], index) => (
+									<ToggleGroupItem
+										key={iconName}
+										value={iconName}
+										id={index === 0 ? field.name : undefined}
+										className='m-1 rounded-lg border-1'
+										aria-label={`${iconName} icon`}>
+										<IconComponent className='m-2 h-5 w-5' />
+									</ToggleGroupItem>
+								))}
 						</ToggleGroup>
 					</FormControl>
 					<FormMessage />

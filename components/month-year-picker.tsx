@@ -47,10 +47,10 @@ export default function MonthYearPicker({
 	};
 
 	return (
-		<div className='flex gap-2 mb-4'>
+		<div className='flex gap-4 mb-4'>
 			{withMonth && (
 				<Select value={String(month)} onValueChange={handleMonthChange}>
-					<SelectTrigger className='w-[180px]'>
+					<SelectTrigger className='w-[calc(50%-8px)] md:w-[180px]'>
 						<SelectValue placeholder='Select a month' />
 					</SelectTrigger>
 					<SelectContent>
@@ -68,7 +68,7 @@ export default function MonthYearPicker({
 			)}
 
 			<Select value={String(year)} onValueChange={handleYearChange}>
-				<SelectTrigger className='w-[180px]'>
+				<SelectTrigger className='w-[calc(50%-8px)] md:w-[180px]'>
 					<SelectValue placeholder='Select a month' />
 				</SelectTrigger>
 				<SelectContent>

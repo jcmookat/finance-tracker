@@ -94,7 +94,7 @@ export default function TransactionsList({
 		const incomes = dayTransactions.filter((tr) => tr.type === 'INCOME');
 		const expenses = dayTransactions.filter((tr) => tr.type === 'EXPENSE');
 		return (
-			<Card key={date} className='relative pb-10 pt-3'>
+			<Card key={date} className='relative pb-10 pt-3 w-full md:w-auto'>
 				<CardContent className='px-3'>
 					<h3 className='text-xs text-muted-foreground mb-2 border-b border-b-black/15 pb-2'>
 						{formatFullDate(date)}
@@ -224,7 +224,7 @@ export default function TransactionsList({
 						</div>
 					)}
 					<p
-						className={`absolute bottom-0 font-bold rounded-b-xl left-0 pl-4 py-1.5 pr-4 text-right w-full bg-muted ${dayTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+						className={`absolute bottom-0 font-bold rounded-b-xl left-0 pl-4 py-1.5 pr-4 text-right w-full bg-muted ${dayTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
 						{dayTotal >= 0 ? '+' : '-'}
 						{formatCurrency(Math.abs(dayTotal))}
 					</p>
