@@ -1,4 +1,5 @@
 'use client';
+
 import CategoryForm from '@/components/form/category-form';
 import ResponsiveDialog from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
@@ -86,6 +87,10 @@ export default function CategoriesList({
 		);
 	};
 
+	const handleCreate = (newCategory: Category) => {
+		setCategories((prev) => [...prev, newCategory]);
+	};
+
 	return (
 		<div>
 			<div className='mb-4'>
@@ -157,6 +162,7 @@ export default function CategoriesList({
 						mode='Create'
 						userId={userId}
 						setIsOpenAction={handleCloseDialog}
+						onCreateAction={handleCreate}
 					/>
 				)}
 			</ResponsiveDialog>

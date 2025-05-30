@@ -5,7 +5,7 @@ import {
 } from '@/lib/validators/category';
 import { prisma } from '@/db/prisma';
 import { revalidatePath } from 'next/cache';
-import { InsertCategory, UpdateCategory } from '@/types/category';
+import { Category, InsertCategory, UpdateCategory } from '@/types/category';
 import { formatError } from '../utils/formatHelpers';
 
 // Create transaction
@@ -21,17 +21,20 @@ export async function createCategory(data: InsertCategory) {
 		};
 	}
 
-	const category = { ...parsed.data };
+	const categoryToCreate = { ...parsed.data };
 
 	try {
 		// Create transaction
-		await prisma.category.create({ data: category });
+		const newCategory = await prisma.category.create({
+			data: categoryToCreate,
+		});
 
 		revalidatePath('/categories');
 
 		return {
 			success: true,
 			message: 'Category created successfully',
+			category: newCategory as Category,
 		};
 	} catch (error) {
 		return {

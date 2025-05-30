@@ -23,6 +23,7 @@ export default function CategoryForm({
 	category,
 	categoryId,
 	onEditAction,
+	onCreateAction,
 	setIsOpenAction,
 }: {
 	mode: 'Create' | 'Update';
@@ -30,6 +31,7 @@ export default function CategoryForm({
 	category?: Category;
 	categoryId?: string;
 	onEditAction?: (updatedCategory: Category) => void;
+	onCreateAction?: (newCategory: Category) => void;
 	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
 }): ReactElement {
 	const router = useRouter();
@@ -68,7 +70,11 @@ export default function CategoryForm({
 			userId,
 		};
 
-		const handleResponse = (res: { success: boolean; message: string }) => {
+		const handleResponse = (res: {
+			success: boolean;
+			message: string;
+			category?: Category;
+		}) => {
 			if (!res.success) {
 				toast('', {
 					description: res.message,
@@ -84,6 +90,9 @@ export default function CategoryForm({
 		if (mode === 'Create') {
 			const res = await createCategory(fullData);
 			handleResponse(res);
+			if (res.success && res.category) {
+				onCreateAction?.(res.category);
+			}
 			setIsOpenAction?.(false);
 		}
 
