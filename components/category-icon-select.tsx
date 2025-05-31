@@ -23,14 +23,18 @@ const CategoryIconSelect = <Tschema extends ZodType>({
 			name={name}
 			render={({ field }) => (
 				<FormItem className='w-full'>
-					{label && <FormLabel htmlFor={field.name}>{label}</FormLabel>}
+					{label && (
+						<FormLabel htmlFor={field.name} className='mb-1'>
+							{label}
+						</FormLabel>
+					)}
 					<FormControl>
 						<ToggleGroup
 							type='single'
 							size='lg'
 							onValueChange={field.onChange}
 							value={field.value}
-							className='block'>
+							className='flex flex-wrap justify-center gap-2'>
 							{Object.entries(icons)
 								.sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
 								.map(([iconName, IconComponent], index) => (
@@ -38,7 +42,7 @@ const CategoryIconSelect = <Tschema extends ZodType>({
 										key={iconName}
 										value={iconName}
 										id={index === 0 ? field.name : undefined}
-										className='m-1 rounded-lg border-1'
+										className='gap 2 rounded-lg border-1 min-w-[50px] max-w-[50px]'
 										aria-label={`${iconName} icon`}>
 										<IconComponent className='m-2 h-5 w-5' />
 									</ToggleGroupItem>

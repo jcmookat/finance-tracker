@@ -127,25 +127,32 @@ export default function TransactionsList({
 										return (
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
-													<DropdownMenuTrigger asChild>
-														<Button
-															variant='ghost'
-															className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
-															<span className='flex items-center gap-2 mr-2'>
+													<div className='flex items-center justify-between focus-visible:ring-0 focus-visible:ring-offset-0 w-full pl-3'>
+														<span className='flex items-center justify-between gap-2 mr-2 w-[100%]'>
+															<span className='flex items-center gap-2'>
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 															</span>
-															<span>+{formatCurrency(Number(tr.amount))}</span>
-														</Button>
-													</DropdownMenuTrigger>
+															<span className='text-right flex items-center gap-1.5'>
+																+{formatCurrency(Number(tr.amount))}
+															</span>
+														</span>
+														<DropdownMenuTrigger asChild>
+															<Button
+																variant='ghost'
+																className='hover:cursor-pointer'>
+																<LucideIcons.MoreVertical />
+															</Button>
+														</DropdownMenuTrigger>
+													</div>
 													<DropdownMenuContent align='end' className='min-w-0'>
 														<DropdownMenuItem
 															onClick={() => handleOpenEditDialog(tr)}>
-															<LucideIcons.PenBox className='text-orange-400 w-5 h-5' />
+															<LucideIcons.PenBox className='text-orange-400 w-4 h-4' />
 														</DropdownMenuItem>
 														<DropdownMenuItem
 															onClick={() => handleOpenDeleteDialog(tr)}>
-															<LucideIcons.Trash2 className='text-red-400 w-6 h-6' />
+															<LucideIcons.Trash2 className='text-red-400 w-4 h-4' />
 														</DropdownMenuItem>
 													</DropdownMenuContent>
 												</DropdownMenu>
@@ -183,37 +190,38 @@ export default function TransactionsList({
 										return (
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
-													<DropdownMenuTrigger asChild>
-														<Button
-															variant='ghost'
-															className='flex items-center justify-between gap-2 focus-visible:ring-0 focus-visible:ring-offset-0 w-full px-3 hover:cursor-pointer'>
-															<span className='flex items-center gap-2 mr-2'>
+													<div className='flex items-center justify-between focus-visible:ring-0 focus-visible:ring-offset-0 w-full pl-3'>
+														<span className='flex items-center justify-between gap-2 mr-2 w-[100%]'>
+															<span className='flex items-center gap-2'>
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 																{tr.subcategory && (
-																	<span className='text-xs'>
+																	<span className='text-xs mr-1'>
 																		({tr.subcategory})
 																	</span>
 																)}
 															</span>
+
 															<span className='text-right flex items-center gap-1.5'>
 																-{formatCurrency(Number(tr.amount))}
-																{tr.paymentMethod === 'Cash' ? (
-																	<LucideIcons.Banknote />
-																) : (
-																	<LucideIcons.CreditCard />
-																)}
 															</span>
-														</Button>
-													</DropdownMenuTrigger>
+														</span>
+														<DropdownMenuTrigger asChild>
+															<Button
+																variant='ghost'
+																className='hover:cursor-pointer'>
+																<LucideIcons.MoreVertical />
+															</Button>
+														</DropdownMenuTrigger>
+													</div>
 													<DropdownMenuContent align='end' className='min-w-0'>
 														<DropdownMenuItem
 															onClick={() => handleOpenEditDialog(tr)}>
-															<LucideIcons.PenBox className='text-orange-400 w-5 h-5' />
+															<LucideIcons.PenBox className='text-orange-400 w-4 h-4' />
 														</DropdownMenuItem>
 														<DropdownMenuItem
 															onClick={() => handleOpenDeleteDialog(tr)}>
-															<LucideIcons.Trash2 className='text-red-400 w-6 h-6' />
+															<LucideIcons.Trash2 className='text-red-400 w-4 h-4' />
 														</DropdownMenuItem>
 													</DropdownMenuContent>
 												</DropdownMenu>
