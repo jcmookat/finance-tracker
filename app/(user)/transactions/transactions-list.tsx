@@ -128,7 +128,7 @@ export default function TransactionsList({
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
 													<div className='flex items-center justify-between focus-visible:ring-0 focus-visible:ring-offset-0 w-full pl-3'>
-														<span className='flex items-center justify-between gap-2 mr-2 w-[100%]'>
+														<span className='flex items-center justify-between gap-2 w-[100%]'>
 															<span className='flex items-center gap-2'>
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
@@ -139,8 +139,9 @@ export default function TransactionsList({
 														</span>
 														<DropdownMenuTrigger asChild>
 															<Button
-																variant='ghost'
-																className='hover:cursor-pointer'>
+																variant='link'
+																size='icon'
+																className='hover:cursor-pointer w-6'>
 																<LucideIcons.MoreVertical />
 															</Button>
 														</DropdownMenuTrigger>
@@ -191,12 +192,12 @@ export default function TransactionsList({
 											<li key={tr.id} className='w-full'>
 												<DropdownMenu modal={false}>
 													<div className='flex items-center justify-between focus-visible:ring-0 focus-visible:ring-offset-0 w-full pl-3'>
-														<span className='flex items-center justify-between gap-2 mr-2 w-[100%]'>
+														<span className='flex items-center justify-between gap-2 w-[100%]'>
 															<span className='flex items-center gap-2'>
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 																{tr.subcategory && (
-																	<span className='text-xs mr-1'>
+																	<span className='text-xs mr-2'>
 																		({tr.subcategory})
 																	</span>
 																)}
@@ -208,8 +209,9 @@ export default function TransactionsList({
 														</span>
 														<DropdownMenuTrigger asChild>
 															<Button
-																variant='ghost'
-																className='hover:cursor-pointer'>
+																variant='link'
+																size='icon'
+																className='hover:cursor-pointer w-6'>
 																<LucideIcons.MoreVertical />
 															</Button>
 														</DropdownMenuTrigger>
