@@ -23,7 +23,7 @@ export default function ResponsiveDialog({
 }) {
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpenAction}>
-			<DialogContent className='sm:max-w-[425px]'>
+			<DialogContent className='sm:max-w-[425px] overflow-y-auto max-h-screen'>
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 					{description && <DialogDescription>{description}</DialogDescription>}
