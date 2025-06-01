@@ -6,6 +6,17 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { Metadata } from 'next';
+import { APP_DESCRIPTION, APP_NAME, SERVER_URL } from '@/lib/constants';
+
+export const metadata: Metadata = {
+	title: {
+		template: `%s | ${APP_NAME}`,
+		default: APP_NAME,
+	},
+	description: APP_DESCRIPTION,
+	metadataBase: new URL(SERVER_URL),
+};
 
 export default function RootLayout({
 	children,
@@ -23,7 +34,7 @@ export default function RootLayout({
 							<AppBreadcrumb />
 						</div>
 					</header>
-					<main className='flex-1 p-4 pt-0'>
+					<main className='flex-1 p-4 pt-0 pb-12'>
 						<div className='min-h-[calc(100vh-80px)] flex-1 rounded-xl'>
 							{children}
 						</div>

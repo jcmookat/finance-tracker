@@ -95,7 +95,7 @@ const BaseFormField = <TSchema extends ZodType>({
 								size='default'
 								onValueChange={field.onChange}
 								value={field.value}
-								className='flex gap-3'>
+								className='flex gap-3 w-full md:w-[320px]'>
 								{dataArr?.map((item) => {
 									const Icon = item.icon;
 									return (
@@ -158,7 +158,7 @@ const BaseFormField = <TSchema extends ZodType>({
 										id={field.name}
 										variant='outline'
 										className={cn(
-											'w-[280px] justify-start text-left font-normal',
+											'justify-start text-left font-normal w-full md:w-[320px]',
 											!field.value && 'text-muted-foreground',
 										)}>
 										<CalendarIcon className='mr-2 h-4 w-4' />

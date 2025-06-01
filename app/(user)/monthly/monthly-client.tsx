@@ -132,10 +132,10 @@ export default function MonthlyClient({
 						</div>
 					</div>
 					<div className='mb-4'>
-						<MonthlySummary transactions={groupedTransactionsByMonth} />
+						<MonthlyList transactions={filteredTransactions} />
 					</div>
 					<div>
-						<MonthlyList transactions={filteredTransactions} />
+						<MonthlySummary transactions={groupedTransactionsByMonth} />
 					</div>
 				</>
 			)}

@@ -136,8 +136,6 @@ export default function TransactionForm({
 	const paymentMethod = form.watch('paymentMethod');
 	const categories = type === 'INCOME' ? incomeCategories : expenseCategories;
 
-	console.log(categories);
-
 	useEffect(() => {
 		if (type === 'INCOME') {
 			form.setValue('subcategory', '');
