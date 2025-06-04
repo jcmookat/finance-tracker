@@ -89,36 +89,37 @@ export default function AnnualClient({
 				/>
 			) : (
 				<>
-					<h2 className='text-2xl font-bold mb-4'>
-						{new Date(year, month - 1).toLocaleString('default', {
-							year: 'numeric',
-						})}
-					</h2>
-
+					<div className='mb-6 flex gap-4 items-center flex-between flex-col md:flex-row'>
+						<h2 className='text-2xl font-bold'>
+							{new Date(year, month - 1).toLocaleString('default', {
+								year: 'numeric',
+							})}
+						</h2>
+						<div className='flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto md:items-center'>
+							<p className='font-bold text-right text-muted-foreground'>
+								Income:{' '}
+								<span className='text-left text-green-700 w-[50%] md:w-auto inline-block md:inline'>
+									{formatCurrency(Math.abs(yearIncome))}
+								</span>
+							</p>
+							<p className='font-bold text-right text-muted-foreground'>
+								Expense:{' '}
+								<span className='text-left text-red-700 w-[50%] md:w-auto inline-block md:inline'>
+									{formatCurrency(Math.abs(yearExpense))}
+								</span>
+							</p>
+							<p className='font-bold text-right text-muted-foreground'>
+								Total:{' '}
+								<span
+									className={`text-lg text-left w-[50%] md:w-auto inline-block md:inline ${yearTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+									{yearTotal >= 0 ? '+' : '-'}
+									{formatCurrency(Math.abs(yearTotal))}
+								</span>
+							</p>
+						</div>
+					</div>
 					<div className='mb-4'>
 						<AnnualList transactions={filteredTransactionsByYear} />
-					</div>
-					<div className='flex flex-col md:flex-row gap-2 md:gap-4'>
-						<p className='font-bold text-right text-muted-foreground'>
-							Income:{' '}
-							<span className='text-lg text-green-700'>
-								+{formatCurrency(Math.abs(yearIncome))}
-							</span>
-						</p>
-						<p className='font-bold text-right text-muted-foreground'>
-							Expense:{' '}
-							<span className='text-lg text-red-700'>
-								-{formatCurrency(Math.abs(yearExpense))}
-							</span>
-						</p>
-						<p className='font-bold text-right text-muted-foreground'>
-							Total:{' '}
-							<span
-								className={`text-lg ${yearTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-								{yearTotal >= 0 ? '+' : '-'}
-								{formatCurrency(Math.abs(yearTotal))}
-							</span>
-						</p>
 					</div>
 				</>
 			)}

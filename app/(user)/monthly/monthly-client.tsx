@@ -108,23 +108,23 @@ export default function MonthlyClient({
 								year: 'numeric',
 							})}
 						</h2>
-						<div className='flex flex-col md:flex-row gap-2 md:gap-4'>
+						<div className='flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto md:items-center'>
 							<p className='font-bold text-right text-muted-foreground'>
 								Income:{' '}
-								<span className='text-lg text-green-700'>
-									+{formatCurrency(Math.abs(monthIncome))}
+								<span className='text-left text-green-700 w-[50%] md:w-auto inline-block md:inline'>
+									{formatCurrency(Math.abs(monthIncome))}
 								</span>
 							</p>
 							<p className='font-bold text-right text-muted-foreground'>
 								Expense:{' '}
-								<span className='text-lg text-red-700'>
-									-{formatCurrency(Math.abs(monthExpense))}
+								<span className='text-left text-red-700 w-[50%] md:w-auto inline-block md:inline'>
+									{formatCurrency(Math.abs(monthExpense))}
 								</span>
 							</p>
 							<p className='font-bold text-right text-muted-foreground'>
 								Total:{' '}
 								<span
-									className={`text-lg ${monthTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+									className={`text-lg text-left w-[50%] md:w-auto inline-block md:inline ${monthTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
 									{monthTotal >= 0 ? '+' : '-'}
 									{formatCurrency(Math.abs(monthTotal))}
 								</span>

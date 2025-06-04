@@ -132,6 +132,11 @@ export default function TransactionsList({
 															<span className='flex items-center gap-2'>
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
+																{tr.description && (
+																	<span className='text-xs mr-1 text-muted-foreground'>
+																		{tr.description.substring(0, 7)}...
+																	</span>
+																)}
 															</span>
 															<span className='text-right flex items-center gap-1.5'>
 																+{formatCurrency(Number(tr.amount))}
@@ -197,12 +202,16 @@ export default function TransactionsList({
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 																{tr.subcategory && (
-																	<span className='text-xs mr-2'>
+																	<span className='text-xs mr-1 text-muted-foreground'>
 																		({tr.subcategory})
 																	</span>
 																)}
+																{tr.description && (
+																	<span className='text-xs mr-1 text-muted-foreground'>
+																		{tr.description.substring(0, 7)}...
+																	</span>
+																)}
 															</span>
-
 															<span className='text-right flex items-center gap-1.5'>
 																-{formatCurrency(Number(tr.amount))}
 															</span>

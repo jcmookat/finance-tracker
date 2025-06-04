@@ -124,7 +124,7 @@ export default function TransactionsClient({
 								year: 'numeric',
 							})}
 						</h2>
-						<div className='flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto'>
+						<div className='flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto md:items-center'>
 							<p className='font-bold text-right text-muted-foreground'>
 								Income:{' '}
 								<span className='text-left text-green-700 w-[50%] md:w-auto inline-block md:inline'>
