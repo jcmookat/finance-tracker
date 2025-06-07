@@ -202,7 +202,7 @@ export default function TransactionsList({
 																<Icon className='px-0 m-0 h-4 w-4 text-muted-foreground' />
 																{tr.categoryName}
 																{tr.subcategory && (
-																	<span className='text-xs mr-1 text-muted-foreground'>
+																	<span className='text-xs mr-1 text-muted-foreground hidden md:block'>
 																		({tr.subcategory})
 																	</span>
 																)}

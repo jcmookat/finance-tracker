@@ -1,7 +1,7 @@
 import { prisma } from '@/db/prisma';
 import { convertToPlainObject } from '../utils/formatHelpers';
 
-// Get transactions by User ID, with optional month/year filtering
+// Get transactions by User ID
 export async function getTransactionsByUserId(userId: string) {
 	const rawTransactions = await prisma.transaction.findMany({
 		where: { userId },
@@ -60,4 +60,19 @@ export async function getTransactionById(transactionId: string) {
 	};
 
 	return convertToPlainObject(transaction);
+}
+
+export async function getLatestTransactionsByUserId(userId: string) {
+	const rawTransactions = await prisma.transaction.findMany({
+		where: { userId },
+		orderBy: { transactionDate: 'desc' }, // most recent first
+		take: 6,
+	});
+	const transactions = rawTransactions.map((tr) => ({
+		...tr,
+		amount: tr.amount.toNumber(),
+		description: tr.description ?? undefined,
+		subcategory: tr.subcategory ?? undefined,
+	}));
+	return convertToPlainObject(transactions);
 }

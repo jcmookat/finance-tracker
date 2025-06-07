@@ -23,6 +23,13 @@ export type SignupFormFieldProps = BaseFormFieldProps<typeof signUpFormSchema>;
 // Define your role type if you have specific roles
 export type UserRole = 'user' | 'admin';
 
+// Charts
+export type ChartEntry = {
+	date: string;
+	INCOME: number;
+	EXPENSE: number;
+};
+
 // Session user schema
 export const sessionUserSchema = z.object({
 	id: z.string(),
