@@ -32,6 +32,12 @@ export const transactionDefaultValues = () => ({
 export const expensePaymentMethod = [
 	{ label: 'Cash', value: 'Cash', icon: LucideIcons.Banknote },
 	{ label: 'Credit Card', value: 'Credit Card', icon: LucideIcons.CreditCard },
+	{ label: 'Points', value: 'Points', icon: LucideIcons.TicketCheck },
+	{
+		label: 'Salary Deduction',
+		value: 'Salary Deduction',
+		icon: LucideIcons.Briefcase,
+	},
 ];
 
 export const expenseCreditCardType = [
@@ -82,9 +88,34 @@ export const expenseSubCategories = [
 	{ label: 'Travel', value: 'Travel', icon: LucideIcons.Train },
 	{ label: 'House Rent', value: 'House Rent', icon: LucideIcons.House },
 	{
-		label: 'Bank Transfer ',
+		label: 'Bank Transfer',
 		value: 'Bank Transfer',
 		icon: LucideIcons.BanknoteArrowUp,
+	},
+	{
+		label: 'Bank Transaction Fee',
+		value: 'Bank Transaction Fee',
+		icon: LucideIcons.BanknoteArrowUp,
+	},
+	{
+		label: 'Income Tax',
+		value: 'Income Tax',
+		icon: LucideIcons.Briefcase,
+	},
+	{
+		label: 'Residence Tax',
+		value: 'Residence Tax',
+		icon: LucideIcons.Briefcase,
+	},
+	{
+		label: 'Pension',
+		value: 'Pension',
+		icon: LucideIcons.Briefcase,
+	},
+	{
+		label: 'Employment Insurance',
+		value: 'Employment Insurance',
+		icon: LucideIcons.Briefcase,
 	},
 ];
 
@@ -92,6 +123,7 @@ export const incomeCategories = [
 	{ label: 'Salary', value: 'Salary', icon: LucideIcons.Briefcase },
 	{ label: 'Carry Over', value: 'Carry Over', icon: LucideIcons.Repeat },
 	{ label: 'Freelance', value: 'Freelance', icon: LucideIcons.PenTool },
+	{ label: 'Bonus', value: 'Bonus', icon: LucideIcons.Coins },
 ];
 
 export const transactionType = [
@@ -127,4 +159,6 @@ export const icons: Record<string, LucideIcons.LucideIcon> = {
 	ShowerHead: LucideIcons.ShowerHead,
 	Banknote: LucideIcons.Banknote,
 	CreditCard: LucideIcons.CreditCard,
+	TicketCheck: LucideIcons.TicketCheck,
+	Coins: LucideIcons.Coins,
 };
