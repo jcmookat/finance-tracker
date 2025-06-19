@@ -7,6 +7,7 @@ import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from '@/components/ui/sonner';
 import { GoogleTagManager } from '@next/third-parties/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
 	title: {
@@ -24,7 +25,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en' suppressHydrationWarning>
-			<GoogleTagManager gtmId='G-XV6GGPE4FB' />
+			<GoogleTagManager gtmId='GT-K585XPNL' />
 			<body className={`${inter.className}`}>
 				<SessionProvider>
 					<ThemeProvider
@@ -37,6 +38,7 @@ export default function RootLayout({
 					</ThemeProvider>
 				</SessionProvider>
 			</body>
+			<GoogleAnalytics gaId='G-XV6GGPE4FB' />
 		</html>
 	);
 }
