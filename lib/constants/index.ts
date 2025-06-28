@@ -117,6 +117,11 @@ export const expenseSubCategories = [
 		value: 'Employment Insurance',
 		icon: LucideIcons.Briefcase,
 	},
+	{
+		label: 'Apparel',
+		value: 'Apparel',
+		icon: LucideIcons.Shirt,
+	},
 ];
 
 export const incomeCategories = [
@@ -161,4 +166,5 @@ export const icons: Record<string, LucideIcons.LucideIcon> = {
 	CreditCard: LucideIcons.CreditCard,
 	TicketCheck: LucideIcons.TicketCheck,
 	Coins: LucideIcons.Coins,
+	Shirt: LucideIcons.Shirt,
 };

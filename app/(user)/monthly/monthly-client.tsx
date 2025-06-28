@@ -12,6 +12,16 @@ import { TransactionsClientProps, Transaction } from '@/types/transaction'; // A
 import Loading from '@/components/loading';
 import MonthlySummary from './monthly-summary';
 import MonthlyList from './montly-list';
+import {
+	Select,
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+	SelectItem,
+} from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { LucideRefreshCcw } from 'lucide-react';
 
 export default function MonthlyClient({
 	initialTransactions,
@@ -26,17 +36,70 @@ export default function MonthlyClient({
 	const [startDate, setStartDate] = useState(initialStartDate);
 	const [isLoading, setIsLoading] = useState(false);
 
+	const ALL = 'ALL';
+
+	const [selectedCategory, setSelectedCategory] = useState<string>(ALL);
+	const [selectedSubcategory, setSelectedSubcategory] = useState<string>(ALL);
+	const [selectedPaymentMethod, setSelectedPaymentMethod] =
+		useState<string>(ALL);
+	const [selectedCreditCardType, setSelectedCreditCardType] =
+		useState<string>(ALL);
+
 	const filteredTransactions = transactions.filter((t) => {
 		const date = new Date(t.transactionDate);
-		return date.getMonth() + 1 === month && date.getFullYear() === year;
+		const matchesMonthYear =
+			date.getMonth() + 1 === month && date.getFullYear() === year;
+
+		const matchesCategory =
+			selectedCategory === ALL || t.categoryName === selectedCategory;
+
+		const matchesSubcategory =
+			selectedSubcategory === ALL || t.subcategory === selectedSubcategory;
+
+		const matchesPaymentMethod =
+			selectedPaymentMethod === ALL ||
+			t.paymentMethod === selectedPaymentMethod;
+
+		const matchesCreditCardType =
+			selectedCreditCardType === ALL ||
+			t.creditCardType === selectedCreditCardType;
+
+		return (
+			matchesMonthYear &&
+			matchesCategory &&
+			matchesSubcategory &&
+			matchesPaymentMethod &&
+			matchesCreditCardType
+		);
 	});
+
+	const uniqueCategories = Array.from(
+		new Set(
+			transactions.map((t) => t.categoryName).filter((s): s is string => !!s),
+		),
+	);
+	const uniqueSubcategories = Array.from(
+		new Set(
+			transactions.map((t) => t.subcategory).filter((s): s is string => !!s),
+		),
+	);
+	const uniquePaymentMethods = Array.from(
+		new Set(
+			transactions.map((t) => t.paymentMethod).filter((s): s is string => !!s),
+		),
+	);
+	const uniqueCreditCardTypes = Array.from(
+		new Set(
+			transactions.map((t) => t.creditCardType).filter((s): s is string => !!s),
+		),
+	);
 
 	const groupedTransactionsByMonth =
 		groupTransactionsByMonth(filteredTransactions);
 
 	const monthIncome = calculateTotal(filteredTransactions, 'INCOME');
 	const monthExpense = calculateTotal(filteredTransactions, 'EXPENSE');
-	const monthTotal = calculateTotal(filteredTransactions, 'ALL');
+	const monthTotal = calculateTotal(filteredTransactions, ALL);
 
 	const handleMonthYearChange = async (
 		selectedMonth: number,
@@ -82,23 +145,104 @@ export default function MonthlyClient({
 		}
 	};
 
+	const resetFilter = () => {
+		setSelectedCategory(ALL);
+		setSelectedSubcategory(ALL);
+		setSelectedPaymentMethod(ALL);
+		setSelectedCreditCardType(ALL);
+	};
+
 	return (
 		<div>
-			<div className='flex justify-between mb-2 flex-col-reverse md:flex-row gap-4'>
+			<div className='flex mb-2 flex-col md:flex-wrap md:flex-row gap-4'>
 				<MonthYearPicker
 					initialMonth={month}
 					initialYear={year}
 					onMonthYearChangeAction={handleMonthYearChange}
 				/>
+				<div className='flex flex-wrap gap-4 mb-4'>
+					<Select value={selectedCategory} onValueChange={setSelectedCategory}>
+						<SelectTrigger className='w-[calc(50%-8px)] md:w-auto'>
+							<SelectValue placeholder='Filter by Category' />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value={ALL}>All Categories</SelectItem>
+							{uniqueCategories.map((val) => (
+								<SelectItem key={val} value={val}>
+									{val}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Select
+						value={selectedSubcategory}
+						onValueChange={setSelectedSubcategory}>
+						<SelectTrigger className='w-[calc(50%-8px)] md:w-auto'>
+							<SelectValue placeholder='Subcategory' />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value={ALL}>All Subcategories</SelectItem>
+							{uniqueSubcategories.map((val) => (
+								<SelectItem key={val} value={val}>
+									{val}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Select
+						value={selectedPaymentMethod}
+						onValueChange={setSelectedPaymentMethod}>
+						<SelectTrigger className='w-[calc(50%-8px)] md:w-auto'>
+							<SelectValue placeholder='Payment Method' />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value={ALL}>All Payment Methods</SelectItem>
+							{uniquePaymentMethods.map((val) => (
+								<SelectItem key={val} value={val}>
+									{val}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Select
+						value={selectedCreditCardType}
+						onValueChange={setSelectedCreditCardType}>
+						<SelectTrigger className='w-[calc(50%-8px)] md:w-auto'>
+							<SelectValue placeholder='Credit Card Type' />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value={ALL}>All Credit Card Types</SelectItem>
+							{uniqueCreditCardTypes.map((val) => (
+								<SelectItem key={val} value={val}>
+									{val}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Button
+						variant='outline'
+						size='icon'
+						onClick={resetFilter}
+						disabled={
+							selectedCategory === ALL &&
+							selectedSubcategory === ALL &&
+							selectedPaymentMethod === ALL &&
+							selectedCreditCardType === ALL
+						}>
+						<LucideRefreshCcw />
+					</Button>
+				</div>
 			</div>
 
 			{isLoading ? (
 				<Loading />
 			) : filteredTransactions.length === 0 ? (
-				<EmptyState
-					title='No Transactions Yet'
-					subtitle='Start tracking your finances to see them here!'
-				/>
+				<Card>
+					<EmptyState
+						title='No Transactions Yet'
+						subtitle='Start tracking your finances to see them here!'
+					/>
+				</Card>
 			) : (
 				<>
 					<div className='mb-6 flex gap-4 items-center flex-between flex-col md:flex-row'>
@@ -111,20 +255,20 @@ export default function MonthlyClient({
 						<div className='flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto md:items-center'>
 							<p className='font-bold text-right text-muted-foreground'>
 								Income:{' '}
-								<span className='text-left text-green-700 w-[50%] md:w-auto inline-block md:inline'>
+								<span className='text-left text-green-700 w-[calc(50%-8px)] md:w-auto inline-block md:inline'>
 									{formatCurrency(Math.abs(monthIncome))}
 								</span>
 							</p>
 							<p className='font-bold text-right text-muted-foreground'>
 								Expense:{' '}
-								<span className='text-left text-red-700 w-[50%] md:w-auto inline-block md:inline'>
+								<span className='text-left text-red-700 w-[calc(50%-8px)] md:w-auto inline-block md:inline'>
 									{formatCurrency(Math.abs(monthExpense))}
 								</span>
 							</p>
 							<p className='font-bold text-right text-muted-foreground'>
 								Total:{' '}
 								<span
-									className={`text-lg text-left w-[50%] md:w-auto inline-block md:inline ${monthTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+									className={`text-lg text-left w-[calc(50%-8px)] md:w-auto inline-block md:inline ${monthTotal >= 0 ? 'text-green-700' : 'text-red-700'}`}>
 									{monthTotal >= 0 ? '+' : '-'}
 									{formatCurrency(Math.abs(monthTotal))}
 								</span>
@@ -132,7 +276,9 @@ export default function MonthlyClient({
 						</div>
 					</div>
 					<div className='mb-4'>
-						<MonthlyList transactions={filteredTransactions} />
+						<Card className='gap-4'>
+							<MonthlyList transactions={filteredTransactions} />
+						</Card>
 					</div>
 					<div>
 						<MonthlySummary transactions={groupedTransactionsByMonth} />
