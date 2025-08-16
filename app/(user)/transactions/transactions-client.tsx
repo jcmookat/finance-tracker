@@ -34,6 +34,15 @@ export default function TransactionsClient({
 	const monthExpense = calculateTotal(filteredTransactions, 'EXPENSE');
 	const monthTotal = calculateTotal(filteredTransactions, 'ALL');
 
+	const taxationTotal = filteredTransactions
+		.filter((t) => t.type === 'EXPENSE' && t.categoryName === 'Taxation')
+		.reduce((sum, t) => sum + t.amount, 0);
+	const netIncome = monthIncome - taxationTotal;
+
+	const tenPercent = netIncome * 0.1;
+	const fiftyPercent = netIncome * 0.5;
+	const fortyPercent = netIncome * 0.4;
+
 	const handleMonthYearChange = async (
 		selectedMonth: number,
 		selectedYear: number,
@@ -117,7 +126,7 @@ export default function TransactionsClient({
 				/>
 			) : (
 				<>
-					<div className='mb-6 flex gap-4 items-center flex-between flex-col md:flex-row'>
+					<div className='mb-2 flex gap-4 items-center flex-between flex-col md:flex-row'>
 						<h2 className='text-2xl font-bold'>
 							{new Date(year, month - 1).toLocaleString('default', {
 								month: 'long',
@@ -146,6 +155,33 @@ export default function TransactionsClient({
 								</span>
 							</p>
 						</div>
+					</div>
+					<div className='flex mb-6 gap-4 items-center justify-end font-medium'>
+						<p className='font-bold text-right text-muted-foreground'>
+							Net Income:{' '}
+							<span
+								className={`text-left ${netIncome >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+								{formatCurrency(Math.abs(netIncome))}
+							</span>
+						</p>
+						<p className='font-bold text-right text-muted-foreground'>
+							Reward (10%):{' '}
+							<span className='text-blue-400'>
+								{formatCurrency(Math.abs(tenPercent))}
+							</span>
+						</p>
+						<p className='font-bold text-right text-muted-foreground'>
+							Budget (50%):{' '}
+							<span className='text-orange-400'>
+								{formatCurrency(Math.abs(fiftyPercent))}
+							</span>
+						</p>
+						<p className='font-bold text-right text-muted-foreground'>
+							Savings (40%):{' '}
+							<span className='text-green-800'>
+								{formatCurrency(Math.abs(fortyPercent))}
+							</span>
+						</p>
 					</div>
 					<div className='flex flex-wrap gap-4'>
 						<TransactionsList
