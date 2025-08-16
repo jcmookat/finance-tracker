@@ -2,8 +2,8 @@ import NextAuth from 'next-auth';
 import authConfig from './auth.config';
 import { getUserById } from '@/lib/data/user';
 import { getAccountByUserId } from './lib/data/account';
-import { prisma } from '@/db/prisma';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+// import { prisma } from '@/db/prisma';
+// import { PrismaAdapter } from '@auth/prisma-adapter';
 
 export const {
 	auth,
@@ -15,7 +15,7 @@ export const {
 		strategy: 'jwt',
 		maxAge: 30 * 24 * 60 * 60, // 30 days
 	},
-	adapter: PrismaAdapter(prisma),
+	// adapter: PrismaAdapter(prisma),
 	...authConfig,
 	callbacks: {
 		async signIn({ user, account }) {
