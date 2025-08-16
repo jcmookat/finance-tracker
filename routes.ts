@@ -6,5 +6,5 @@ export const privateRoutes = [
 	'/annual',
 	'/monthly',
 	'/categories',
-	'/settings',
+	// '/settings',
 ];
