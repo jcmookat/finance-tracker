@@ -40,4 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# generated (e.g. prisma client output, regenerated via postinstall)
+/lib/generated/
+
 .eslintignore
