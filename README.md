@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gastos at Grasya
+
+A personal finance tracker for logging income and expenses and reviewing them through monthly, annual, and all-time reports.
+
+## Tech Stack
+
+- [Next.js 15](https://nextjs.org) (App Router) + React 19 + TypeScript
+- [Prisma](https://www.prisma.io) + PostgreSQL, via the [Neon](https://neon.tech) serverless driver
+- [Auth.js (NextAuth v5)](https://authjs.dev) — Google OAuth and email/password credentials
+- [Tailwind CSS v4](https://tailwindcss.com) + [shadcn/ui](https://ui.shadcn.com) (Radix UI primitives)
+- [react-hook-form](https://react-hook-form.com) + [Zod](https://zod.dev) for forms and validation
+- [Recharts](https://recharts.org) for dashboard charts
+- [Resend](https://resend.com) + [React Email](https://react.email) for verification emails
+
+## Features
+
+- Email/password sign-up with email verification, or Google sign-in
+- Transaction CRUD: type (income/expense), category, subcategory, payment method, credit card type, amount, description, date
+- User-defined categories with icon picker
+- Dashboard with an income vs. expense chart and recent transactions
+- Reports:
+  - **Monthly** — breakdown by category, subcategory, payment method, and credit card type
+  - **Annual** — month-by-month table for a selected year
+  - **All Reports** — year-over-year totals, net income, and 10/40/50 budget-rule percentages
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A PostgreSQL database (this project is built around [Neon](https://neon.tech))
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+This also runs `prisma generate` via the `postinstall` script.
+
+### 2. Configure environment variables
+
+Create a `.env` file in the project root:
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `DATABASE_URL` | Yes | PostgreSQL connection string (Neon) |
+| `GOOGLE_CLIENT_ID` | Yes | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Yes | Google OAuth client secret |
+| `RESEND_API_KEY` | Yes | Resend API key, used to send verification emails |
+| `NEXT_PUBLIC_SERVER_URL` | No | Base app URL used in redirects and verification links (defaults to `http://localhost:3000`) |
+| `SENDER_EMAIL` | No | "From" address for verification emails (defaults to `onboarding@resend.dev`) |
+| `NEXT_PUBLIC_APP_NAME` | No | Overrides the app name shown in the UI and emails |
+| `NEXT_PUBLIC_APP_DESCRIPTION` | No | Overrides the app description used in metadata |
+
+### 3. Set up the database
+
+```bash
+npx prisma migrate deploy
+```
+
+### 4. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run start` | Start the production server (after `build`) |
+| `npm run lint` | Run ESLint |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  (auth)/        Sign-in / sign-up
+  (root)/        Public landing page
+  (user)/        Authenticated app: dashboard, transactions, categories,
+                 monthly/annual/all reports, profile, settings
+  api/           NextAuth handler + transactions-by-period endpoint
+components/      Shared UI components (shadcn primitives, forms, sidebar, header)
+lib/
+  actions/       Server actions (transactions, categories, users)
+  data/          Prisma data-access functions
+  validators/    Zod schemas
+  utils/         Date/format helpers and report aggregation logic
+  constants/     Category lists, payment methods, icon map
+db/              Prisma client setup, seed scripts
+prisma/          Schema and migrations
+emails/          React Email templates + send helper
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No automated test suite is set up yet.
+- The Auth.js Prisma adapter is not wired in; account linkage for verified email/password users is created manually in `lib/actions/user.actions.ts`.
