@@ -35,6 +35,14 @@
 	--color-popover: var(--popover);
 	--color-card-foreground: var(--card-foreground);
 	--color-card: var(--card);
+	--color-glass-bg: var(--glass-bg);
+	--color-glass-border: var(--glass-border);
+	--color-glass-highlight: var(--glass-highlight);
+	--color-glow-primary: var(--glow-primary);
+	--color-glow-secondary: var(--glow-secondary);
+	--color-glow-accent: var(--glow-accent);
+	--color-gradient-from: var(--gradient-from);
+	--color-gradient-to: var(--gradient-to);
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -159,6 +167,21 @@
 	--shadow-xl:
 		0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
 	--shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+
+	/* Glass surfaces (border uses a dark-based alpha here since a white-alpha
+	   border is invisible against this theme's light backgrounds) */
+	--glass-bg: oklch(1 0 0 / 55%);
+	--glass-border: oklch(0 0 0 / 12%);
+	--glass-highlight: oklch(1 0 0 / 85%);
+
+	/* Deeper, more saturated variants of primary/secondary/accent, used only for gradients + glow */
+	--glow-primary: oklch(0.72 0.19 7.09);
+	--glow-secondary: oklch(0.65 0.2 225.75);
+	--glow-accent: oklch(0.75 0.2 79.8);
+
+	/* Subtle, single-hue (pink) gradient for buttons/accents */
+	--gradient-from: oklch(0.88 0.08 10);
+	--gradient-to: oklch(0.76 0.14 350);
 }
 
 .dark {
@@ -194,6 +217,20 @@
 	--sidebar-accent-foreground: oklch(0 0 0);
 	--sidebar-border: oklch(0.39 0 0);
 	--sidebar-ring: oklch(0.8 0.14 349.23);
+
+	/* Glass surfaces */
+	--glass-bg: oklch(1 0 0 / 6%);
+	--glass-border: oklch(1 0 0 / 12%);
+	--glass-highlight: oklch(1 0 0 / 20%);
+
+	/* Deeper, more saturated variants of primary/secondary/accent, used only for gradients + glow */
+	--glow-primary: oklch(0.68 0.22 349.23);
+	--glow-secondary: oklch(0.62 0.24 142.85);
+	--glow-accent: oklch(0.62 0.16 225.75);
+
+	/* Subtle, single-hue (magenta) gradient for buttons/accents */
+	--gradient-from: oklch(0.68 0.22 335);
+	--gradient-to: oklch(0.52 0.24 310);
 	--font-sans: Poppins, sans-serif;
 	--font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
 	--font-mono: Roboto Mono, monospace;
@@ -240,11 +277,85 @@
 	@apply font-bold text-xl lg:text-2xl;
 }
 
+@utility glass-panel {
+	@apply relative rounded-xl border border-glass-border bg-glass-bg backdrop-blur-xl shadow-lg;
+}
+
+@utility glow-primary {
+	box-shadow:
+		0 0 0 1px color-mix(in oklch, var(--glow-primary) 40%, transparent),
+		0 8px 30px -6px color-mix(in oklch, var(--glow-primary) 55%, transparent);
+}
+
+@utility glow-secondary {
+	box-shadow:
+		0 0 0 1px color-mix(in oklch, var(--glow-secondary) 40%, transparent),
+		0 8px 30px -6px color-mix(in oklch, var(--glow-secondary) 55%, transparent);
+}
+
+@utility glow-accent {
+	box-shadow:
+		0 0 0 1px color-mix(in oklch, var(--glow-accent) 40%, transparent),
+		0 8px 30px -6px color-mix(in oklch, var(--glow-accent) 55%, transparent);
+}
+
+@utility gradient-brand {
+	background-image: linear-gradient(
+		135deg,
+		var(--gradient-from) 0%,
+		var(--gradient-to) 100%
+	);
+}
+
+@keyframes aurora {
+	0% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(3%, -4%) scale(1.08);
+	}
+	100% {
+		transform: translate(-4%, 3%) scale(1);
+	}
+}
+
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
 	}
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-background text-foreground relative isolate;
+	}
+	body::before,
+	body::after {
+		content: '';
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		filter: blur(80px);
+		animation: aurora 20s ease-in-out infinite alternate;
+	}
+	body::before {
+		background-image:
+			radial-gradient(
+				35% 40% at 20% 20%,
+				color-mix(in oklch, var(--glow-primary) 35%, transparent),
+				transparent
+			),
+			radial-gradient(
+				30% 35% at 80% 15%,
+				color-mix(in oklch, var(--glow-accent) 30%, transparent),
+				transparent
+			);
+	}
+	body::after {
+		background-image: radial-gradient(
+			35% 40% at 75% 85%,
+			color-mix(in oklch, var(--glow-secondary) 30%, transparent),
+			transparent
+		);
+		animation-delay: -10s;
+		animation-direction: alternate-reverse;
 	}
 }

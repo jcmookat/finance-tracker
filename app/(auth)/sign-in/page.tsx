@@ -31,7 +31,7 @@ const SignInPage = async (props: {
 	}
 	return (
 		<div className='flex-center min-h-screen w-full p-4'>
-			<div className='w-full max-w-md mx-auto'>
+			<div className='w-full max-w-md mx-auto animate-in fade-in zoom-in-95 duration-500'>
 				<Card>
 					<CardHeader className='space-y-4'>
 						<Link href='/' className='flex-center'>

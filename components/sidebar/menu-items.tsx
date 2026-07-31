@@ -1,3 +1,5 @@
+'use client';
+
 import { type ReactElement } from 'react';
 import {
 	SidebarGroup,
@@ -8,6 +10,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Calendar, Home, Inbox, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const items = [
 	{
@@ -48,20 +51,27 @@ const items = [
 ];
 
 export default function AppSidebarMenu(): ReactElement {
+	const pathname = usePathname();
+
 	return (
 		<SidebarGroup>
 			<SidebarGroupContent>
 				<SidebarMenu>
-					{items.map((item) => (
-						<SidebarMenuItem key={item.title}>
-							<SidebarMenuButton asChild>
-								<Link href={item.url}>
-									<item.icon />
-									<span>{item.title}</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
-					))}
+					{items.map((item) => {
+						const isActive =
+							pathname === item.url || pathname.startsWith(`${item.url}/`);
+
+						return (
+							<SidebarMenuItem key={item.title}>
+								<SidebarMenuButton asChild isActive={isActive}>
+									<Link href={item.url}>
+										<item.icon />
+										<span>{item.title}</span>
+									</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+						);
+					})}
 				</SidebarMenu>
 			</SidebarGroupContent>
 		</SidebarGroup>

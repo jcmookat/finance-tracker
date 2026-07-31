@@ -1,4 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import {
+	Card,
+	CardAction,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
 import {
 	Table,
 	TableBody,
@@ -7,8 +15,11 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { formatFullDate } from '@/lib/utils/dateHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
+import { cn } from '@/lib/utils';
 import { Transaction } from '@/types/transaction';
 
 export default function DashboardLatest({
@@ -22,33 +33,64 @@ export default function DashboardLatest({
 				<div className='grid flex-1 gap-1'>
 					<CardTitle>Recent Transactions</CardTitle>
 				</div>
+				<CardAction>
+					<Button variant='ghost' size='sm' asChild>
+						<Link href='/transactions'>
+							View all
+							<ArrowRight className='h-4 w-4' />
+						</Link>
+					</Button>
+				</CardAction>
 			</CardHeader>
 			<CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
 				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableHead>Date</TableHead>
-							<TableHead>Type</TableHead>
 							<TableHead>Category</TableHead>
-							<TableHead>Sub Category</TableHead>
 							<TableHead>Description</TableHead>
-							<TableHead>Amount</TableHead>
-							<TableHead>Payment Method</TableHead>
-							<TableHead>Credit Card Type</TableHead>
+							<TableHead>Type</TableHead>
+							<TableHead className='text-right'>Amount</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{transactions.slice(0, 6).map((tr) => {
+							const isIncome = tr.type === 'INCOME';
 							return (
-								<TableRow key={tr.id} className='relative pb-10 pt-3'>
-									<TableCell>{formatFullDate(tr.transactionDate)}</TableCell>
-									<TableCell>{tr.type}</TableCell>
-									<TableCell>{tr.categoryName}</TableCell>
-									<TableCell>{tr.subcategory}</TableCell>
-									<TableCell>{tr.description}</TableCell>
-									<TableCell>{formatCurrency(tr.amount)}</TableCell>
-									<TableCell>{tr.paymentMethod}</TableCell>
-									<TableCell>{tr.creditCardType}</TableCell>
+								<TableRow key={tr.id}>
+									<TableCell className='py-3 text-muted-foreground'>
+										{formatFullDate(tr.transactionDate)}
+									</TableCell>
+									<TableCell className='py-3'>
+										<div className='font-medium'>{tr.categoryName}</div>
+										{tr.subcategory && (
+											<div className='text-xs text-muted-foreground'>
+												{tr.subcategory}
+											</div>
+										)}
+									</TableCell>
+									<TableCell className='py-3 text-muted-foreground'>
+										{tr.description || '—'}
+									</TableCell>
+									<TableCell className='py-3'>
+										<Badge
+											variant='outline'
+											className={cn(
+												isIncome
+													? 'bg-secondary/15 text-secondary border-secondary/30'
+													: 'bg-destructive/15 text-destructive border-destructive/30',
+											)}>
+											{isIncome ? 'Income' : 'Expense'}
+										</Badge>
+									</TableCell>
+									<TableCell
+										className={cn(
+											'py-3 text-right font-semibold',
+											isIncome ? 'text-secondary' : 'text-destructive',
+										)}>
+										{isIncome ? '+' : '-'}
+										{formatCurrency(tr.amount)}
+									</TableCell>
 								</TableRow>
 							);
 						})}

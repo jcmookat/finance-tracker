@@ -103,10 +103,10 @@ const BaseFormField = <TSchema extends ZodType>({
 											key={item.value}
 											value={item.value}
 											className={cn(
-												'px-6 py-3 text-sm font-semibold rounded-md border transition-colors',
+												'px-6 py-3 text-sm font-semibold rounded-md border transition-all duration-200',
 												field.value === item.value
-													? 'bg-primary text-secondary-foreground border-gray-400'
-													: 'bg-muted text-muted-foreground/50 hover:bg-accent hover:text-accent-foreground',
+													? 'gradient-brand glow-primary text-primary-foreground border-transparent'
+													: 'bg-glass-bg border-glass-border backdrop-blur-sm text-muted-foreground/50 hover:bg-accent/20 hover:text-accent-foreground',
 											)}>
 											{Icon && <Icon className='h-4 w-4' />}
 											{item.label}

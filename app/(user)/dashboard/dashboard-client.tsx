@@ -14,11 +14,9 @@ export default function DashboardClient({
 	transactions: Transaction[];
 }) {
 	return (
-		<>
+		<div className='flex flex-col gap-6'>
 			<DashboardChart chartData={chartData} />
-			<div className='pt-4'>
-				<DashboardLatest transactions={transactions} />
-			</div>
-		</>
+			<DashboardLatest transactions={transactions} />
+		</div>
 	);
 }

@@ -108,7 +108,7 @@ const SignUpForm = () => {
 						/>
 						<div>
 							{data?.success ? (
-								<div className='text-center p-2 bg-green-100 text-green-700 rounded-md font-medium'>
+								<div className='text-center p-2 rounded-md font-medium bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 backdrop-blur-sm'>
 									Registration complete!
 								</div>
 							) : (
@@ -121,7 +121,7 @@ const SignUpForm = () => {
 						</div>
 						{data && (
 							<div
-								className={`text-center ${data.success ? 'text-green-500' : 'text-destructive'}`}>
+								className={`text-center ${data.success ? 'text-green-600 dark:text-green-400' : 'text-destructive'}`}>
 								{data.message}
 							</div>
 						)}

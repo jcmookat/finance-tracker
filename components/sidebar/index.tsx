@@ -22,7 +22,7 @@ export default async function AppSidebar(): Promise<ReactElement> {
 
   const user = session.user;
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" variant="floating">
       <SidebarContent>
         <SidebarHeader>
           <SidebarMenu>
