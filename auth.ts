@@ -1,8 +1,11 @@
 import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 import authConfig from './auth.config';
 import { getUserById } from '@/lib/data/user';
 import { getAccountByUserId } from './lib/data/account';
-// import { prisma } from '@/db/prisma';
+import { signInFormSchema } from '@/lib/validators/user';
+import { prisma } from './db/prisma';
+import { compareSync } from 'bcryptjs';
 // import { PrismaAdapter } from '@auth/prisma-adapter';
 
 export const {
@@ -17,6 +20,32 @@ export const {
 	},
 	// adapter: PrismaAdapter(prisma),
 	...authConfig,
+	providers: [
+		...authConfig.providers,
+		Credentials({
+			async authorize(credentials) {
+				const validatedData = signInFormSchema.safeParse(credentials);
+				if (!validatedData.success) return null;
+				const { email, password } = validatedData.data;
+				const user = await prisma.user.findUnique({
+					where: {
+						email: email,
+					},
+				});
+				if (!user || !user.password || !user.email) {
+					return null;
+				}
+
+				const passwordsMatch = compareSync(password, user.password);
+
+				if (passwordsMatch) {
+					return user;
+				}
+
+				return null;
+			},
+		}),
+	],
 	callbacks: {
 		async signIn({ user, account }) {
 			if (account?.provider !== 'credentials') {
