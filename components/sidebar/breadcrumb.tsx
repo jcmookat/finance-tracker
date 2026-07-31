@@ -17,7 +17,6 @@ const routeTitles: Record<string, string> = {
 	'/annual': 'Annual Reports',
 	'/reports': 'All Reports',
 	'/categories': 'Categories',
-	'/settings': 'Settings',
 	// Add other routes as needed
 	// Example for a dynamic route, though more complex in practice:
 	// '/users/[id]': 'User Details', // This would need to be resolved dynamically

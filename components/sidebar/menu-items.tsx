@@ -8,7 +8,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Calendar, Home, Inbox, Settings } from 'lucide-react';
+import { Calendar, Home, Inbox } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -42,11 +42,6 @@ const items = [
 		title: 'Categories',
 		url: '/categories',
 		icon: Inbox,
-	},
-	{
-		title: 'Settings',
-		url: '/settings',
-		icon: Settings,
 	},
 ];
 

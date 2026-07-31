@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { signOut } from 'next-auth/react';
 import { SessionUser } from '@/types';
+import ModeToggle from '@/components/mode-toggle';
 
 export default function AppSidebarFooter({
 	user,
@@ -34,6 +35,12 @@ export default function AppSidebarFooter({
 	return (
 		<SidebarFooter>
 			<SidebarMenu>
+				<SidebarMenuItem>
+					<div className='flex items-center justify-between rounded-md p-2 text-sm text-sidebar-foreground'>
+						<span>Theme</span>
+						<ModeToggle />
+					</div>
+				</SidebarMenuItem>
 				<SidebarMenuItem>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
