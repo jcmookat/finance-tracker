@@ -40,7 +40,7 @@ const items = [
 		icon: Calendar,
 	},
 	{
-		title: 'Categories',
+		title: 'Manage',
 		url: '/categories',
 		icon: Inbox,
 	},
