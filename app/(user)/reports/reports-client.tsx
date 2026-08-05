@@ -10,7 +10,7 @@ export default function MonthlyClient({
 	transactions: Transaction[];
 }) {
 	return (
-		<div>
+		<div className='pt-4'>
 			{transactions.length === 0 ? (
 				<EmptyState
 					title='No Transactions Yet'

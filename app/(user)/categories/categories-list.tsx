@@ -92,7 +92,7 @@ export default function CategoriesList({
 	};
 
 	return (
-		<div>
+		<div className='pt-4'>
 			<div className='mb-4'>
 				<Button onClick={() => handleOpenCreateDialog()}>Add Category</Button>
 			</div>

@@ -154,7 +154,7 @@ export default function MonthlyClient({
 
 	return (
 		<div>
-			<div className='flex mb-2 flex-col md:flex-wrap md:flex-row gap-4'>
+			<div className='flex mb-2 pt-4 flex-col md:flex-wrap md:flex-row gap-4'>
 				<MonthYearPicker
 					initialMonth={month}
 					initialYear={year}
