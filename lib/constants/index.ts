@@ -44,6 +44,7 @@ export const expenseCreditCardType = [
 	{ label: 'VPASS', value: 'VPASS', icon: LucideIcons.CreditCard },
 	{ label: 'UCS', value: 'UCS', icon: LucideIcons.CreditCard },
 	{ label: 'RAKUTEN', value: 'RAKUTEN', icon: LucideIcons.CreditCard },
+	{ label: 'PAYPAY', value: 'PAYPAY', icon: LucideIcons.CreditCard },
 ];
 
 export const expenseCategories = [
