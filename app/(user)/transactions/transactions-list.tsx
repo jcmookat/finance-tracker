@@ -21,12 +21,15 @@ import DeleteForm from '@/components/delete-form';
 import { deleteTransaction } from '@/lib/actions/transaction.actions';
 import TransactionForm from '@/components/form/transaction-form';
 import { formatFullDate } from '@/lib/utils/dateHelpers';
+import { resolveIcon, LucideIconComponent } from '@/lib/utils/iconHelpers';
 
 export default function TransactionsList({
 	transactions,
 	onDeleteAction,
 	onEditAction,
 	userCategories,
+	userPaymentMethods,
+	userCreditCardTypes,
 }: TransactionsListProps) {
 	const groupedTransactionsByDate = groupTransactionsByDate(transactions);
 	const sortedDates = Object.keys(groupedTransactionsByDate).sort((a, b) =>
@@ -56,32 +59,9 @@ export default function TransactionsList({
 		}, 200);
 	};
 
-	type LucideIconComponent = React.ForwardRefExoticComponent<
-		Omit<LucideIcons.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-	>;
-
 	const iconMap = userCategories.reduce(
 		(acc, category) => {
-			let resolvedIconComponent: LucideIconComponent;
-
-			if (category.icon) {
-				const iconName = category.icon as keyof typeof LucideIcons;
-				const potentialIcon = LucideIcons[iconName];
-
-				if (potentialIcon) {
-					resolvedIconComponent = potentialIcon as LucideIconComponent;
-				} else {
-					console.warn(
-						`Warning: Icon '${category.icon}' not found in LucideIcons or is not a valid component. Using ShoppingBag as default for '${category.name}'.`,
-					);
-					resolvedIconComponent = LucideIcons.ShoppingBag;
-				}
-			} else {
-				// If category.icon is null, use ShoppingBag
-				resolvedIconComponent = LucideIcons.ShoppingBag;
-			}
-
-			acc[category.name] = resolvedIconComponent;
+			acc[category.name] = resolveIcon(category.icon, category.name);
 			return acc;
 		},
 		{} as Record<string, LucideIconComponent>,
@@ -284,6 +264,8 @@ export default function TransactionsList({
 							onEditAction={onEditAction}
 							setIsOpenAction={handleCloseDialog}
 							userCategories={userCategories}
+							userPaymentMethods={userPaymentMethods}
+							userCreditCardTypes={userCreditCardTypes}
 						/>
 					)}
 				</ResponsiveDialog>

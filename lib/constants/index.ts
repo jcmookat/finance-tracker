@@ -29,24 +29,6 @@ export const transactionDefaultValues = () => ({
 	transactionDate: new Date(),
 });
 
-export const expensePaymentMethod = [
-	{ label: 'Cash', value: 'Cash', icon: LucideIcons.Banknote },
-	{ label: 'Credit Card', value: 'Credit Card', icon: LucideIcons.CreditCard },
-	{ label: 'Points', value: 'Points', icon: LucideIcons.TicketCheck },
-	{
-		label: 'Salary Deduction',
-		value: 'Salary Deduction',
-		icon: LucideIcons.Briefcase,
-	},
-];
-
-export const expenseCreditCardType = [
-	{ label: 'VPASS', value: 'VPASS', icon: LucideIcons.CreditCard },
-	{ label: 'UCS', value: 'UCS', icon: LucideIcons.CreditCard },
-	{ label: 'RAKUTEN', value: 'RAKUTEN', icon: LucideIcons.CreditCard },
-	{ label: 'PAYPAY', value: 'PAYPAY', icon: LucideIcons.CreditCard },
-];
-
 export const expenseCategories = [
 	{ label: 'Groceries', value: 'Groceries', icon: LucideIcons.ShoppingCart },
 	{ label: 'Utilities', value: 'Utilities', icon: LucideIcons.ReceiptText },

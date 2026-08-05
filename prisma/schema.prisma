@@ -27,6 +27,7 @@ model User {
   session                 Session[]
   Transaction             Transaction[]
   Category                Category[]
+  TransactionOption       TransactionOption[]
 }
 
 model Account {
@@ -105,4 +106,26 @@ model Category {
 
   createdAt DateTime @default(now()) @db.Timestamp(6)
   updatedAt DateTime @updatedAt
+}
+
+enum TransactionOptionKind {
+  PAYMENT_METHOD
+  CREDIT_CARD_TYPE
+}
+
+// Per-user, editable catalog that drives the Payment Method / Credit Card
+// Type dropdowns on the transaction form. No relation to Transaction on
+// purpose - Transaction.paymentMethod/creditCardType stay plain strings.
+model TransactionOption {
+  id        String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String                @db.Uuid
+  kind      TransactionOptionKind
+  name      String
+  icon      String?
+  user      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, kind, name])
 }

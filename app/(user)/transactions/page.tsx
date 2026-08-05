@@ -6,6 +6,7 @@ import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
 import { getCategoriesByUserId } from '@/lib/data/category';
 import { getUserBudgetPreferences } from '@/lib/data/user';
+import { getTransactionOptionsByUserId } from '@/lib/data/transaction-option';
 
 export const metadata: Metadata = {
 	title: 'Transactions',
@@ -31,6 +32,14 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 	const userCategories = await getCategoriesByUserId(userId);
 	const { rewardPercent, savingsPercent } =
 		await getUserBudgetPreferences(userId);
+	const userPaymentMethods = await getTransactionOptionsByUserId(
+		userId,
+		'PAYMENT_METHOD',
+	);
+	const userCreditCardTypes = await getTransactionOptionsByUserId(
+		userId,
+		'CREDIT_CARD_TYPE',
+	);
 
 	return (
 		<TransactionsClient
@@ -41,6 +50,8 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 			userCategories={userCategories}
 			initialRewardPercent={rewardPercent}
 			initialSavingsPercent={savingsPercent}
+			userPaymentMethods={userPaymentMethods}
+			userCreditCardTypes={userCreditCardTypes}
 		/>
 	);
 }

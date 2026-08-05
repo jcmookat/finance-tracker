@@ -7,6 +7,7 @@ import EmptyState from '@/components/empty-state';
 import { calculateTotal } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction';
+import { TransactionOption } from '@/types/transaction-option';
 import Loading from '@/components/loading';
 import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 import CreateTransactionButtons from '@/components/form/transaction-buttons';
@@ -27,6 +28,8 @@ const PERCENT_OPTIONS = Array.from({ length: 20 }, (_, i) => i * 5); // 0, 5, ..
 interface TransactionsPageClientProps extends TransactionsClientProps {
 	initialRewardPercent: number;
 	initialSavingsPercent: number;
+	userPaymentMethods: TransactionOption[];
+	userCreditCardTypes: TransactionOption[];
 }
 
 export default function TransactionsClient({
@@ -37,6 +40,8 @@ export default function TransactionsClient({
 	userCategories,
 	initialRewardPercent,
 	initialSavingsPercent,
+	userPaymentMethods,
+	userCreditCardTypes,
 }: TransactionsPageClientProps) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
@@ -285,6 +290,8 @@ export default function TransactionsClient({
 							onDeleteAction={handleDelete}
 							onEditAction={handleEdit}
 							userCategories={userCategories}
+							userPaymentMethods={userPaymentMethods}
+							userCreditCardTypes={userCreditCardTypes}
 						/>
 					</div>
 				</>

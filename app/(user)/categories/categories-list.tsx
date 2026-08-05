@@ -4,7 +4,7 @@ import CategoryForm from '@/components/form/category-form';
 import ResponsiveDialog from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { Category } from '@/types/category';
-import * as LucideIcons from 'lucide-react';
+import { resolveIcon, LucideIconComponent } from '@/lib/utils/iconHelpers';
 import { useState } from 'react';
 
 export default function CategoriesList({
@@ -38,32 +38,9 @@ export default function CategoriesList({
 		}, 200);
 	};
 
-	type LucideIconComponent = React.ForwardRefExoticComponent<
-		Omit<LucideIcons.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-	>;
-
 	const iconMap = categories.reduce(
 		(acc, category) => {
-			let resolvedIconComponent: LucideIconComponent;
-
-			if (category.icon) {
-				const iconName = category.icon as keyof typeof LucideIcons;
-				const potentialIcon = LucideIcons[iconName];
-
-				if (potentialIcon) {
-					resolvedIconComponent = potentialIcon as LucideIconComponent;
-				} else {
-					console.warn(
-						`Warning: Icon '${category.icon}' not found in LucideIcons or is not a valid component. Using ShoppingBag as default for '${category.name}'.`,
-					);
-					resolvedIconComponent = LucideIcons.ShoppingBag;
-				}
-			} else {
-				// If category.icon is null, use ShoppingBag
-				resolvedIconComponent = LucideIcons.ShoppingBag;
-			}
-
-			acc[category.name] = resolvedIconComponent;
+			acc[category.name] = resolveIcon(category.icon, category.name);
 			return acc;
 		},
 		{} as Record<string, LucideIconComponent>,
@@ -92,7 +69,7 @@ export default function CategoriesList({
 	};
 
 	return (
-		<div className='pt-4'>
+		<div>
 			<div className='mb-4'>
 				<Button onClick={() => handleOpenCreateDialog()}>Add Category</Button>
 			</div>

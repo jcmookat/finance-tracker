@@ -15,10 +15,7 @@ import {
 	expenseSubCategories,
 	transactionDefaultValues,
 	transactionType,
-	expensePaymentMethod,
-	expenseCreditCardType,
 } from '@/lib/constants';
-import * as LucideIcons from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -26,6 +23,8 @@ import {
 	updateTransaction,
 } from '@/lib/actions/transaction.actions';
 import { Category } from '@/types/category';
+import { TransactionOption } from '@/types/transaction-option';
+import { resolveIcon, LucideIconComponent } from '@/lib/utils/iconHelpers';
 // import { ComboBox } from '../combo-box';
 
 export default function TransactionForm({
@@ -34,6 +33,8 @@ export default function TransactionForm({
 	transaction,
 	transactionId,
 	userCategories,
+	userPaymentMethods,
+	userCreditCardTypes,
 	onEditAction,
 	setIsOpenAction,
 }: {
@@ -42,6 +43,8 @@ export default function TransactionForm({
 	transaction?: Transaction;
 	transactionId?: string;
 	userCategories?: Category[];
+	userPaymentMethods?: TransactionOption[];
+	userCreditCardTypes?: TransactionOption[];
 	onEditAction?: (updatedTransaction: Transaction) => void;
 	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
 }): ReactElement {
@@ -50,32 +53,9 @@ export default function TransactionForm({
 	const typeParam = searchParams.get('type') as 'EXPENSE' | 'INCOME';
 	const formDefaults = transactionDefaultValues();
 
-	type LucideIconComponent = React.ForwardRefExoticComponent<
-		Omit<LucideIcons.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-	>;
-
 	const iconMap = userCategories?.reduce(
 		(acc, category) => {
-			let resolvedIconComponent: LucideIconComponent;
-
-			if (category.icon) {
-				const iconName = category.icon as keyof typeof LucideIcons;
-				const potentialIcon = LucideIcons[iconName];
-
-				if (potentialIcon) {
-					resolvedIconComponent = potentialIcon as LucideIconComponent;
-				} else {
-					console.warn(
-						`Warning: Icon '${category.icon}' not found in LucideIcons or is not a valid component. Using ShoppingBag as default for '${category.name}'.`,
-					);
-					resolvedIconComponent = LucideIcons.ShoppingBag;
-				}
-			} else {
-				// If category.icon is null, use ShoppingBag
-				resolvedIconComponent = LucideIcons.ShoppingBag;
-			}
-
-			acc[category.name] = resolvedIconComponent;
+			acc[category.name] = resolveIcon(category.icon, category.name);
 			return acc;
 		},
 		{} as Record<string, LucideIconComponent>,
@@ -98,6 +78,20 @@ export default function TransactionForm({
 				value: item.name,
 				icon: iconMap?.[item.name],
 			})) || [];
+
+	const paymentMethodOptions =
+		userPaymentMethods?.map((item) => ({
+			label: item.name,
+			value: item.name,
+			icon: resolveIcon(item.icon, item.name),
+		})) || [];
+
+	const creditCardTypeOptions =
+		userCreditCardTypes?.map((item) => ({
+			label: item.name,
+			value: item.name,
+			icon: resolveIcon(item.icon, item.name),
+		})) || [];
 
 	const modeConfig = {
 		Update: {
@@ -217,7 +211,7 @@ export default function TransactionForm({
 							label='Payment Method'
 							placeholder='Select a payment method'
 							inputType='select'
-							dataArr={expensePaymentMethod}
+							dataArr={paymentMethodOptions}
 							formControl={form.control}
 						/>
 					)}
@@ -227,7 +221,7 @@ export default function TransactionForm({
 							label='Credit Card Type'
 							placeholder='Select a credit card type'
 							inputType='select'
-							dataArr={expenseCreditCardType}
+							dataArr={creditCardTypeOptions}
 							formControl={form.control}
 						/>
 					)}
