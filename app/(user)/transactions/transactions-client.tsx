@@ -10,6 +10,24 @@ import { TransactionsClientProps, Transaction } from '@/types/transaction';
 import Loading from '@/components/loading';
 import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 import CreateTransactionButtons from '@/components/form/transaction-buttons';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
+import { updateBudgetPercentages } from '@/lib/actions/user.actions';
+import { toast } from 'sonner';
+import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+const PERCENT_OPTIONS = Array.from({ length: 20 }, (_, i) => i * 5); // 0, 5, ..., 95
+
+interface TransactionsPageClientProps extends TransactionsClientProps {
+	initialRewardPercent: number;
+	initialSavingsPercent: number;
+}
 
 export default function TransactionsClient({
 	initialTransactions,
@@ -17,7 +35,9 @@ export default function TransactionsClient({
 	initialYear,
 	initialStartDate,
 	userCategories,
-}: TransactionsClientProps) {
+	initialRewardPercent,
+	initialSavingsPercent,
+}: TransactionsPageClientProps) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
 	const [month, setMonth] = useState(initialMonth);
@@ -39,9 +59,34 @@ export default function TransactionsClient({
 		.reduce((sum, t) => sum + t.amount, 0);
 	const netIncome = monthIncome - taxationTotal;
 
-	const tenPercent = netIncome * 0.1;
-	const fiftyPercent = netIncome * 0.5;
-	const fortyPercent = netIncome * 0.4;
+	const [rewardPercent, setRewardPercent] = useState(initialRewardPercent);
+	const [savingsPercent, setSavingsPercent] = useState(initialSavingsPercent);
+	const budgetPercent = Math.max(0, 100 - rewardPercent - savingsPercent);
+
+	const saveBudgetPercentages = async (reward: number, savings: number) => {
+		const result = await updateBudgetPercentages(reward, savings);
+		if (!result.success) {
+			toast('Failed to save budget percentages', {
+				description: result.message,
+			});
+		}
+	};
+
+	const handleRewardChange = (value: string) => {
+		const percent = Number(value);
+		setRewardPercent(percent);
+		saveBudgetPercentages(percent, savingsPercent);
+	};
+
+	const handleSavingsChange = (value: string) => {
+		const percent = Number(value);
+		setSavingsPercent(percent);
+		saveBudgetPercentages(rewardPercent, percent);
+	};
+
+	const rewardAmount = netIncome * (rewardPercent / 100);
+	const budgetAmount = netIncome * (budgetPercent / 100);
+	const savingsAmount = netIncome * (savingsPercent / 100);
 
 	const handleMonthYearChange = async (
 		selectedMonth: number,
@@ -108,7 +153,7 @@ export default function TransactionsClient({
 
 	return (
 		<div>
-			<div className='flex justify-between mb-2 flex-col-reverse md:flex-row gap-4'>
+			<div className='flex justify-between mb-2 pt-4 flex-col-reverse md:flex-row gap-4'>
 				<MonthYearPicker
 					initialMonth={month}
 					initialYear={year}
@@ -156,33 +201,84 @@ export default function TransactionsClient({
 							</p>
 						</div>
 					</div>
-					<div className='flex mb-6 gap-4 items-center justify-end font-medium'>
-						<p className='font-bold text-right text-muted-foreground'>
-							Net Income:{' '}
-							<span
-								className={`text-left ${netIncome >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-								{formatCurrency(Math.abs(netIncome))}
-							</span>
-						</p>
-						<p className='font-bold text-right text-muted-foreground'>
-							Reward (10%):{' '}
-							<span className='text-blue-400'>
-								{formatCurrency(Math.abs(tenPercent))}
-							</span>
-						</p>
-						<p className='font-bold text-right text-muted-foreground'>
-							Budget (50%):{' '}
-							<span className='text-orange-400'>
-								{formatCurrency(Math.abs(fiftyPercent))}
-							</span>
-						</p>
-						<p className='font-bold text-right text-muted-foreground'>
-							Savings (40%):{' '}
-							<span className='text-green-800'>
-								{formatCurrency(Math.abs(fortyPercent))}
-							</span>
-						</p>
-					</div>
+					<Card className='mb-6 p-6'>
+						<div className='flex flex-col gap-6'>
+							<div>
+								<p className='text-sm text-muted-foreground'>Net Income</p>
+								<p
+									className={cn(
+										'text-2xl font-bold',
+										netIncome >= 0 ? 'text-secondary' : 'text-destructive',
+									)}>
+									{netIncome >= 0 ? '+' : '-'}
+									{formatCurrency(Math.abs(netIncome))}
+								</p>
+							</div>
+							<div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
+								<div className='flex flex-col gap-2'>
+									<div className='flex items-center justify-between gap-2'>
+										<span className='text-sm text-muted-foreground'>
+											Reward
+										</span>
+										<Select
+											value={String(rewardPercent)}
+											onValueChange={handleRewardChange}>
+											<SelectTrigger className='h-8 w-[76px]'>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												{PERCENT_OPTIONS.map((p) => (
+													<SelectItem key={p} value={String(p)}>
+														{p}%
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</div>
+									<p className='text-lg font-bold text-chart-3'>
+										{formatCurrency(Math.abs(rewardAmount))}
+									</p>
+								</div>
+								<div className='flex flex-col gap-2'>
+									<div className='flex items-center justify-between gap-2'>
+										<span className='text-sm text-muted-foreground'>
+											Budget
+										</span>
+										<div className='flex h-8 w-[76px] items-center justify-center rounded-md border bg-muted text-sm text-muted-foreground'>
+											{budgetPercent}%
+										</div>
+									</div>
+									<p className='text-lg font-bold text-chart-4'>
+										{formatCurrency(Math.abs(budgetAmount))}
+									</p>
+								</div>
+								<div className='flex flex-col gap-2'>
+									<div className='flex items-center justify-between gap-2'>
+										<span className='text-sm text-muted-foreground'>
+											Savings
+										</span>
+										<Select
+											value={String(savingsPercent)}
+											onValueChange={handleSavingsChange}>
+											<SelectTrigger className='h-8 w-[76px]'>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												{PERCENT_OPTIONS.map((p) => (
+													<SelectItem key={p} value={String(p)}>
+														{p}%
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</div>
+									<p className='text-lg font-bold text-chart-5'>
+										{formatCurrency(Math.abs(savingsAmount))}
+									</p>
+								</div>
+							</div>
+						</div>
+					</Card>
 					<div className='flex flex-wrap gap-4'>
 						<TransactionsList
 							transactions={filteredTransactions}

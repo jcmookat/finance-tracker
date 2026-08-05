@@ -1,7 +1,7 @@
 'use server';
 
 import { signInFormSchema, signUpFormSchema } from '@/lib/validators/user';
-import { signIn, signOut } from '@/auth';
+import { auth, signIn, signOut } from '@/auth';
 import { prisma } from '@/db/prisma';
 import { hashSync } from 'bcrypt-ts-edge';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
@@ -10,6 +10,7 @@ import { cookies } from 'next/headers';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import { sendVerificationEmail } from '@/emails';
+import { revalidatePath } from 'next/cache';
 
 // Sign up user
 export async function signUpUser(prevState: unknown, formData: FormData) {
@@ -223,4 +224,28 @@ export async function signOutUser() {
   const cookiesObject = await cookies();
   cookiesObject.set('sessionCartId', '', { expires: new Date(0) }); // Clear the cookie
   await signOut({ redirectTo: '/', redirect: true });
+}
+
+// Save the signed-in user's budget-rule percentages (Reward / Savings)
+export async function updateBudgetPercentages(
+  rewardPercent: number,
+  savingsPercent: number,
+) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { rewardPercent, savingsPercent },
+    });
+
+    revalidatePath('/transactions');
+
+    return { success: true, message: 'Budget percentages updated' };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
 }

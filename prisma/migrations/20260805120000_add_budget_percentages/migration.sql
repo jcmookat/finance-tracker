@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User"
+ADD COLUMN "rewardPercent" INTEGER NOT NULL DEFAULT 5,
+ADD COLUMN "savingsPercent" INTEGER NOT NULL DEFAULT 35;

@@ -5,6 +5,7 @@ import TransactionsClient from './transactions-client';
 import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
 import { getCategoriesByUserId } from '@/lib/data/category';
+import { getUserBudgetPreferences } from '@/lib/data/user';
 
 export const metadata: Metadata = {
 	title: 'Transactions',
@@ -28,6 +29,8 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 		endDate,
 	);
 	const userCategories = await getCategoriesByUserId(userId);
+	const { rewardPercent, savingsPercent } =
+		await getUserBudgetPreferences(userId);
 
 	return (
 		<TransactionsClient
@@ -36,6 +39,8 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 			initialYear={year}
 			initialStartDate={startDate}
 			userCategories={userCategories}
+			initialRewardPercent={rewardPercent}
+			initialSavingsPercent={savingsPercent}
 		/>
 	);
 }

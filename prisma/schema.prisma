@@ -19,6 +19,8 @@ model User {
   image                   String?
   password                String?
   role                    String        @default("user")
+  rewardPercent           Int           @default(5)
+  savingsPercent          Int           @default(35)
   createdAt               DateTime      @default(now()) @db.Timestamp(6)
   updatedAt               DateTime      @updatedAt
   account                 Account[]
