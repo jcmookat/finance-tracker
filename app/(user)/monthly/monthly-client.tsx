@@ -9,6 +9,7 @@ import {
 } from '@/lib/utils/transactionHelpers';
 import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { TransactionsClientProps, Transaction } from '@/types/transaction'; // Adjust import path as needed
+import { TransactionOption } from '@/types/transaction-option';
 import Loading from '@/components/loading';
 import MonthlySummary from './monthly-summary';
 import MonthlyList from './montly-list';
@@ -23,12 +24,19 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LucideRefreshCcw } from 'lucide-react';
 
+interface MonthlyClientProps extends TransactionsClientProps {
+	userPaymentMethods: TransactionOption[];
+	userCreditCardTypes: TransactionOption[];
+}
+
 export default function MonthlyClient({
 	initialTransactions,
 	initialMonth,
 	initialYear,
 	initialStartDate,
-}: TransactionsClientProps) {
+	userPaymentMethods,
+	userCreditCardTypes,
+}: MonthlyClientProps) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
 	const [month, setMonth] = useState(initialMonth);
@@ -143,6 +151,12 @@ export default function MonthlyClient({
 				setIsLoading(false);
 			}
 		}
+	};
+
+	const handleEdit = (updatedTransaction: Transaction) => {
+		setTransactions((prev) =>
+			prev.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t)),
+		);
 	};
 
 	const resetFilter = () => {
@@ -277,7 +291,12 @@ export default function MonthlyClient({
 					</div>
 					<div className='mb-4'>
 						<Card className='gap-4'>
-							<MonthlyList transactions={filteredTransactions} />
+							<MonthlyList
+							transactions={filteredTransactions}
+							userPaymentMethods={userPaymentMethods}
+							userCreditCardTypes={userCreditCardTypes}
+							onEditAction={handleEdit}
+						/>
 						</Card>
 					</div>
 					<div>

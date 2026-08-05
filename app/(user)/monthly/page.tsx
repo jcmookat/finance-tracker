@@ -5,6 +5,7 @@ import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 import { getTransactionsForPeriod } from '@/lib/data/transaction';
 import MonthlySummary from './monthly-client';
 import { getCategoriesByUserId } from '@/lib/data/category';
+import { getTransactionOptionsByUserId } from '@/lib/data/transaction-option';
 
 export const metadata: Metadata = {
 	title: 'Monthly Reports',
@@ -29,6 +30,14 @@ export default async function ReportsPage(): Promise<ReactElement> {
 	);
 
 	const userCategories = await getCategoriesByUserId(userId);
+	const userPaymentMethods = await getTransactionOptionsByUserId(
+		userId,
+		'PAYMENT_METHOD',
+	);
+	const userCreditCardTypes = await getTransactionOptionsByUserId(
+		userId,
+		'CREDIT_CARD_TYPE',
+	);
 
 	return (
 		<>
@@ -38,6 +47,8 @@ export default async function ReportsPage(): Promise<ReactElement> {
 				initialYear={year}
 				initialStartDate={startDate}
 				userCategories={userCategories}
+				userPaymentMethods={userPaymentMethods}
+				userCreditCardTypes={userCreditCardTypes}
 			/>
 		</>
 	);

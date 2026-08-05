@@ -85,6 +85,7 @@ export async function updateTransaction(data: UpdateTransaction) {
 		});
 
 		revalidatePath('/transactions');
+		revalidatePath('/monthly');
 
 		return {
 			success: true,
