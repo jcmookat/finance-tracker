@@ -7,6 +7,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	useSidebar,
 } from '@/components/ui/sidebar';
 import { Calendar, Home, Inbox } from 'lucide-react';
 import Link from 'next/link';
@@ -47,6 +48,7 @@ const items = [
 
 export default function AppSidebarMenu(): ReactElement {
 	const pathname = usePathname();
+	const { isMobile, setOpenMobile } = useSidebar();
 
 	return (
 		<SidebarGroup>
@@ -59,7 +61,11 @@ export default function AppSidebarMenu(): ReactElement {
 						return (
 							<SidebarMenuItem key={item.title}>
 								<SidebarMenuButton asChild isActive={isActive}>
-									<Link href={item.url}>
+									<Link
+										href={item.url}
+										onClick={() => {
+											if (isMobile) setOpenMobile(false);
+										}}>
 										<item.icon />
 										<span>{item.title}</span>
 									</Link>
