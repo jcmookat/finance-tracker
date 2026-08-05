@@ -34,6 +34,7 @@ export default function MonthlyClient({
 	initialMonth,
 	initialYear,
 	initialStartDate,
+	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
 }: MonthlyClientProps) {
@@ -293,6 +294,7 @@ export default function MonthlyClient({
 						<Card className='gap-4'>
 							<MonthlyList
 							transactions={filteredTransactions}
+							userCategories={userCategories}
 							userPaymentMethods={userPaymentMethods}
 							userCreditCardTypes={userCreditCardTypes}
 							onEditAction={handleEdit}
