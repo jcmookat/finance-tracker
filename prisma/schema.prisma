@@ -28,6 +28,7 @@ model User {
   Transaction             Transaction[]
   Category                Category[]
   TransactionOption       TransactionOption[]
+  RecurringTransaction    RecurringTransaction[]
 }
 
 model Account {
@@ -128,4 +129,34 @@ model TransactionOption {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, kind, name])
+}
+
+enum RecurringFrequency {
+  MONTHLY
+}
+
+// Template that the daily cron (app/api/cron/recurring-transactions) reads
+// to generate real Transaction rows. categoryName/paymentMethod/creditCardType
+// are plain strings with no FK, same reasoning as TransactionOption.
+model RecurringTransaction {
+  id             String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String             @db.Uuid
+  type           TransactionType
+  categoryName   String
+  subcategory    String?
+  paymentMethod  String?
+  creditCardType String?
+  amount         Decimal            @db.Decimal(10, 2)
+  description    String?
+  frequency      RecurringFrequency @default(MONTHLY)
+  dayOfMonth     Int
+  endDate        DateTime?          @db.Timestamp(6)
+  nextRunDate    DateTime           @db.Timestamp(6)
+  isActive       Boolean            @default(true)
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }

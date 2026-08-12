@@ -18,7 +18,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -149,36 +149,48 @@ const BaseFormField = <TSchema extends ZodType>({
 								className='resize-none'
 							/>
 						) : inputType === 'datepicker' ? (
-							<Popover
-								open={isCalendarOpen}
-								onOpenChange={setIsCalendarOpen}
-								modal>
-								<PopoverTrigger asChild>
+							<div className='flex w-full items-center gap-2 md:w-[320px]'>
+								<Popover
+									open={isCalendarOpen}
+									onOpenChange={setIsCalendarOpen}
+									modal>
+									<PopoverTrigger asChild>
+										<Button
+											id={field.name}
+											variant='outline'
+											className={cn(
+												'w-full justify-start text-left font-normal',
+												!field.value && 'text-muted-foreground',
+											)}>
+											<CalendarIcon className='mr-2 h-4 w-4' />
+											{field.value ? format(field.value, 'PPP') : 'Pick a date'}
+										</Button>
+									</PopoverTrigger>
+									<PopoverContent className='w-auto p-0'>
+										<Calendar
+											mode='single'
+											selected={field.value}
+											onSelect={(val) => {
+												if (val) {
+													field.onChange(val);
+													setIsCalendarOpen(false);
+												}
+											}}
+											initialFocus
+										/>
+									</PopoverContent>
+								</Popover>
+								{field.value && (
 									<Button
-										id={field.name}
-										variant='outline'
-										className={cn(
-											'justify-start text-left font-normal w-full md:w-[320px]',
-											!field.value && 'text-muted-foreground',
-										)}>
-										<CalendarIcon className='mr-2 h-4 w-4' />
-										{field.value ? format(field.value, 'PPP') : 'Pick a date'}
+										type='button'
+										variant='ghost'
+										size='icon'
+										aria-label='Clear date'
+										onClick={() => field.onChange(undefined)}>
+										<XIcon className='h-4 w-4' />
 									</Button>
-								</PopoverTrigger>
-								<PopoverContent className='w-auto p-0'>
-									<Calendar
-										mode='single'
-										selected={field.value}
-										onSelect={(val) => {
-											if (val) {
-												field.onChange(val);
-												setIsCalendarOpen(false);
-											}
-										}}
-										initialFocus
-									/>
-								</PopoverContent>
-							</Popover>
+								)}
+							</div>
 						) : (
 							// Default Input Field
 							<Input

@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 const routeTitles: Record<string, string> = {
 	'/dashboard': 'Dashboard',
 	'/transactions': 'Transactions',
+	'/recurring': 'Recurring',
 	'/monthly': 'Monthly Reports',
 	'/annual': 'Annual Reports',
 	'/reports': 'All Reports',

@@ -9,7 +9,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from '@/components/ui/sidebar';
-import { Calendar, Home, Inbox } from 'lucide-react';
+import { Calendar, Home, Inbox, Repeat } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -23,6 +23,11 @@ const items = [
 		title: 'Transactions',
 		url: '/transactions',
 		icon: Inbox,
+	},
+	{
+		title: 'Recurring',
+		url: '/recurring',
+		icon: Repeat,
 	},
 	{
 		title: 'Monthly Reports',
