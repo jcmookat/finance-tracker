@@ -15,6 +15,7 @@ import { getFirstRunDate } from '@/lib/utils/recurrenceHelpers';
 import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 import { convertToPlainObject } from '../utils/formatHelpers';
 import { Prisma } from '@/lib/generated/prisma';
+import { processRecurringTransaction } from '@/lib/cron/generateRecurringTransactions';
 
 function toPlainRecurringTransaction(row: {
 	id: string;
@@ -70,12 +71,24 @@ export async function createRecurringTransaction(
 			},
 		});
 
+		// If it's already due (nextRunDate === today), generate the first
+		// occurrence immediately instead of waiting for the next cron run.
+		const { transactionsGenerated, updatedTemplate } =
+			await processRecurringTransaction(created);
+
 		revalidatePath('/recurring');
+		if (transactionsGenerated > 0) {
+			revalidatePath('/transactions');
+			revalidatePath('/monthly');
+		}
 
 		return {
 			success: true,
-			message: 'Recurring transaction created successfully',
-			item: toPlainRecurringTransaction(created),
+			message:
+				transactionsGenerated > 0
+					? "Recurring transaction created - today's transaction was added"
+					: 'Recurring transaction created successfully',
+			item: toPlainRecurringTransaction(updatedTemplate),
 		};
 	} catch (error) {
 		return {
