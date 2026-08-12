@@ -327,6 +327,14 @@
 	}
 	body {
 		@apply bg-background text-foreground relative isolate;
+		background-image: url('/images/kawaii-scene.svg');
+		background-repeat: no-repeat;
+		background-position: bottom center;
+		background-size: cover;
+		background-attachment: fixed;
+	}
+	.dark body {
+		background-image: none;
 	}
 	body::before,
 	body::after {

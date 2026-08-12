@@ -50,7 +50,11 @@ export default function DashboardStats({
 								{stat.value}
 							</p>
 						</div>
-						<div className={cn('rounded-full p-3', stat.iconClass)}>
+						<div
+							className={cn(
+								'rounded-full p-3 ring-4 ring-background/60 transition-transform duration-200 hover:scale-110',
+								stat.iconClass,
+							)}>
 							<stat.icon className='h-5 w-5' />
 						</div>
 					</div>

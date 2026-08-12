@@ -2,7 +2,13 @@
 
 import { Form } from '@/components/ui/form';
 import BaseFormField from '@/components/base-form-field';
-import { Dispatch, ReactElement, SetStateAction, useEffect } from 'react';
+import {
+	Dispatch,
+	ReactElement,
+	SetStateAction,
+	useEffect,
+	useState,
+} from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
 	insertTransactionSchema,
@@ -25,6 +31,7 @@ import {
 import { Category } from '@/types/category';
 import { TransactionOption } from '@/types/transaction-option';
 import { resolveIcon, LucideIconComponent } from '@/lib/utils/iconHelpers';
+import SparkleBurst from '@/components/sparkle-burst';
 // import { ComboBox } from '../combo-box';
 
 export default function TransactionForm({
@@ -49,6 +56,7 @@ export default function TransactionForm({
 	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
 }): ReactElement {
 	const router = useRouter();
+	const [showSparkle, setShowSparkle] = useState(false);
 	const searchParams = useSearchParams();
 	const typeParam = searchParams.get('type') as 'EXPENSE' | 'INCOME';
 	const formDefaults = transactionDefaultValues();
@@ -157,7 +165,14 @@ export default function TransactionForm({
 
 		if (mode === 'Create') {
 			const res = await createTransaction(fullData);
-			handleResponse(res);
+
+			if (res.success && values.type === 'INCOME') {
+				toast('', { description: res.message });
+				setShowSparkle(true);
+				setTimeout(() => router.push('/transactions'), 700);
+			} else {
+				handleResponse(res);
+			}
 		}
 
 		if (mode === 'Update') {
@@ -180,6 +195,7 @@ export default function TransactionForm({
 
 	return (
 		<Form {...form}>
+			{showSparkle && <SparkleBurst />}
 			<form
 				method='post'
 				onSubmit={form.handleSubmit(onSubmit)}
