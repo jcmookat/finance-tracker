@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import '@/assets/styles/globals.css';
@@ -8,6 +8,7 @@ import { SessionProvider } from 'next-auth/react';
 import { Toaster } from '@/components/ui/sonner';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import ServiceWorkerRegister from '@/components/service-worker-register';
 
 export const metadata: Metadata = {
 	title: {
@@ -16,6 +17,20 @@ export const metadata: Metadata = {
 	},
 	description: APP_DESCRIPTION,
 	metadataBase: new URL(SERVER_URL),
+	manifest: '/manifest.webmanifest',
+	icons: {
+		icon: '/icons/icon-512.png',
+		apple: '/icons/apple-touch-icon.png',
+	},
+	appleWebApp: {
+		capable: true,
+		statusBarStyle: 'default',
+		title: APP_NAME,
+	},
+};
+
+export const viewport: Viewport = {
+	themeColor: '#6b5b95',
 };
 
 export default function RootLayout({
@@ -27,6 +42,7 @@ export default function RootLayout({
 		<html lang='en' suppressHydrationWarning>
 			<GoogleTagManager gtmId='GT-K585XPNL' />
 			<body className={`${inter.className}`}>
+				<ServiceWorkerRegister />
 				<SessionProvider>
 					<ThemeProvider
 						attribute='class'
