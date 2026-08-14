@@ -15,6 +15,7 @@ export type BaseFormFieldProps<TSchema extends ZodType> = {
 	dataArr?: Array<{ label: string; value: string; icon?: LucideIcon }>;
 	disabledLabel?: string;
 	enabledLabel?: string;
+	clearable?: boolean;
 	formControl: Control<z.infer<TSchema>>;
 };
 

@@ -230,6 +230,7 @@ export default function RecurringTransactionForm({
 						name='endDate'
 						label='End Date (optional)'
 						inputType='datepicker'
+						clearable
 						formControl={form.control}
 					/>
 					<BaseFormField<typeof insertRecurringTransactionSchema>

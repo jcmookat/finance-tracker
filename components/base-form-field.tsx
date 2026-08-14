@@ -44,6 +44,7 @@ const BaseFormField = <TSchema extends ZodType>({
 	dataArr,
 	disabledLabel = 'Disabled',
 	enabledLabel = 'Enabled',
+	clearable = false,
 	formControl,
 }: BaseFormFieldProps<TSchema>) => {
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -180,7 +181,7 @@ const BaseFormField = <TSchema extends ZodType>({
 										/>
 									</PopoverContent>
 								</Popover>
-								{field.value && (
+								{clearable && field.value && (
 									<Button
 										type='button'
 										variant='ghost'
