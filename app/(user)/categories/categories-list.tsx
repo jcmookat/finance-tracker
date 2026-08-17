@@ -5,6 +5,7 @@ import ResponsiveDialog from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { Category } from '@/types/category';
 import { resolveIcon, LucideIconComponent } from '@/lib/utils/iconHelpers';
+import { formatCurrency } from '@/lib/utils/formatHelpers';
 import { useState } from 'react';
 
 export default function CategoriesList({
@@ -107,6 +108,11 @@ export default function CategoriesList({
 										onClick={() => handleOpenEditDialog(item)}>
 										<Icon className='h-4 w-4' />
 										{item.name}
+										{item.monthlyLimit && (
+											<span className='text-xs text-muted-foreground'>
+												limit {formatCurrency(item.monthlyLimit)}/mo
+											</span>
+										)}
 									</Button>
 								</li>
 							);

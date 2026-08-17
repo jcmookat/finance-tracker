@@ -34,7 +34,13 @@ export async function createCategory(data: InsertCategory) {
 		return {
 			success: true,
 			message: 'Category created successfully',
-			category: newCategory as Category,
+			category: {
+				...newCategory,
+				icon: newCategory.icon ?? undefined,
+				monthlyLimit: newCategory.monthlyLimit
+					? newCategory.monthlyLimit.toNumber()
+					: undefined,
+			} as Category,
 		};
 	} catch (error) {
 		return {

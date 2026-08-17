@@ -9,6 +9,7 @@ export async function getCategoriesByUserId(userId: string) {
 	const categories = rawCategories.map((tr) => ({
 		...tr,
 		icon: tr.icon ?? undefined,
+		monthlyLimit: tr.monthlyLimit ? tr.monthlyLimit.toNumber() : undefined,
 	}));
 	return convertToPlainObject(categories);
 }

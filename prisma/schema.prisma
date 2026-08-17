@@ -104,6 +104,9 @@ model Category {
   user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
   type         TransactionType
+  // Optional monthly spending cap, only meaningful for EXPENSE categories
+  // (enforced in the UI, not the DB). Null = no limit set.
+  monthlyLimit Decimal?        @db.Decimal(10, 2)
 
   createdAt DateTime @default(now()) @db.Timestamp(6)
   updatedAt DateTime @updatedAt

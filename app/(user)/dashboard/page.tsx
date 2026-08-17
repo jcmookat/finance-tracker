@@ -1,12 +1,18 @@
 import { Metadata } from 'next';
 import { auth } from '@/auth';
 import { getTransactionsByUserId } from '@/lib/data/transaction';
+import { getCategoriesByUserId } from '@/lib/data/category';
 import CreateTransactionButtons from '@/components/form/transaction-buttons';
 import { type ReactElement } from 'react';
 import DashboardClient from './dashboard-client';
 import DashboardStats from './dashboard-stats';
+import BudgetStatus from './budget-status';
 import { ChartEntry } from '@/types';
-import { calculateTotal } from '@/lib/utils/transactionHelpers';
+import {
+	calculateTotal,
+	getTotalsByKey,
+} from '@/lib/utils/transactionHelpers';
+import { getCurrentMonthAndYear } from '@/lib/utils/dateHelpers';
 
 export const metadata: Metadata = {
 	title: 'Dashboard',
@@ -43,6 +49,21 @@ export default async function ProfilePage(): Promise<ReactElement> {
 	const totalExpense = calculateTotal(transactions, 'EXPENSE');
 	const netIncome = totalIncome - totalExpense;
 
+	const userCategories = await getCategoriesByUserId(userId);
+	const { month, year } = getCurrentMonthAndYear();
+	const thisMonthExpenses = transactions.filter((t) => {
+		const date = new Date(t.transactionDate);
+		return (
+			t.type === 'EXPENSE' &&
+			date.getMonth() + 1 === month &&
+			date.getFullYear() === year
+		);
+	});
+	const monthlySpendByCategory = getTotalsByKey(
+		thisMonthExpenses,
+		'categoryName',
+	);
+
 	return (
 		<div className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-4 pt-4 sm:flex-row sm:items-center sm:justify-between'>
@@ -58,6 +79,10 @@ export default async function ProfilePage(): Promise<ReactElement> {
 				totalIncome={totalIncome}
 				totalExpense={totalExpense}
 				netIncome={netIncome}
+			/>
+			<BudgetStatus
+				categories={userCategories}
+				monthlySpendByCategory={monthlySpendByCategory}
 			/>
 			<DashboardClient chartData={chartData} transactions={transactions} />
 		</div>

@@ -12,6 +12,11 @@ const baseCategorySchema = z.object({
 			message: 'Select a transaction type',
 		}) as z.ZodType<TransactionType>,
 	icon: z.string().optional(),
+	monthlyLimit: z.coerce
+		.number({ invalid_type_error: 'Must be a number' })
+		.positive('Must be a positive amount')
+		.optional()
+		.nullable(),
 });
 
 export const insertCategorySchema = baseCategorySchema;

@@ -64,6 +64,8 @@ export default function CategoryForm({
 					},
 	});
 
+	const type = form.watch('type');
+
 	const onSubmit: SubmitHandler<InsertCategory> = async (values) => {
 		const fullData = {
 			...values,
@@ -143,6 +145,15 @@ export default function CategoryForm({
 						label='Category icon'
 						formControl={form.control}
 					/>
+					{type === 'EXPENSE' && (
+						<BaseFormField<typeof insertCategorySchema>
+							name='monthlyLimit'
+							label='Monthly Budget Limit (optional)'
+							placeholder='Enter a monthly limit'
+							inputType='number'
+							formControl={form.control}
+						/>
+					)}
 				</div>
 				<div>
 					<SubmitButton
