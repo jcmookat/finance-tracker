@@ -27,6 +27,13 @@ export const metadata: Metadata = {
 		statusBarStyle: 'default',
 		title: APP_NAME,
 	},
+	other: {
+		// Next only emits the newer unprefixed "mobile-web-app-capable" from
+		// appleWebApp.capable - keep the legacy Apple-prefixed tag too, since
+		// that's what older iOS Safari versions actually key standalone
+		// launch behavior off of.
+		'apple-mobile-web-app-capable': 'yes',
+	},
 };
 
 export const viewport: Viewport = {
