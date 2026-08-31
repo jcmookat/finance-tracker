@@ -66,7 +66,7 @@ export async function createRecurringTransaction(
 			data: {
 				...rest,
 				frequency: 'MONTHLY',
-				endDate: endDate ? normalizeToUtcMidnight(new Date(endDate)) : null,
+				endDate: endDate ?? null,
 				nextRunDate,
 			},
 		});
@@ -128,7 +128,7 @@ export async function updateRecurringTransaction(
 			where: { id },
 			data: {
 				...rest,
-				endDate: endDate ? normalizeToUtcMidnight(new Date(endDate)) : null,
+				endDate: endDate ?? null,
 				nextRunDate,
 				isActive: true,
 			},

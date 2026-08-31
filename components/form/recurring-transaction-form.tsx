@@ -24,6 +24,7 @@ import { Category } from '@/types/category';
 import { TransactionOption } from '@/types/transaction-option';
 import { resolveIcon } from '@/lib/utils/iconHelpers';
 import { expenseSubCategories } from '@/lib/constants';
+import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 
 const DAY_OF_MONTH_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
 	label: String(i + 1),
@@ -128,7 +129,15 @@ export default function RecurringTransactionForm({
 	const onSubmit: SubmitHandler<InsertRecurringTransaction> = async (
 		values,
 	) => {
-		const fullData = { ...values, userId };
+		const fullData = {
+			...values,
+			userId,
+			// Normalize while still in the browser's own timezone context - see
+			// transaction-form.tsx for why this can't happen on the server.
+			endDate: values.endDate
+				? normalizeToUtcMidnight(new Date(values.endDate))
+				: values.endDate,
+		};
 
 		const handleResponse = (res: { success: boolean; message: string }) => {
 			toast('', { description: res.message });

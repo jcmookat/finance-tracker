@@ -7,7 +7,6 @@ import {
 } from '../validators/transaction';
 import { revalidatePath } from 'next/cache';
 import { InsertTransaction, UpdateTransaction } from '@/types/transaction';
-import { normalizeToUtcMidnight } from '../utils/dateHelpers';
 
 // Create transaction
 export async function createTransaction(data: InsertTransaction) {
@@ -23,12 +22,6 @@ export async function createTransaction(data: InsertTransaction) {
 	}
 
 	const transaction = { ...parsed.data };
-
-	if (transaction.transactionDate) {
-		transaction.transactionDate = normalizeToUtcMidnight(
-			new Date(transaction.transactionDate),
-		);
-	}
 
 	try {
 		// Create transaction
@@ -63,12 +56,6 @@ export async function updateTransaction(data: UpdateTransaction) {
 
 	const transaction = { ...parsed.data };
 	const { id, ...updateTransaction } = transaction;
-
-	if (updateTransaction.transactionDate) {
-		updateTransaction.transactionDate = normalizeToUtcMidnight(
-			new Date(updateTransaction.transactionDate),
-		);
-	}
 
 	try {
 		// Validate and find transaction

@@ -32,6 +32,7 @@ import { Category } from '@/types/category';
 import { TransactionOption } from '@/types/transaction-option';
 import { resolveIcon, LucideIconComponent } from '@/lib/utils/iconHelpers';
 import SparkleBurst from '@/components/sparkle-burst';
+import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 // import { ComboBox } from '../combo-box';
 
 export default function TransactionForm({
@@ -148,6 +149,10 @@ export default function TransactionForm({
 		const fullData = {
 			...values,
 			userId,
+			// Normalize to UTC midnight while we still have the browser's own
+			// timezone context - a server action runs in the server's timezone,
+			// which would otherwise re-derive the wrong calendar day.
+			transactionDate: normalizeToUtcMidnight(new Date(values.transactionDate)),
 		};
 
 		const handleResponse = (res: { success: boolean; message: string }) => {
