@@ -22,6 +22,9 @@ import { updateBudgetPercentages } from '@/lib/actions/user.actions';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 const PERCENT_OPTIONS = Array.from({ length: 20 }, (_, i) => i * 5); // 0, 5, ..., 95
 
@@ -53,6 +56,38 @@ export default function TransactionsClient({
 	const filteredTransactions = transactions.filter((t) => {
 		const date = new Date(t.transactionDate);
 		return date.getMonth() + 1 === month && date.getFullYear() === year;
+	});
+
+	const [searchQuery, setSearchQuery] = useState('');
+	const [typeFilter, setTypeFilter] = useState<'ALL' | 'INCOME' | 'EXPENSE'>(
+		'ALL',
+	);
+	const [categoryFilter, setCategoryFilter] = useState('ALL');
+
+	const hasActiveFilters =
+		searchQuery !== '' || typeFilter !== 'ALL' || categoryFilter !== 'ALL';
+
+	const clearFilters = () => {
+		setSearchQuery('');
+		setTypeFilter('ALL');
+		setCategoryFilter('ALL');
+	};
+
+	const visibleTransactions = filteredTransactions.filter((t) => {
+		if (typeFilter !== 'ALL' && t.type !== typeFilter) return false;
+		if (categoryFilter !== 'ALL' && t.categoryName !== categoryFilter)
+			return false;
+
+		if (searchQuery.trim()) {
+			const query = searchQuery.trim().toLowerCase();
+			const haystack = [t.categoryName, t.subcategory, t.description]
+				.filter(Boolean)
+				.join(' ')
+				.toLowerCase();
+			if (!haystack.includes(query)) return false;
+		}
+
+		return true;
 	});
 
 	const monthIncome = calculateTotal(filteredTransactions, 'INCOME');
@@ -206,6 +241,54 @@ export default function TransactionsClient({
 							</p>
 						</div>
 					</div>
+					<div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-center'>
+						<Input
+							placeholder='Search description, category...'
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							className='sm:max-w-xs'
+						/>
+						<Select
+							value={typeFilter}
+							onValueChange={(value) =>
+								setTypeFilter(value as 'ALL' | 'INCOME' | 'EXPENSE')
+							}>
+							<SelectTrigger className='sm:w-[140px]'>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value='ALL'>All Types</SelectItem>
+								<SelectItem value='INCOME'>Income</SelectItem>
+								<SelectItem value='EXPENSE'>Expense</SelectItem>
+							</SelectContent>
+						</Select>
+						<Select value={categoryFilter} onValueChange={setCategoryFilter}>
+							<SelectTrigger className='sm:w-[180px]'>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value='ALL'>All Categories</SelectItem>
+								{userCategories
+									.slice()
+									.sort((a, b) => a.name.localeCompare(b.name))
+									.map((category) => (
+										<SelectItem key={category.id} value={category.name}>
+											{category.name}
+										</SelectItem>
+									))}
+							</SelectContent>
+						</Select>
+						{hasActiveFilters && (
+							<Button
+								variant='ghost'
+								size='sm'
+								onClick={clearFilters}
+								className='self-start sm:self-auto'>
+								<X className='h-4 w-4' />
+								Clear
+							</Button>
+						)}
+					</div>
 					<Card className='mb-6 p-6'>
 						<div className='flex flex-col gap-6'>
 							<div>
@@ -284,16 +367,23 @@ export default function TransactionsClient({
 							</div>
 						</div>
 					</Card>
-					<div className='flex flex-wrap gap-4'>
-						<TransactionsList
-							transactions={filteredTransactions}
-							onDeleteAction={handleDelete}
-							onEditAction={handleEdit}
-							userCategories={userCategories}
-							userPaymentMethods={userPaymentMethods}
-							userCreditCardTypes={userCreditCardTypes}
+					{visibleTransactions.length === 0 ? (
+						<EmptyState
+							title='No Matching Transactions'
+							subtitle='Try adjusting your search or filters'
 						/>
-					</div>
+					) : (
+						<div className='flex flex-wrap gap-4'>
+							<TransactionsList
+								transactions={visibleTransactions}
+								onDeleteAction={handleDelete}
+								onEditAction={handleEdit}
+								userCategories={userCategories}
+								userPaymentMethods={userPaymentMethods}
+								userCreditCardTypes={userCreditCardTypes}
+							/>
+						</div>
+					)}
 				</>
 			)}
 		</div>
