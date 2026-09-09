@@ -21,19 +21,21 @@ import { formatFullDate } from '@/lib/utils/dateHelpers';
 import { CardContent } from '@/components/ui/card';
 import { updateTransaction } from '@/lib/actions/transaction.actions';
 import { toast } from 'sonner';
-import { transactionType, expenseSubCategories } from '@/lib/constants';
+import { transactionType } from '@/lib/constants';
 
 export default function MonthlyList({
 	transactions,
 	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 	onEditAction,
 }: {
 	transactions: Transaction[];
 	userCategories: Category[];
 	userPaymentMethods: TransactionOption[];
 	userCreditCardTypes: TransactionOption[];
+	userSubCategories: TransactionOption[];
 	onEditAction: (updatedTransaction: Transaction) => void;
 }) {
 	const saveTransaction = (updated: Transaction, fieldLabel: string) => {
@@ -170,9 +172,9 @@ export default function MonthlyList({
 												<SelectValue placeholder='Select' />
 											</SelectTrigger>
 											<SelectContent>
-												{expenseSubCategories.map((option) => (
-													<SelectItem key={option.value} value={option.value}>
-														{option.label}
+												{userSubCategories.map((option) => (
+													<SelectItem key={option.id} value={option.name}>
+														{option.name}
 													</SelectItem>
 												))}
 											</SelectContent>

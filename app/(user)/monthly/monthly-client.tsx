@@ -27,6 +27,7 @@ import { LucideRefreshCcw } from 'lucide-react';
 interface MonthlyClientProps extends TransactionsClientProps {
 	userPaymentMethods: TransactionOption[];
 	userCreditCardTypes: TransactionOption[];
+	userSubCategories: TransactionOption[];
 }
 
 export default function MonthlyClient({
@@ -37,6 +38,7 @@ export default function MonthlyClient({
 	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 }: MonthlyClientProps) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
@@ -297,6 +299,7 @@ export default function MonthlyClient({
 							userCategories={userCategories}
 							userPaymentMethods={userPaymentMethods}
 							userCreditCardTypes={userCreditCardTypes}
+							userSubCategories={userSubCategories}
 							onEditAction={handleEdit}
 						/>
 						</Card>

@@ -46,67 +46,6 @@ export const expenseCategories = [
 	{ label: 'Moldex', value: 'Moldex', icon: LucideIcons.House },
 ];
 
-export const expenseSubCategories = [
-	{ label: 'Online', value: 'Online', icon: LucideIcons.Router },
-	{
-		label: 'Gas & Electricity',
-		value: 'Gas & Electricity',
-		icon: LucideIcons.Zap,
-	},
-	{ label: 'Water', value: 'Water', icon: LucideIcons.ShowerHead },
-	{
-		label: 'Drinking Water',
-		value: 'Drinking Water',
-		icon: LucideIcons.GlassWater,
-	},
-	{ label: 'Transportation', value: 'Transportation', icon: LucideIcons.Bus },
-	{ label: 'Mobile', value: 'Mobile', icon: LucideIcons.Smartphone },
-	{ label: 'Internet', value: 'Internet', icon: LucideIcons.Wifi },
-	{
-		label: 'Health Insurance',
-		value: 'Health Insurance',
-		icon: LucideIcons.HeartPulse,
-	},
-	{ label: 'Eating Out', value: 'Eating Out', icon: LucideIcons.ForkKnife },
-	{ label: 'Travel', value: 'Travel', icon: LucideIcons.Train },
-	{ label: 'House Rent', value: 'House Rent', icon: LucideIcons.House },
-	{
-		label: 'Bank Transfer',
-		value: 'Bank Transfer',
-		icon: LucideIcons.BanknoteArrowUp,
-	},
-	{
-		label: 'Bank Transaction Fee',
-		value: 'Bank Transaction Fee',
-		icon: LucideIcons.BanknoteArrowUp,
-	},
-	{
-		label: 'Income Tax',
-		value: 'Income Tax',
-		icon: LucideIcons.Briefcase,
-	},
-	{
-		label: 'Residence Tax',
-		value: 'Residence Tax',
-		icon: LucideIcons.Briefcase,
-	},
-	{
-		label: 'Pension',
-		value: 'Pension',
-		icon: LucideIcons.Briefcase,
-	},
-	{
-		label: 'Employment Insurance',
-		value: 'Employment Insurance',
-		icon: LucideIcons.Briefcase,
-	},
-	{
-		label: 'Apparel',
-		value: 'Apparel',
-		icon: LucideIcons.Shirt,
-	},
-];
-
 export const incomeCategories = [
 	{ label: 'Salary', value: 'Salary', icon: LucideIcons.Briefcase },
 	{ label: 'Carry Over', value: 'Carry Over', icon: LucideIcons.Repeat },

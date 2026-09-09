@@ -30,6 +30,7 @@ export default function TransactionsList({
 	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 }: TransactionsListProps) {
 	const groupedTransactionsByDate = groupTransactionsByDate(transactions);
 	const sortedDates = Object.keys(groupedTransactionsByDate).sort((a, b) =>
@@ -266,6 +267,7 @@ export default function TransactionsList({
 							userCategories={userCategories}
 							userPaymentMethods={userPaymentMethods}
 							userCreditCardTypes={userCreditCardTypes}
+							userSubCategories={userSubCategories}
 						/>
 					)}
 				</ResponsiveDialog>

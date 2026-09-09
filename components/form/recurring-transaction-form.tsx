@@ -23,7 +23,6 @@ import {
 import { Category } from '@/types/category';
 import { TransactionOption } from '@/types/transaction-option';
 import { resolveIcon } from '@/lib/utils/iconHelpers';
-import { expenseSubCategories } from '@/lib/constants';
 import { normalizeToUtcMidnight } from '@/lib/utils/dateHelpers';
 
 const DAY_OF_MONTH_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
@@ -39,6 +38,7 @@ export default function RecurringTransactionForm({
 	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 	onEditAction,
 	onCreateAction,
 	setIsOpenAction,
@@ -50,6 +50,7 @@ export default function RecurringTransactionForm({
 	userCategories?: Category[];
 	userPaymentMethods?: TransactionOption[];
 	userCreditCardTypes?: TransactionOption[];
+	userSubCategories?: TransactionOption[];
 	onEditAction?: (updated: RecurringTransaction) => void;
 	onCreateAction?: (created: RecurringTransaction) => void;
 	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
@@ -121,6 +122,13 @@ export default function RecurringTransactionForm({
 
 	const creditCardTypeOptions =
 		userCreditCardTypes?.map((option) => ({
+			label: option.name,
+			value: option.name,
+			icon: resolveIcon(option.icon, option.name),
+		})) || [];
+
+	const subCategoryOptions =
+		userSubCategories?.map((option) => ({
 			label: option.name,
 			value: option.name,
 			icon: resolveIcon(option.icon, option.name),
@@ -229,9 +237,9 @@ export default function RecurringTransactionForm({
 						<BaseFormField<typeof insertRecurringTransactionSchema>
 							name='subcategory'
 							label='Sub Category'
-							placeholder='Enter a sub category'
+							placeholder='Select a sub category'
 							inputType='select'
-							dataArr={expenseSubCategories}
+							dataArr={subCategoryOptions}
 							formControl={form.control}
 						/>
 					)}

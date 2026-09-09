@@ -16,6 +16,7 @@ export interface TransactionsListProps {
 	userCategories: Category[];
 	userPaymentMethods: TransactionOption[];
 	userCreditCardTypes: TransactionOption[];
+	userSubCategories: TransactionOption[];
 }
 
 export interface MonthlySummaryProps {

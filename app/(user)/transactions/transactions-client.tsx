@@ -33,6 +33,7 @@ interface TransactionsPageClientProps extends TransactionsClientProps {
 	initialSavingsPercent: number;
 	userPaymentMethods: TransactionOption[];
 	userCreditCardTypes: TransactionOption[];
+	userSubCategories: TransactionOption[];
 }
 
 export default function TransactionsClient({
@@ -45,6 +46,7 @@ export default function TransactionsClient({
 	initialSavingsPercent,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 }: TransactionsPageClientProps) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
@@ -381,6 +383,7 @@ export default function TransactionsClient({
 								userCategories={userCategories}
 								userPaymentMethods={userPaymentMethods}
 								userCreditCardTypes={userCreditCardTypes}
+								userSubCategories={userSubCategories}
 							/>
 						</div>
 					)}

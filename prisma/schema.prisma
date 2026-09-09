@@ -115,6 +115,7 @@ model Category {
 enum TransactionOptionKind {
   PAYMENT_METHOD
   CREDIT_CARD_TYPE
+  SUB_CATEGORY
 }
 
 // Per-user, editable catalog that drives the Payment Method / Credit Card

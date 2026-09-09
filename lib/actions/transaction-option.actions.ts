@@ -88,3 +88,28 @@ export async function updateTransactionOption(data: UpdateTransactionOption) {
 		};
 	}
 }
+
+// Delete a payment method, credit card type, or sub category
+export async function deleteTransactionOption(id: string) {
+	try {
+		const optionExists = await prisma.transactionOption.findFirst({
+			where: { id },
+		});
+
+		if (!optionExists) throw new Error('Not found');
+
+		await prisma.transactionOption.delete({ where: { id } });
+
+		revalidatePath('/categories');
+
+		return {
+			success: true,
+			message: 'Deleted successfully',
+		};
+	} catch (error) {
+		return {
+			success: false,
+			message: formatError(error),
+		};
+	}
+}

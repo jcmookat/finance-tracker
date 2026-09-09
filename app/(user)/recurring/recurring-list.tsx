@@ -23,12 +23,14 @@ export default function RecurringList({
 	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 }: {
 	userId: string;
 	initialItems: RecurringTransaction[];
 	userCategories: Category[];
 	userPaymentMethods: TransactionOption[];
 	userCreditCardTypes: TransactionOption[];
+	userSubCategories: TransactionOption[];
 }) {
 	const [items, setItems] = useState<RecurringTransaction[]>(initialItems);
 	const [dialogMode, setDialogMode] = useState<
@@ -194,6 +196,7 @@ export default function RecurringList({
 							userCategories={userCategories}
 							userPaymentMethods={userPaymentMethods}
 							userCreditCardTypes={userCreditCardTypes}
+							userSubCategories={userSubCategories}
 							onEditAction={handleEdit}
 							setIsOpenAction={handleCloseDialog}
 						/>
@@ -205,6 +208,7 @@ export default function RecurringList({
 						userCategories={userCategories}
 						userPaymentMethods={userPaymentMethods}
 						userCreditCardTypes={userCreditCardTypes}
+						userSubCategories={userSubCategories}
 						onCreateAction={handleCreate}
 						setIsOpenAction={handleCloseDialog}
 					/>

@@ -17,11 +17,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { InsertTransaction, Transaction } from '@/types/transaction';
 import SubmitButton from '../submit-button';
-import {
-	expenseSubCategories,
-	transactionDefaultValues,
-	transactionType,
-} from '@/lib/constants';
+import { transactionDefaultValues, transactionType } from '@/lib/constants';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -43,6 +39,7 @@ export default function TransactionForm({
 	userCategories,
 	userPaymentMethods,
 	userCreditCardTypes,
+	userSubCategories,
 	onEditAction,
 	setIsOpenAction,
 }: {
@@ -53,6 +50,7 @@ export default function TransactionForm({
 	userCategories?: Category[];
 	userPaymentMethods?: TransactionOption[];
 	userCreditCardTypes?: TransactionOption[];
+	userSubCategories?: TransactionOption[];
 	onEditAction?: (updatedTransaction: Transaction) => void;
 	setIsOpenAction?: Dispatch<SetStateAction<boolean>>;
 }): ReactElement {
@@ -97,6 +95,13 @@ export default function TransactionForm({
 
 	const creditCardTypeOptions =
 		userCreditCardTypes?.map((item) => ({
+			label: item.name,
+			value: item.name,
+			icon: resolveIcon(item.icon, item.name),
+		})) || [];
+
+	const subCategoryOptions =
+		userSubCategories?.map((item) => ({
 			label: item.name,
 			value: item.name,
 			icon: resolveIcon(item.icon, item.name),
@@ -265,9 +270,9 @@ export default function TransactionForm({
 						<BaseFormField<typeof insertTransactionSchema>
 							name='subcategory'
 							label='Sub Category'
-							placeholder='Enter a sub category'
+							placeholder='Select a sub category'
 							inputType='select'
-							dataArr={expenseSubCategories}
+							dataArr={subCategoryOptions}
 							formControl={form.control}
 						/>
 					)}

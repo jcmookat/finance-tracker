@@ -27,16 +27,29 @@ export default async function CategoriesPage(): Promise<ReactElement> {
 		userId,
 		'CREDIT_CARD_TYPE',
 	);
+	const subCategories = await getTransactionOptionsByUserId(
+		userId,
+		'SUB_CATEGORY',
+	);
 
 	return (
 		<Tabs defaultValue='categories' className='gap-6 pt-4'>
 			<TabsList>
 				<TabsTrigger value='categories'>Categories</TabsTrigger>
+				<TabsTrigger value='sub-categories'>Sub Categories</TabsTrigger>
 				<TabsTrigger value='payment-methods'>Payment Methods</TabsTrigger>
 				<TabsTrigger value='credit-cards'>Credit Card Types</TabsTrigger>
 			</TabsList>
 			<TabsContent value='categories'>
 				<CategoriesList userId={userId} userCategories={userCategories} />
+			</TabsContent>
+			<TabsContent value='sub-categories'>
+				<TransactionOptionManager
+					userId={userId}
+					kind='SUB_CATEGORY'
+					title='Sub Category'
+					initialOptions={subCategories}
+				/>
 			</TabsContent>
 			<TabsContent value='payment-methods'>
 				<TransactionOptionManager

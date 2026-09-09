@@ -38,6 +38,10 @@ export default async function ReportsPage(): Promise<ReactElement> {
 		userId,
 		'CREDIT_CARD_TYPE',
 	);
+	const userSubCategories = await getTransactionOptionsByUserId(
+		userId,
+		'SUB_CATEGORY',
+	);
 
 	return (
 		<>
@@ -49,6 +53,7 @@ export default async function ReportsPage(): Promise<ReactElement> {
 				userCategories={userCategories}
 				userPaymentMethods={userPaymentMethods}
 				userCreditCardTypes={userCreditCardTypes}
+				userSubCategories={userSubCategories}
 			/>
 		</>
 	);

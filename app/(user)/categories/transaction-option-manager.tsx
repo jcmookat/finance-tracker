@@ -2,10 +2,13 @@
 
 import TransactionOptionForm from '@/components/form/transaction-option-form';
 import ResponsiveDialog from '@/components/responsive-dialog';
+import DeleteForm from '@/components/delete-form';
 import { Button } from '@/components/ui/button';
 import { TransactionOption } from '@/types/transaction-option';
 import { resolveIcon } from '@/lib/utils/iconHelpers';
 import { TransactionOptionKind } from '@/lib/generated/prisma';
+import { deleteTransactionOption } from '@/lib/actions/transaction-option.actions';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function TransactionOptionManager({
@@ -20,7 +23,9 @@ export default function TransactionOptionManager({
 	initialOptions: TransactionOption[];
 }) {
 	const [options, setOptions] = useState<TransactionOption[]>(initialOptions);
-	const [dialogMode, setDialogMode] = useState<'CREATE' | 'EDIT' | null>(null);
+	const [dialogMode, setDialogMode] = useState<
+		'CREATE' | 'EDIT' | 'DELETE' | null
+	>(null);
 	const [selectedOption, setSelectedOption] = useState<TransactionOption | null>(
 		null,
 	);
@@ -33,6 +38,11 @@ export default function TransactionOptionManager({
 	const handleOpenEditDialog = (option: TransactionOption) => {
 		setSelectedOption(option);
 		setDialogMode('EDIT');
+	};
+
+	const handleOpenDeleteDialog = (option: TransactionOption) => {
+		setSelectedOption(option);
+		setDialogMode('DELETE');
 	};
 
 	const handleCloseDialog = () => {
@@ -53,6 +63,10 @@ export default function TransactionOptionManager({
 		setOptions((prev) => [...prev, newOption]);
 	};
 
+	const handleDelete = (id: string) => {
+		setOptions((prev) => prev.filter((o) => o.id !== id));
+	};
+
 	return (
 		<div>
 			<div className='mb-4'>
@@ -65,12 +79,19 @@ export default function TransactionOptionManager({
 					.map((item) => {
 						const Icon = resolveIcon(item.icon, item.name);
 						return (
-							<li key={item.id}>
+							<li key={item.id} className='flex items-center'>
 								<Button
 									variant='ghost'
+									className='flex-1 justify-start'
 									onClick={() => handleOpenEditDialog(item)}>
 									<Icon className='h-4 w-4' />
 									{item.name}
+								</Button>
+								<Button
+									variant='ghost'
+									size='icon'
+									onClick={() => handleOpenDeleteDialog(item)}>
+									<Trash2 className='h-4 w-4 text-red-400' />
 								</Button>
 							</li>
 						);
@@ -80,11 +101,19 @@ export default function TransactionOptionManager({
 			<ResponsiveDialog
 				isOpen={isDialogOpen}
 				setIsOpenAction={handleCloseDialog}
-				title={dialogMode === 'CREATE' ? `Create ${title}` : `Edit ${title}`}
+				title={
+					dialogMode === 'CREATE'
+						? `Create ${title}`
+						: dialogMode === 'DELETE'
+							? `Delete ${title}`
+							: `Edit ${title}`
+				}
 				description={
 					dialogMode === 'CREATE'
 						? `Create a ${title.toLowerCase()}`
-						: `Edit your ${title.toLowerCase()} below`
+						: dialogMode === 'DELETE'
+							? `Are you sure you want to delete this ${title.toLowerCase()}?`
+							: `Edit your ${title.toLowerCase()} below`
 				}>
 				{dialogMode === 'EDIT' ? (
 					selectedOption && (
@@ -96,6 +125,15 @@ export default function TransactionOptionManager({
 							option={selectedOption}
 							onEditAction={handleEdit}
 							setIsOpenAction={handleCloseDialog}
+						/>
+					)
+				) : dialogMode === 'DELETE' ? (
+					selectedOption && (
+						<DeleteForm
+							transactionId={selectedOption.id}
+							setIsOpenAction={handleCloseDialog}
+							action={deleteTransactionOption}
+							onDeleteAction={handleDelete}
 						/>
 					)
 				) : (

@@ -27,6 +27,10 @@ export default async function RecurringPage(): Promise<ReactElement> {
 		userId,
 		'CREDIT_CARD_TYPE',
 	);
+	const userSubCategories = await getTransactionOptionsByUserId(
+		userId,
+		'SUB_CATEGORY',
+	);
 
 	return (
 		<div className='pt-4'>
@@ -36,6 +40,7 @@ export default async function RecurringPage(): Promise<ReactElement> {
 				userCategories={userCategories}
 				userPaymentMethods={userPaymentMethods}
 				userCreditCardTypes={userCreditCardTypes}
+				userSubCategories={userSubCategories}
 			/>
 		</div>
 	);

@@ -40,6 +40,10 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 		userId,
 		'CREDIT_CARD_TYPE',
 	);
+	const userSubCategories = await getTransactionOptionsByUserId(
+		userId,
+		'SUB_CATEGORY',
+	);
 
 	return (
 		<TransactionsClient
@@ -52,6 +56,7 @@ export default async function TransactionsPage(): Promise<ReactElement> {
 			initialSavingsPercent={savingsPercent}
 			userPaymentMethods={userPaymentMethods}
 			userCreditCardTypes={userCreditCardTypes}
+			userSubCategories={userSubCategories}
 		/>
 	);
 }
