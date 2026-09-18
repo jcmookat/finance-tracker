@@ -9,7 +9,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from '@/components/ui/sidebar';
-import { Calendar, Home, Inbox, Repeat } from 'lucide-react';
+import { Calendar, Home, Inbox, Repeat, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -48,6 +48,11 @@ const items = [
 		title: 'Manage',
 		url: '/categories',
 		icon: Inbox,
+	},
+	{
+		title: 'Ask AI',
+		url: '/assistant',
+		icon: Sparkles,
 	},
 ];
 
